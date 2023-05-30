@@ -81,7 +81,7 @@ function EditCategory
                                     type="text"
                                     name='ten'
                                     value={categoryInput.ten}
-                                    placeholder="Nhập tên sản phẩm..."
+                                    placeholder="Nhập tên loại sản phẩm..."
                                     autoFocus
                                 />
                             </Form.Group>

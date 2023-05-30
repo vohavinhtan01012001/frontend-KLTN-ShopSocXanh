@@ -83,6 +83,7 @@ function EditProduct() {
         TheLoaiId: '',
         ten: '',
         giaTien: '',
+        mauSac: '',
         soLuongM: '',
         soLuongL: '',
         soLuongXL: '',
@@ -91,6 +92,9 @@ function EditProduct() {
         image3: null,
         image4: null,
         moTa: '',
+        ThuongHieuId: '',
+        KhuyenMaiId: '',
+        trangThai: 1,
     }
 
     useEffect(() => {
@@ -104,6 +108,7 @@ function EditProduct() {
                 console.log(res.data.product)
                 initialValues.id = res.data.product[0].id
                 initialValues.TheLoaiId = res.data.product[0].TheLoaiId
+                initialValues.mauSac = res.data.product[0].mauSac
                 initialValues.ThuongHieuId = res.data.product[0].ThuongHieuId
                 initialValues.KhuyenMaiId = res.data.product[0].KhuyenMaiId ? res.data.product[0].KhuyenMaiId : null
                 initialValues.ten = res.data.product[0].ten
@@ -111,6 +116,7 @@ function EditProduct() {
                 initialValues.soLuongL = res.data.product[0].soLuongL
                 initialValues.soLuongM = res.data.product[0].soLuongM
                 initialValues.soLuongXL = res.data.product[0].soLuongXL
+                initialValues.trangThai = res.data.product[0].trangThai
                 formik.setValues(initialValues)
                 setLoading(false);
             }
@@ -134,6 +140,8 @@ function EditProduct() {
         giaTien: Yup.number()
             .min(0, 'Giá tiền không được bé hơn 0')
             .required('Giá tiền là bắt buộc'),
+        mauSac: Yup.string()
+            .required('Màu sắc là bắt buộc'),
         soLuongM: Yup.number()
             .min(0, 'số Lượng M không được bé hơn 0')
             .required('số Lượng M là bắt buộc'),
@@ -172,11 +180,11 @@ function EditProduct() {
                 },)
                     .then((res) => {
                         Swal.fire({
-                            title: 'Thêm thành công!',
+                            title: 'Cập nhật thành công!',
                             icon: 'success',
                             confirmButtonText: 'Đóng'
                         })
-
+                        history('/admin/view-product')
                     }).catch((err) => {
                         console.log(err);
                         Swal.fire({
@@ -323,6 +331,23 @@ function EditProduct() {
                                             ) : null}
                                         </p>
                                     </div>
+                                    <div className="form-group mb-3">
+                                        <label>Màu sắc</label>
+                                        <div >
+                                            <input
+                                                placeholder="Nhập màu săc..."
+                                                name="mauSac"
+                                                type="text"
+                                                value={formik.values.mauSac}
+                                                onChange={formik.handleChange}
+                                                className="form-control fs-4 text" style={{ padding: "7px 15px", fontSize: "16px", display: "flex", width: "20%", marginRight: "10px" }} />
+                                        </div>
+                                        <p className="text-danger">
+                                            {formik.errors.mauSac ? (
+                                                <p>{formik.errors.mauSac}</p>
+                                            ) : null}
+                                        </p>
+                                    </div>
                                     <div className="form-group mb-3" style={{ display: "flex" }}>
                                         <label style={{ margin: "10px 10px 10px 50px", width: "100%" }}>Số lượng(M)</label>
                                         <input placeholder="0" name="soLuongM"
@@ -446,6 +471,17 @@ function EditProduct() {
                                         <p className="text-danger">
                                             <h1 name='moTa' component="div" style={{ color: "red", fontWeight: "500" }} />
                                         </p>
+                                    </div>
+                                    <div className="form-group mb-3">
+                                        <label>Trạng thái hoạt động</label>
+                                        <select
+                                            name="trangThai"
+                                            value={formik.values.trangThai}
+                                            onChange={formik.handleChange} className="form-control fs-4 text" style={{ padding: "7px 15px", fontSize: "16px" }}
+                                        >
+                                            <option value="1" >Hoạt động</option>
+                                            <option value="0" >Tạm ngưng</option>
+                                        </select>
                                     </div>
                                 </div>
                             </div>

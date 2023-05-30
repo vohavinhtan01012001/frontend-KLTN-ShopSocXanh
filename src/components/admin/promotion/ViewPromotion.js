@@ -257,7 +257,7 @@ function ViewPromotion() {
                                 <TableCell >STT</TableCell>
                                 <TableCell align="right">Mã khuyến mãi</TableCell>
                                 <TableCell align="right">Tiêu đề</TableCell>
-                                <TableCell align="right">Giá trị khuyến mãi(đơn vị %)</TableCell>
+                                <TableCell align="right">Giá trị khuyến mãi(%)</TableCell>
                                 <TableCell align="right">Trạng thái</TableCell>
                                 <TableCell align="right"></TableCell>
                                 <TableCell align="right"></TableCell>

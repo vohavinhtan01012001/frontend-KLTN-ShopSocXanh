@@ -12,6 +12,7 @@ import EditProduct from "../components/admin/product/EditProduct";
 import ViewPromotion from "../components/admin/promotion/ViewPromotion";
 import ViewTrademark from "../components/admin/trademark/ViewTrademark";
 import EditTrademark from "../components/admin/trademark/EditTrademark";
+import ViewProductTrademark from "../components/admin/trademark/ViewProductTrademark";
 
 
 const publicRoutes = [
@@ -57,6 +58,10 @@ const privateRoutes = [
     {
         path:'/view-trademark',
         component: ViewTrademark,
+    },
+    {
+        path:'/view-trademark/:id',
+        component: ViewProductTrademark,
     },
 ];
 export { privateRoutes, publicRoutes };

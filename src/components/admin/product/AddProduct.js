@@ -77,6 +77,7 @@ function AddProduct() {
         TheLoaiId: '',
         ten: '',
         giaTien: '',
+        mauSac: '',
         soLuongM: '',
         soLuongL: '',
         soLuongXL: '',
@@ -87,6 +88,7 @@ function AddProduct() {
         moTa: '',
         KhuyenMaiId: null,
         ThuongHieuId: '',
+        trangThai: 1,
     }
     const validationSchema = Yup.object().shape({
         TheLoaiId: Yup.string()
@@ -98,6 +100,8 @@ function AddProduct() {
         giaTien: Yup.number()
             .min(0, 'Giá tiền không được bé hơn 0')
             .required('Giá tiền là bắt buộc'),
+        mauSac: Yup.string()
+            .required('Màu sắc là bắt buộc'),
         soLuongM: Yup.number()
             .min(0, 'số Lượng M không được bé hơn 0')
             .required('số Lượng M là bắt buộc'),
@@ -118,7 +122,6 @@ function AddProduct() {
             values.image2 = image2;
             values.image3 = image3;
             values.image4 = image4;
-
             console.log(values);
             if (values.image1 == null || values.image2 == null || values.image3 == null || values.image4 == null) {
                 Swal.fire({
@@ -252,6 +255,15 @@ function AddProduct() {
                                                 />
                                             </p>
                                         </div>
+                                        <div className="form-group mb-3">
+                                            <label>Màu sắc</label>
+                                            <div>
+                                                <Field placeholder="Nhập màu sắc..." name="mauSac"  className="form-control fs-4 text" style={{ padding: "7px 15px", fontSize: "16px", display: "flex", width: "20%", marginRight: "10px" }} />
+                                            </div>
+                                            <p className="text-danger">
+                                                <ErrorMessage name='mauSac' component="div" style={{ color: "red", fontWeight: "500" }} />
+                                            </p>
+                                        </div>
                                         <div className="form-group mb-3" style={{ display: "flex" }}>
                                             <label style={{ margin: "10px 10px 10px 50px", width: "100%" }}>Số lượng(M)</label>
                                             <Field placeholder="0" name="soLuongM"
@@ -331,6 +343,14 @@ function AddProduct() {
                                             <p className="text-danger">
                                                 <ErrorMessage name='moTa' component="div" style={{ color: "red", fontWeight: "500" }} />
                                             </p>
+                                        </div>
+                                        <div className="form-group mb-3">
+                                            <label>Trạng thái hoạt động</label>
+                                            <Field as="select" name="trangThai" className="form-control fs-4 text" style={{ padding: "7px 15px", fontSize: "16px" }}>
+                                                <option value="1" >Hoạt động</option>
+                                                <option value="0" >Tạm ngưng</option>
+                                            </Field>
+
                                         </div>
                                     </div>
                                 </div>

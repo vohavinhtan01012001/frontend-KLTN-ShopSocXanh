@@ -223,7 +223,7 @@ function ViewProduct() {
                         {item.id}
                     </TableCell>
                     <TableCell
-                        sx={{ fontSize: "16px",width:'250px' }}
+                        sx={{ fontSize: "16px", width: '250px' }}
                         align="right"
                         component="th"
                         scope="row"
@@ -238,6 +238,14 @@ function ViewProduct() {
                         scope="row"
                     >
                         {item.TheLoai.ten}
+                    </TableCell>
+                    <TableCell
+                        sx={{ fontSize: "16px" }}
+                        align="right"
+                        component="th"
+                        scope="row"
+                    >
+                        {item.ThuongHieu.ten}
                     </TableCell>
                     <TableCell
                         sx={{ fontSize: "16px" }}
@@ -263,6 +271,14 @@ function ViewProduct() {
                         scope="row"
                     >
                         {formatMoney(item.giaGiam)}
+                    </TableCell>
+                    <TableCell
+                        sx={{ fontSize: "16px" }}
+                        align="right"
+                        component="th"
+                        scope="row"
+                    >
+                        {item.mauSac}
                     </TableCell>
                     <TableCell
                         sx={{ fontSize: "16px" }}
@@ -310,6 +326,23 @@ function ViewProduct() {
                                 :
                                 <p style={{ color: '#0ccf0f', fontWeight: "bold" }}>
                                     Còn hàng
+                                </p>
+                        }
+                    </TableCell>
+                    <TableCell
+                        sx={{ fontSize: "16px" }}
+                        align="right"
+                        component="th"
+                        scope="row"
+                    >
+                        {
+                            item.trangThai == 0 ?
+                                <p style={{ color: 'red', fontWeight: "bold" }}>
+                                    Tạm ngừng
+                                </p>
+                                :
+                                <p style={{ color: '#0ccf0f', fontWeight: "bold" }}>
+                                    Hoạt động
                                 </p>
                         }
                     </TableCell>
@@ -407,14 +440,17 @@ function ViewProduct() {
                             <TableCell align="right">Mã</TableCell>
                             <TableCell align="right" >Tên</TableCell>
                             <TableCell align="right">Loại</TableCell>
+                            <TableCell align="right">Thương hiệu</TableCell>
                             <TableCell align="right" width={150}>Giá gốc</TableCell>
                             <TableCell align="right">Khuyến mãi</TableCell>
                             <TableCell align="right" width={150}>Giá đã giảm</TableCell>
+                            <TableCell align="right">Màu sắc</TableCell>
                             <TableCell align="right">M</TableCell>
                             <TableCell align="right">L</TableCell>
                             <TableCell align="right">XL</TableCell>
                             <TableCell align="right" width={100}>Hình ảnh</TableCell>
                             <TableCell align="right" width={120}>Trạng thái</TableCell>
+                            <TableCell align="right" width={120}>Hoạt động</TableCell>
                             <TableCell align="right" width={120}></TableCell>
                             <TableCell align="right"></TableCell>
                         </TableRow>
@@ -427,7 +463,7 @@ function ViewProduct() {
                     <Pagination size="lg" >{items}</Pagination>
                 </div>
             </TableContainer>
-            
+
         </div>
     )
 }
