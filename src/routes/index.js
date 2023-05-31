@@ -13,6 +13,8 @@ import ViewPromotion from "../components/admin/promotion/ViewPromotion";
 import ViewTrademark from "../components/admin/trademark/ViewTrademark";
 import EditTrademark from "../components/admin/trademark/EditTrademark";
 import ViewProductTrademark from "../components/admin/trademark/ViewProductTrademark";
+import AddProductPor from "../components/admin/promotion/AddProductPor";
+import ViewProductPor from "../components/admin/promotion/ViewProductPor";
 
 
 const publicRoutes = [
@@ -54,6 +56,14 @@ const privateRoutes = [
     {
         path:'/view-promotion',
         component: ViewPromotion,
+    },
+    {
+        path:'/promotion/view-product/:id',
+        component: ViewProductPor,
+    },
+    {
+        path:'/promotion/add-product/:id',
+        component: AddProductPor,
     },
     {
         path:'/view-trademark',

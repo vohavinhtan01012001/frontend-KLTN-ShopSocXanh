@@ -1,7 +1,8 @@
 import axios from "axios";
 import React, { useEffect, useState } from "react";
 import { Link, useParams } from "react-router-dom";
-import swal from "sweetalert";
+import Swal from "sweetalert2";
+import Loading from "../../Loading";
 
 function ViewProductPor() {
     const [loading, setLoading] = useState(true);
@@ -17,53 +18,39 @@ function ViewProductPor() {
         }
     }
 
-    const slug = message;
-    useEffect(() => {
-        document.title ="Danh sách sản phẩm";
-        if (slug != "") {
-            axios.get(`/api/search/${slug}`).then(res => {
-                if (res.data.status === 200) {
-                    setProduct(res.data.product);
-                }
-                else if (res.data.status === 404) {
+    /*  const slug = message;
+     useEffect(() => {
+         document.title ="Danh sách sản phẩm";
+         if (slug != "") {
+             axios.get(`/api/search/${slug}`).then(res => {
+                 if (res.data.status === 200) {
+                     setProduct(res.data.product);
+                 }
+                 else if (res.data.status === 404) {
+ 
+                 }
+             });
+         }
+     }, [message]) */
 
-                }
-            });
-        }
-    }, [message])
-
-    useEffect(() => {
-        let isMounted = true;
+    /* useEffect(() => {
         axios.get(`/api/view-promotion`).then(res => {
-            if (isMounted) {
-                if (res.status === 200) {
-                    setPromotionList(res.data.promotion)
-                }
+            if (res.status === 200) {
+                setPromotionList(res.data.promotion)
             }
         });
-
-        return () => {
-            isMounted = false
-        };
-
-    }, []);
+    }, []); */
 
     //Xử lý xuất dữ liệu
-    useEffect(() => {
-        let isMounted = true;
+    /* useEffect(() => {
         document.title = "Shop sóc xanh";
         axios.get(`/api/view-product`).then(res => {
-            if (isMounted) {
                 if (res.data.status === 200) {
                     setProduct(res.data.products);
                     setLoading(false);
                 }
-            }
         });
-        return () => {
-            isMounted = false
-        };
-    }, []);
+    }, []); */
     const deletePromotionId = (e, id) => {
         e.preventDefault();
         const thisclicked = e.target.closest('tr');
@@ -90,7 +77,7 @@ function ViewProductPor() {
                         <td><img src={`http://localhost:8000/${item.image}`} width="50px" alt={item.name} /></td>
                         <td>
                             <button type="button" onClick={(e) => {
-                                swal({
+                                Swal({
                                     title: "Thông báo!",
                                     text: "Bạn có chắc muốn xóa không!",
                                     icon: "warning",
@@ -101,7 +88,7 @@ function ViewProductPor() {
                                     dangerMode: true,
                                 }).then(function (isConfirm) {
                                     if (isConfirm) {
-                                        swal({
+                                        Swal({
                                             title: 'Thành công!',
                                             text: 'Đã xóa thành công!',
                                             icon: 'success'

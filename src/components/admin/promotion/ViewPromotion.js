@@ -163,9 +163,9 @@ function ViewPromotion() {
                         <Link
                             to={`/admin/edit-product/${item.id}`}
                             className="btn btn-success btn-lg"
-                            style={{ padding: "8px", borderRadius: "5px", fontSize: "16px", width: "160px" }}
+                            style={{ padding: "8px", borderRadius: "5px", fontSize: "16px", width: "100px" }}
                         >
-                            Xem sản phẩm áp dụng
+                            Xem chi tiết
                         </Link>
                     </TableCell>
                     <TableCell
@@ -175,11 +175,11 @@ function ViewPromotion() {
                         scope="row"
                     >
                         <Link
-                            to={`/admin/edit-product/${item.id}`}
+                            to={`/admin/promotion/add-product/${item.id}`}
                             className="btn btn-success btn-lg"
-                            style={{ padding: "8px", borderRadius: "5px", fontSize: "16px", width: "160px" }}
+                            style={{ padding: "8px", borderRadius: "5px", fontSize: "16px", width: "100px" }}
                         >
-                           Thêm sản phẩm khuyến mãi
+                           Thêm sản phẩm
                         </Link>
                     </TableCell>
                     <TableCell
@@ -193,34 +193,6 @@ function ViewPromotion() {
                             setRefersh={setRefersh}
                             refersh={refersh}
                         />
-                    </TableCell>
-                    <TableCell
-                        sx={{ fontSize: "16px" }}
-                        align="right"
-                        component="th"
-                        scope="row"
-                    >
-                        <button
-                            className='btn btn-primary btn-sm'
-                            style={{ padding: "8px", borderRadius: "5px", fontSize: "16px", background: "red", color: "white", border: 0 }}
-                        /* onClick={(e) => {
-                            Swal.fire({
-                                text: "Bạn có chắc muốn xóa không?",
-                                icon: 'question',
-                                showCancelButton: true,
-                                confirmButtonColor: '#3085d6',
-                                cancelButtonColor: '#d33',
-                                confirmButtonText: 'Đồng ý!'
-                            }).then((result) => {
-                                if (result.isConfirmed) {
-
-                                    deleteProduct(e, item.id);
-                                }
-                            })
-                        }} */
-                        >
-                            Xóa
-                        </button>
                     </TableCell>
                 </TableRow>
             )
@@ -261,8 +233,7 @@ function ViewPromotion() {
                                 <TableCell align="right">Trạng thái</TableCell>
                                 <TableCell align="right"></TableCell>
                                 <TableCell align="right"></TableCell>
-                                <TableCell align="right">Chỉnh sửa</TableCell>
-                                <TableCell align="right">Xóa</TableCell>
+                                <TableCell align="right"></TableCell>
                             </TableRow>
                         </TableHead>
                         <TableBody>
