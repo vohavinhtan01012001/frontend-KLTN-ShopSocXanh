@@ -9,7 +9,7 @@ import TableContainer from '@mui/material/TableContainer';
 import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
-
+import ContentPasteIcon from '@mui/icons-material/ContentPaste';
 import Pagination from 'react-bootstrap/Pagination';
 import AddTrademark from './AddTrademark';
 import Loading from '../../Loading';
@@ -136,10 +136,9 @@ function ViewTrademark() {
                     >
                         <Link
                             to={`${item.id}`}
-                            className="btn btn-success btn-lg"
-                            style={{ padding: "8px", borderRadius: "5px", fontSize: "16px" }}
+                            
                         >
-                            Xem chi tiết
+                             <ContentPasteIcon style={{ fontSize: "30px", color: "#5ec9ff" }} />
                         </Link>
                     </TableCell>
                 </TableRow>

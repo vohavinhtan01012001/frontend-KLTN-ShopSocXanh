@@ -1,4 +1,4 @@
-import { faAngleDown, faAngleRight, faBagShopping, faBox, faPercent, faSliders, faTimes, faUserCircle, faUsersGear } from "@fortawesome/free-solid-svg-icons";
+import { faAngleDown, faAngleRight, faBagShopping, faBox, faGauge, faPercent, faSliders, faTimes, faTrademark, faUserCircle, faUsersGear } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
@@ -95,7 +95,7 @@ function Sidebar({ onCloseClick }) {
     return (
         <nav className="Sidebar__admin">
             <ul className="Sidebar__admin--menu">
-                <li className="admin__menu--account">
+                {/* <li className="admin__menu--account">
                     <div className="admin__menu--close-icon" onClick={onCloseClick}>
                         <FontAwesomeIcon icon={faTimes} />
                     </div>
@@ -106,6 +106,12 @@ function Sidebar({ onCloseClick }) {
                             <FontAwesomeIcon icon={faUserCircle} />
                         </div>
                         <p>Admin</p>
+                    </Link>
+                </li> */}
+                <li className="admin__menu--account">
+                    <Link to="/admin/view-category" className="admin__menu--account-link">
+                        <FontAwesomeIcon icon={faGauge} className="account__link--icon" />
+                        <p>Thống kê</p>
                     </Link>
                 </li>
                 <li className="admin__menu--account">
@@ -134,7 +140,7 @@ function Sidebar({ onCloseClick }) {
                 </li>
                 <li className="admin__menu--account">
                     <Link to="/admin/view-trademark" className="admin__menu--account-link">
-                        <FontAwesomeIcon icon={faBox} className="account__link--icon" />
+                        <FontAwesomeIcon icon={faTrademark} className="account__link--icon" />
                         <p>Quản lý thương hiệu</p>
                     </Link>
                 </li>
@@ -148,6 +154,12 @@ function Sidebar({ onCloseClick }) {
                     <Link to="/admin/view-account" className="admin__menu--account-link">
                         <FontAwesomeIcon icon={faUsersGear} className="account__link--icon" />
                         <p>Quản lý tài khoản</p>
+                    </Link>
+                </li>
+                <li className="admin__menu--account">
+                    <Link to="/admin/view-account" className="admin__menu--account-link">
+                        <FontAwesomeIcon icon={faUsersGear} className="account__link--icon" />
+                        <p>Quản lý Phân quyền</p>
                     </Link>
                 </li>
             </ul>

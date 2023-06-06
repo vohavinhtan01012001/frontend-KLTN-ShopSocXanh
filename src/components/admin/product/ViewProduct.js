@@ -1,6 +1,8 @@
 import React, { useContext, useEffect, useMemo, useState } from 'react';
 import { Link } from 'react-router-dom';
 import FilterAltIcon from '@mui/icons-material/FilterAlt';
+import ToggleOnIcon from '@mui/icons-material/ToggleOn';
+import ToggleOffIcon from '@mui/icons-material/ToggleOff';
 import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
 import TableCell from '@mui/material/TableCell';
@@ -12,6 +14,10 @@ import Pagination from 'react-bootstrap/Pagination';
 import Button from '@mui/material/Button';
 import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
+import CheckIcon from '@mui/icons-material/Check';
+import ClearIcon from '@mui/icons-material/Clear';
+import DriveFileRenameOutlineIcon from '@mui/icons-material/DriveFileRenameOutline';
+import DeleteForeverIcon from '@mui/icons-material/DeleteForever';
 import API from '../../../API';
 import { AuthContext } from '../../../helpers/AuthContext';
 import Swal from 'sweetalert2';
@@ -26,6 +32,7 @@ function ViewProduct() {
     const [upload, setUpdate] = useState(1);
     const [category, setCategory] = useState([])
     const [productLength, setProductLength] = useState(0);
+    const [checkAction, setCheckAction] = useState([]);
     const [anchorEl, setAnchorEl] = React.useState(null);
     const open = Boolean(anchorEl);
     const [refersh, setRefersh] = useState(false)
@@ -134,6 +141,15 @@ function ViewProduct() {
             if (res.data.status === 200) {
                 setProduct(res.data.products)
                 setLoading(false);
+                setCheckAction(prevCheckAction => {
+                    const newCheckAction = { ...prevCheckAction };
+                    res.data.products.forEach((item, index) => {
+                        if (item.trangThai === 1) {
+                            newCheckAction[item.id] = item.id;
+                        }
+                    });
+                    return newCheckAction;
+                });
             }
             else {
                 Swal.fire({
@@ -146,9 +162,9 @@ function ViewProduct() {
         })
     }, [upload, refersh]);
 
+
     console.log(viewProduct)
-
-
+    console.log(checkAction)
 
     const handlePagination = (e) => {
         setUpdate(e.target.name)
@@ -180,6 +196,46 @@ function ViewProduct() {
     const formatMoney = (value) => {
         return value.toLocaleString('vi-VN') + ' VNĐ';
     };
+
+    const handleChange = (id) => {
+        setCheckAction({ ...checkAction, [id]: 0 });
+        API({
+            method: 'put',
+            url: `/admin-product/upload-status/${id}`,
+            data: { trangThai: 0 },
+        }).then((res) => {
+            console.log("thanh cong")
+            setRefersh(!refersh)
+        }).catch((err) =>
+            Swal.fire({
+                title: 'Error!',
+                text: 'Do you want to continue',
+                icon: 'error',
+                confirmButtonText: 'Close'
+            })
+        )
+
+    }
+    const handleChange1 = (id) => {
+        setCheckAction({ ...checkAction, [id]: id });
+        API({
+            method: 'put',
+            url: `/admin-product/upload-status/${id}`,
+            data: { trangThai: 1 },
+        }).then((res) => {
+            setRefersh(!refersh)
+            console.log("thanh cong")
+        }).catch((err) =>
+            Swal.fire({
+                title: 'Error!',
+                text: 'Do you want to continue',
+                icon: 'error',
+                confirmButtonText: 'Close'
+            })
+        )
+
+    }
+
 
 
     var role = authState.phanQuyen;
@@ -321,11 +377,11 @@ function ViewProduct() {
                                 item.soLuongM == 0 &&
                                 item.soLuongXL == 0 ?
                                 <p style={{ color: 'red', fontWeight: "bold" }}>
-                                    Hết hàng
+                                    <ClearIcon color='#0ccf0f' style={{ fontSize: "35px", fontWeight: "800" }} />
                                 </p>
                                 :
                                 <p style={{ color: '#0ccf0f', fontWeight: "bold" }}>
-                                    Còn hàng
+                                    <CheckIcon color='#0ccf0f' style={{ fontSize: "35px", fontWeight: "800" }} />
                                 </p>
                         }
                     </TableCell>
@@ -338,12 +394,36 @@ function ViewProduct() {
                         {
                             item.trangThai == 0 ?
                                 <p style={{ color: 'red', fontWeight: "bold" }}>
-                                    Tạm ngừng
+                                    <ClearIcon color='#0ccf0f' style={{ fontSize: "35px", fontWeight: "800" }} />
                                 </p>
                                 :
                                 <p style={{ color: '#0ccf0f', fontWeight: "bold" }}>
-                                    Hoạt động
+                                    <CheckIcon color='#0ccf0f' style={{ fontSize: "35px", fontWeight: "800" }} />
                                 </p>
+                        }
+
+                    </TableCell>
+                    <TableCell
+                        sx={{ fontSize: "16px" }}
+                        align="right"
+                        component="th"
+                        scope="row"
+                    /* onClick={() => handleChange(item.id)} */
+                    >
+                        {
+                            /* checkAction ?
+                                (<ToggleOnIcon style={{ fontSize: "30px" }} />) :
+                                <ToggleOffIcon style={{ fontSize: "30px" }} /> */
+                            checkAction[item.id] == item.id ?
+                                (<ToggleOnIcon
+                                    style={{ fontSize: "45px", color: "#5ec9ff" }}
+
+                                    onClick={() => handleChange(item.id)}
+
+                                />) :
+                                <ToggleOffIcon style={{ fontSize: "45px", color: "red" }}
+                                    onClick={() => handleChange1(item.id)}
+                                />
                         }
                     </TableCell>
                     <TableCell
@@ -354,10 +434,8 @@ function ViewProduct() {
                     >
                         <Link
                             to={`/admin/edit-product/${item.id}`}
-                            className="btn btn-success btn-lg"
-                            style={{ padding: "8px", borderRadius: "5px", fontSize: "16px", width: "100px" }}
                         >
-                            Xem chi tiết
+                            <DriveFileRenameOutlineIcon style={{ fontSize: "30px", color: "#5ec9ff" }} />
                         </Link>
                     </TableCell>
                     <TableCell
@@ -367,8 +445,9 @@ function ViewProduct() {
                         scope="row"
                     >
                         <button
-                            className='btn btn-primary btn-sm'
-                            style={{ padding: "8px", borderRadius: "5px", fontSize: "16px", background: "red", color: "white", border: 0 }}
+                            /*  className='btn btn-primary btn-lg'
+                             style={{ padding: "8px", borderRadius: "5px", fontSize: "16px", background: "red", color: "white", border: 0 }} */
+                            style={{ border: "0px", background: "none" }}
                             onClick={(e) => {
                                 Swal.fire({
                                     text: "Bạn có chắc muốn xóa không?",
@@ -376,7 +455,8 @@ function ViewProduct() {
                                     showCancelButton: true,
                                     confirmButtonColor: '#3085d6',
                                     cancelButtonColor: '#d33',
-                                    confirmButtonText: 'Đồng ý!'
+                                    confirmButtonText: 'Đồng ý!',
+                                    cancelButtonText: 'Đóng',
                                 }).then((result) => {
                                     if (result.isConfirmed) {
 
@@ -385,10 +465,10 @@ function ViewProduct() {
                                 })
                             }}
                         >
-                            Xóa
+                            <DeleteForeverIcon style={{ fontSize: "30px", color: "red" }} />
                         </button>
                     </TableCell>
-                </TableRow>
+                </TableRow >
             )
         });
     }
@@ -452,6 +532,7 @@ function ViewProduct() {
                             <TableCell align="right" width={120}>Trạng thái</TableCell>
                             <TableCell align="right" width={120}>Hoạt động</TableCell>
                             <TableCell align="right" width={120}></TableCell>
+                            <TableCell align="right"></TableCell>
                             <TableCell align="right"></TableCell>
                         </TableRow>
                     </TableHead>

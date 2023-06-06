@@ -3,6 +3,8 @@ import { Link, useNavigate, useParams } from 'react-router-dom';
 import API from '../../../API';
 import Swal from 'sweetalert2';
 import Loading from '../../Loading';
+import DeleteForeverIcon from '@mui/icons-material/DeleteForever';
+import DriveFileRenameOutlineIcon from '@mui/icons-material/DriveFileRenameOutline';
 import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
 import TableCell from '@mui/material/TableCell';
@@ -10,6 +12,8 @@ import TableContainer from '@mui/material/TableContainer';
 import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
+import CheckIcon from '@mui/icons-material/Check';
+import ClearIcon from '@mui/icons-material/Clear';
 
 function ViewProductTrademark() {
     const history = useNavigate();
@@ -265,41 +269,42 @@ function ViewProductTrademark() {
                                 <img src={`http://localhost:4000/${item.hinh}`} alt={item.ten} width={70} />
                             </TableCell>
                             <TableCell
-                                sx={{ fontSize: "16px" }}
-                                align="right"
-                                component="th"
-                                scope="row"
-                            >
-                                {
-                                    item.soLuongL == 0 &&
-                                        item.soLuongM == 0 &&
-                                        item.soLuongXL == 0 ?
-                                        <p style={{ color: 'red', fontWeight: "bold" }}>
-                                            Hết hàng
-                                        </p>
-                                        :
-                                        <p style={{ color: '#0ccf0f', fontWeight: "bold" }}>
-                                            Còn hàng
-                                        </p>
-                                }
-                            </TableCell>
-                            <TableCell
-                                sx={{ fontSize: "16px" }}
-                                align="right"
-                                component="th"
-                                scope="row"
-                            >
-                                {
-                                    item.trangThai == 0 ?
-                                        <p style={{ color: 'red', fontWeight: "bold" }}>
-                                            Tạm ngưng
-                                        </p>
-                                        :
-                                        <p style={{ color: '#0ccf0f', fontWeight: "bold" }}>
-                                            Hoạt động
-                                        </p>
-                                }
-                            </TableCell>
+                        sx={{ fontSize: "16px" }}
+                        align="right"
+                        component="th"
+                        scope="row"
+                    >
+                        {
+                            item.soLuongL == 0 &&
+                                item.soLuongM == 0 &&
+                                item.soLuongXL == 0 ?
+                                <p style={{ color: 'red', fontWeight: "bold" }}>
+                                    <ClearIcon color='#0ccf0f' style={{ fontSize: "35px", fontWeight: "800" }} />
+                                </p>
+                                :
+                                <p style={{ color: '#0ccf0f', fontWeight: "bold" }}>
+                                    <CheckIcon color='#0ccf0f' style={{ fontSize: "35px", fontWeight: "800" }} />
+                                </p>
+                        }
+                    </TableCell>
+                    <TableCell
+                        sx={{ fontSize: "16px" }}
+                        align="right"
+                        component="th"
+                        scope="row"
+                    >
+                        {
+                            item.trangThai == 0 ?
+                                <p style={{ color: 'red', fontWeight: "bold" }}>
+                                    <ClearIcon color='#0ccf0f' style={{ fontSize: "35px", fontWeight: "800" }} />
+                                </p>
+                                :
+                                <p style={{ color: '#0ccf0f', fontWeight: "bold" }}>
+                                    <CheckIcon color='#0ccf0f' style={{ fontSize: "35px", fontWeight: "800" }} />
+                                </p>
+                        }
+
+                    </TableCell>
                             <TableCell
                                 sx={{ fontSize: "16px", width: "100px" }}
                                 align="right"
@@ -308,10 +313,9 @@ function ViewProductTrademark() {
                             >
                                 <Link
                                     to={`/admin/edit-product/${item.id}`}
-                                    className="btn btn-success btn-lg"
-                                    style={{ padding: "8px", borderRadius: "5px", fontSize: "16px", width: "100px" }}
+                                    
                                 >
-                                    Xem chi tiết
+                                    <DriveFileRenameOutlineIcon style={{ fontSize: "30px", color: "#5ec9ff" }} />
                                 </Link>
                             </TableCell>
                             <TableCell
@@ -321,8 +325,8 @@ function ViewProductTrademark() {
                                 scope="row"
                             >
                                 <button
-                                    className='btn btn-primary btn-sm'
-                                    style={{ padding: "8px", borderRadius: "5px", fontSize: "16px", background: "red", color: "white", border: 0 }}
+                                    className='btn btn-primary btn-lg'
+                                    style={{border:"0px",background: "none"}}
                                     onClick={(e) => {
                                         Swal.fire({
                                             text: "Bạn có chắc muốn xóa không?",
@@ -330,7 +334,8 @@ function ViewProductTrademark() {
                                             showCancelButton: true,
                                             confirmButtonColor: '#3085d6',
                                             cancelButtonColor: '#d33',
-                                            confirmButtonText: 'Đồng ý!'
+                                            confirmButtonText: 'Đồng ý!',
+                                            cancelButtonText: 'Đóng'
                                         }).then((result) => {
                                             if (result.isConfirmed) {
 
@@ -339,7 +344,7 @@ function ViewProductTrademark() {
                                         })
                                     }}
                                 >
-                                    Xóa
+                                   <DeleteForeverIcon style={{ fontSize: "30px", color: "red" }} />
                                 </button>
                             </TableCell>
                         </TableRow>
@@ -352,14 +357,15 @@ function ViewProductTrademark() {
                         showCancelButton: true,
                         confirmButtonColor: '#3085d6',
                         cancelButtonColor: '#d33',
-                        confirmButtonText: 'Đồng ý!'
+                        confirmButtonText: 'Đồng ý!',
+                        cancelButtonText: 'Đóng'
                     }).then((result) => {
                         if (result.isConfirmed) {
 
                             deleteTrademark(e);
                         }
                     })
-                }} className='btn btn-danger btn-sm fs-4 text float-end p-3'>Xóa Loại sản phẩm</button>)
+                }} className='btn btn-danger btn-lg fs-4 text float-end p-3'>Xóa Loại sản phẩm</button>)
 
             }
             else {
@@ -493,10 +499,9 @@ function ViewProductTrademark() {
                                 >
                                     <Link
                                         to={`/admin/edit-product/${item.id}`}
-                                        className="btn btn-success btn-lg"
-                                        style={{ padding: "8px", borderRadius: "5px", fontSize: "16px", width: "100px" }}
+                                        
                                     >
-                                        Xem chi tiết
+                                         <DriveFileRenameOutlineIcon style={{ fontSize: "30px", color: "#5ec9ff" }} />
                                     </Link>
                                 </TableCell>
                                 <TableCell
@@ -506,7 +511,7 @@ function ViewProductTrademark() {
                                     scope="row"
                                 >
                                     <button
-                                        className='btn btn-primary btn-sm'
+                                        className='btn btn-primary btn-lg'
                                         style={{ padding: "8px", borderRadius: "5px", fontSize: "16px", background: "red", color: "white", border: 0 }}
                                         onClick={(e) => {
                                             Swal.fire({
@@ -515,7 +520,8 @@ function ViewProductTrademark() {
                                                 showCancelButton: true,
                                                 confirmButtonColor: '#3085d6',
                                                 cancelButtonColor: '#d33',
-                                                confirmButtonText: 'Đồng ý!'
+                                                confirmButtonText: 'Đồng ý!',
+                                                cancelButtonText: 'Đóng'
                                             }).then((result) => {
                                                 if (result.isConfirmed) {
 
@@ -524,7 +530,7 @@ function ViewProductTrademark() {
                                             })
                                         }}
                                     >
-                                        Xóa
+                                        <DeleteForeverIcon style={{ fontSize: "30px", color: "red" }} />
                                     </button>
                                 </TableCell>
                             </TableRow>
@@ -546,14 +552,15 @@ function ViewProductTrademark() {
                     showCancelButton: true,
                     confirmButtonColor: '#3085d6',
                     cancelButtonColor: '#d33',
-                    confirmButtonText: 'Đồng ý!'
+                    confirmButtonText: 'Đồng ý!',
+                    cancelButtonText: 'Đóng'
                 }).then((result) => {
                     if (result.isConfirmed) {
 
                         deleteTrademark(e);
                     }
                 })
-            }} className='btn btn-danger btn-sm fs-4 text float-end p-3'>Xóa Loại sản phẩm</button>)
+            }} className='btn btn-danger btn-lg fs-4 text float-end p-3'>Xóa Loại sản phẩm</button>)
         }
     }
     return (

@@ -2,6 +2,8 @@ import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import Swal from 'sweetalert2'
 import API from '../../../API';
+import DeleteForeverIcon from '@mui/icons-material/DeleteForever';
+import DriveFileRenameOutlineIcon from '@mui/icons-material/DriveFileRenameOutline';
 import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
 import TableCell from '@mui/material/TableCell';
@@ -12,7 +14,8 @@ import Paper from '@mui/material/Paper';
 import AddPromotion from './AddPromotion';
 import Button from 'react-bootstrap/Button';
 import EditPromotion from './EditPromotion';
-
+import AddCircleIcon from '@mui/icons-material/AddCircle';
+import ContentPasteIcon from '@mui/icons-material/ContentPaste';
 import Pagination from 'react-bootstrap/Pagination';
 import Loading from '../../Loading';
 
@@ -91,6 +94,29 @@ function ViewPromotion() {
             </Pagination.Item>,
         );
     }
+
+    const deletePromotion = (e,id) => {
+        e.preventDefault();
+        API({
+            method: 'delete',
+            url: `/admin-promotion/delete-promotion/${id}`,
+        }).then((res) => {
+            setRefersh(!refersh)
+            Swal.fire(
+                'Thành công!',
+                'Đã xóa thành công!',
+                'success'
+            )
+        }).catch((err) => {
+            console.log(err);
+            Swal.fire({
+                icon: 'warning',
+                title: 'Lỗi server',
+                confirmButtonText: 'Đóng'
+            })
+        });
+    }
+
     var viewpromotion_HTMLTABLE = "";
     if (loading) {
         return <Loading />
@@ -161,11 +187,10 @@ function ViewPromotion() {
                         scope="row"
                     >
                         <Link
-                            to={`/admin/edit-product/${item.id}`}
-                            className="btn btn-success btn-lg"
-                            style={{ padding: "8px", borderRadius: "5px", fontSize: "16px", width: "100px" }}
+                            to={`/admin/promotion/view-product/${item.id}`}
+                            
                         >
-                            Xem chi tiết
+                             <ContentPasteIcon style={{ fontSize: "30px", color: "#5ec9ff" }} />
                         </Link>
                     </TableCell>
                     <TableCell
@@ -176,10 +201,8 @@ function ViewPromotion() {
                     >
                         <Link
                             to={`/admin/promotion/add-product/${item.id}`}
-                            className="btn btn-success btn-lg"
-                            style={{ padding: "8px", borderRadius: "5px", fontSize: "16px", width: "100px" }}
                         >
-                           Thêm sản phẩm
+                            <AddCircleIcon style={{ fontSize: "30px", color: "#5ec9ff" }}/>
                         </Link>
                     </TableCell>
                     <TableCell
@@ -193,6 +216,35 @@ function ViewPromotion() {
                             setRefersh={setRefersh}
                             refersh={refersh}
                         />
+                    </TableCell>
+                    <TableCell
+                        sx={{ fontSize: "16px" }}
+                        align="right"
+                        component="th"
+                        scope="row"
+                    >
+                        <button
+                            className='btn btn-primary btn-lg'
+                            style={{border:"0px",background: "none"}}
+                            onClick={(e) => {
+                                Swal.fire({
+                                    text: "Bạn có chắc muốn xóa không?",
+                                    icon: 'question',
+                                    showCancelButton: true,
+                                    confirmButtonColor: '#3085d6',
+                                    cancelButtonColor: '#d33',
+                                    confirmButtonText: 'Đồng ý!',
+                                    cancelButtonText: 'Đóng'
+                                }).then((result) => {
+                                    if (result.isConfirmed) {
+
+                                        deletePromotion(e, item.id);
+                                    }
+                                })
+                            }}
+                        >
+                            <DeleteForeverIcon style={{ fontSize: "30px", color: "red" }} />
+                        </button>
                     </TableCell>
                 </TableRow>
             )
@@ -215,14 +267,15 @@ function ViewPromotion() {
                     <div className="card-header" style={{ padding: "30px 0" }}>
                         <h1 style={{ fontWeight: "700" }}>Danh sách khuyến mãi
                             <AddPromotion
-                            setShowAddPromotion={setShowAddPromotion} showAddPromotion={showAddPromotion}
-                            setRefersh={setRefersh}
-                            refersh={refersh}
+                                setShowAddPromotion={setShowAddPromotion} showAddPromotion={showAddPromotion}
+                                setRefersh={setRefersh}
+                                refersh={refersh}
                             />
                         </h1>
                     </div>
                 </div>
-                <TableContainer component={Paper} className='container' style={{ padding: "10px 20px", background: "#f8f9fa" }}>
+                {
+                    promotionList.length > 0 ? <TableContainer component={Paper} className='container' style={{ padding: "10px 20px", background: "#f8f9fa" }}>
                     <Table sx={{ minWidth: 650, fontSize: "16px" }} aria-label="caption table">
                         <TableHead >
                             <TableRow sx={{ '&:last-child tr, &:last-child th': { fontSize: '16px', fontWeight: "600" } }}>
@@ -231,6 +284,7 @@ function ViewPromotion() {
                                 <TableCell align="right">Tiêu đề</TableCell>
                                 <TableCell align="right">Giá trị khuyến mãi(%)</TableCell>
                                 <TableCell align="right">Trạng thái</TableCell>
+                                <TableCell align="right"></TableCell>
                                 <TableCell align="right"></TableCell>
                                 <TableCell align="right"></TableCell>
                                 <TableCell align="right"></TableCell>
@@ -244,6 +298,8 @@ function ViewPromotion() {
                         <Pagination size="lg" >{items}</Pagination>
                     </div>
                 </TableContainer>
+                :<h1 style={{color:"red"}}>Chưa có chương trình khuyến mãi nào</h1> 
+                }
             </div>
         </div>
     );

@@ -79,7 +79,6 @@ function EditProduct() {
         })
     }, []);
     var initialValues = {
-        id: '',
         TheLoaiId: '',
         ten: '',
         giaTien: '',
@@ -163,18 +162,13 @@ function EditProduct() {
                 values.image2 = image2;
                 values.image3 = image3;
                 values.image4 = image4;
-                console.log(values)
-                if (values.image1 == null || values.image2 == null || values.image3 == null || values.image4 == null) {
-                    Swal.fire({
-                        icon: 'warning',
-                        text: 'Vui lòng nhập đầy đủ file hình!',
-                        confirmButtonText: 'Đóng'
-                    })
-                    return;
+                if(!values.KhuyenMaiId){
+                    values.KhuyenMaiId = 0;
                 }
+                console.log(values)
                 API({
                     method: 'put',
-                    url: `admin-product/upload-product`,
+                    url: `admin-product/upload-product/${slug.id}`,
                     data: values,
                     headers: { 'Content-Type': 'multipart/form-data' }
                 },)
@@ -217,7 +211,7 @@ function EditProduct() {
                 <div className="card-header" style={{ padding: "30px 0" }}>
                     <h1 style={{ fontWeight: "700" }}>Cập nhật sản phẩm
                         <Button
-                            className="btn btn-primary btn-sm float-end fs-4 text"
+                            className="btn btn-primary btn-lg float-end fs-4 text"
                             style={{ padding: "8px 10px", borderRadius: "5px" }}
                             onClick={() => history("/admin/view-product")}
                         >
@@ -317,6 +311,7 @@ function EditProduct() {
                                             value={formik.values.KhuyenMaiId}
                                             onChange={formik.handleChange} className="form-control fs-4 text" style={{ padding: "7px 15px", fontSize: "16px" }}
                                         >
+                                            <option value={0}>---Không áp dụng khuyến mãi---</option>
                                             {
                                                 promotionlist.map((item) => {
                                                     return (

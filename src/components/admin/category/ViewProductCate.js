@@ -1,10 +1,13 @@
 import React, { useEffect, useMemo, useState } from 'react';
-import axios from 'axios';
 import { Link, useNavigate, useParams } from 'react-router-dom';
 import API from '../../../API';
 import Swal from 'sweetalert2';
 import Loading from '../../Loading';
+import CheckIcon from '@mui/icons-material/Check';
+import ClearIcon from '@mui/icons-material/Clear';
+import DeleteForeverIcon from '@mui/icons-material/DeleteForever';
 import FilterAltIcon from '@mui/icons-material/FilterAlt';
+import DriveFileRenameOutlineIcon from '@mui/icons-material/DriveFileRenameOutline';
 import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
 import TableCell from '@mui/material/TableCell';
@@ -282,11 +285,11 @@ function ViewProductCate() {
                                         item.soLuongM == 0 &&
                                         item.soLuongXL == 0 ?
                                         <p style={{ color: 'red', fontWeight: "bold" }}>
-                                            Hết hàng
+                                            <ClearIcon color='#0ccf0f' style={{ fontSize: "35px", fontWeight: "800" }} />
                                         </p>
                                         :
                                         <p style={{ color: '#0ccf0f', fontWeight: "bold" }}>
-                                            Còn hàng
+                                            <CheckIcon color='#0ccf0f' style={{ fontSize: "35px", fontWeight: "800" }} />
                                         </p>
                                 }
                             </TableCell>
@@ -299,11 +302,11 @@ function ViewProductCate() {
                                 {
                                     item.trangThai == 0 ?
                                         <p style={{ color: 'red', fontWeight: "bold" }}>
-                                            Tạm ngưng
+                                            <ClearIcon color='#0ccf0f' style={{ fontSize: "35px", fontWeight: "800" }} />
                                         </p>
                                         :
                                         <p style={{ color: '#0ccf0f', fontWeight: "bold" }}>
-                                            Hoạt động
+                                            <CheckIcon color='#0ccf0f' style={{ fontSize: "35px", fontWeight: "800" }} />
                                         </p>
                                 }
                             </TableCell>
@@ -315,10 +318,9 @@ function ViewProductCate() {
                             >
                                 <Link
                                     to={`/admin/edit-product/${item.id}`}
-                                    className="btn btn-success btn-lg"
-                                    style={{ padding: "8px", borderRadius: "5px", fontSize: "16px", width: "100px" }}
+
                                 >
-                                    Xem chi tiết
+                                    <DriveFileRenameOutlineIcon style={{ fontSize: "30px", color: "#5ec9ff" }} />
                                 </Link>
                             </TableCell>
                             <TableCell
@@ -328,8 +330,7 @@ function ViewProductCate() {
                                 scope="row"
                             >
                                 <button
-                                    className='btn btn-primary btn-sm'
-                                    style={{ padding: "8px", borderRadius: "5px", fontSize: "16px", background: "red", color: "white", border: 0 }}
+                                    style={{ border: "0px", background: "none" }}
                                     onClick={(e) => {
                                         Swal.fire({
                                             text: "Bạn có chắc muốn xóa không?",
@@ -346,7 +347,7 @@ function ViewProductCate() {
                                         })
                                     }}
                                 >
-                                    Xóa
+                                    <DeleteForeverIcon style={{ fontSize: "30px", color: "red" }} />
                                 </button>
                             </TableCell>
                         </TableRow>
@@ -359,14 +360,15 @@ function ViewProductCate() {
                         showCancelButton: true,
                         confirmButtonColor: '#3085d6',
                         cancelButtonColor: '#d33',
-                        confirmButtonText: 'Đồng ý!'
+                        confirmButtonText: 'Đồng ý!',
+                        cancelButtonText: 'Đóng',
                     }).then((result) => {
                         if (result.isConfirmed) {
 
                             deleteCategory(e);
                         }
                     })
-                }} className='btn btn-danger btn-sm fs-4 text float-end p-3'>Xóa Loại sản phẩm</button>)
+                }} className='btn btn-danger btn-lg fs-4 text float-end p-3'>Xóa Loại sản phẩm</button>)
 
             }
             else {
@@ -375,77 +377,77 @@ function ViewProductCate() {
                         indexA++;
                         return (
                             <TableRow
-                            sx={{ '&:last-child tr, &:last-child th': { fontSize: '16px' } }}
-                            id={item.id}
-                            key={index}
-                            
-                        >
-                            <TableCell
-                                sx={{ fontSize: "16px" }}
-                                component="th"
-                                scope="row"
+                                sx={{ '&:last-child tr, &:last-child th': { fontSize: '16px' } }}
+                                id={item.id}
+                                key={index}
+
                             >
-                                {index + 1}
-                            </TableCell>
-                            <TableCell
-                                sx={{ fontSize: "16px" }}
-                                align="right" component="th"
-                                scope="row"
-                            >
-                                {item.id}
-                            </TableCell>
-                            <TableCell
-                                sx={{ fontSize: "16px", width: '250px' }}
-                                align="right"
-                                component="th"
-                                scope="row"
-        
-                            >
-                                {item.ten}
-                            </TableCell>
-                            <TableCell
-                                sx={{ fontSize: "16px" }}
-                                align="right"
-                                component="th"
-                                scope="row"
-                            >
-                                {item.TheLoai.ten}
-                            </TableCell>
-                            <TableCell
-                                sx={{ fontSize: "16px" }}
-                                align="right"
-                                component="th"
-                                scope="row"
-                            >
-                                {item.ThuongHieu.ten}
-                            </TableCell>
-                            <TableCell
-                                sx={{ fontSize: "16px" }}
-                                align="right"
-                                component="th"
-                                scope="row"
-                                width={200}
-                            >
-                                {formatMoney(item.giaTien)}
-                            </TableCell>
-                            <TableCell
-                                sx={{ fontSize: "16px" }}
-                                align="right"
-                                component="th"
-                                scope="row"
-                            >
-                                {item.KhuyenMai ? item.KhuyenMai.giamGia + "%" : "0%"}
-                            </TableCell>
-                            <TableCell
-                                sx={{ fontSize: "16px" }}
-                                align="right"
-                                component="th"
-                                scope="row"
-                            >
-                                {formatMoney(item.giaGiam)}
-                            </TableCell>
-                            
-                           {/*  <TableCell
+                                <TableCell
+                                    sx={{ fontSize: "16px" }}
+                                    component="th"
+                                    scope="row"
+                                >
+                                    {index + 1}
+                                </TableCell>
+                                <TableCell
+                                    sx={{ fontSize: "16px" }}
+                                    align="right" component="th"
+                                    scope="row"
+                                >
+                                    {item.id}
+                                </TableCell>
+                                <TableCell
+                                    sx={{ fontSize: "16px", width: '250px' }}
+                                    align="right"
+                                    component="th"
+                                    scope="row"
+
+                                >
+                                    {item.ten}
+                                </TableCell>
+                                <TableCell
+                                    sx={{ fontSize: "16px" }}
+                                    align="right"
+                                    component="th"
+                                    scope="row"
+                                >
+                                    {item.TheLoai.ten}
+                                </TableCell>
+                                <TableCell
+                                    sx={{ fontSize: "16px" }}
+                                    align="right"
+                                    component="th"
+                                    scope="row"
+                                >
+                                    {item.ThuongHieu.ten}
+                                </TableCell>
+                                <TableCell
+                                    sx={{ fontSize: "16px" }}
+                                    align="right"
+                                    component="th"
+                                    scope="row"
+                                    width={200}
+                                >
+                                    {formatMoney(item.giaTien)}
+                                </TableCell>
+                                <TableCell
+                                    sx={{ fontSize: "16px" }}
+                                    align="right"
+                                    component="th"
+                                    scope="row"
+                                >
+                                    {item.KhuyenMai ? item.KhuyenMai.giamGia + "%" : "0%"}
+                                </TableCell>
+                                <TableCell
+                                    sx={{ fontSize: "16px" }}
+                                    align="right"
+                                    component="th"
+                                    scope="row"
+                                >
+                                    {formatMoney(item.giaGiam)}
+                                </TableCell>
+
+                                {/*  <TableCell
                                 sx={{ fontSize: "16px" }}
                                 align="right"
                                 component="th"
@@ -453,107 +455,110 @@ function ViewProductCate() {
                             >
                                 {item.soLuongM}
                             </TableCell> */}
-                            <TableCell
-                                sx={{ fontSize: "16px" }}
-                                align="right"
-                                component="th"
-                                scope="row"
-                            >{item.soLuongL}</TableCell>
-                            <TableCell
-                                sx={{ fontSize: "16px" }}
-                                align="right"
-                                component="th"
-                                scope="row"
-                            >
-                                {item.soLuongXL}
-                            </TableCell>
-                            <TableCell
-                                sx={{ fontSize: "16px" }}
-                                align="right"
-                                component="th"
-                                scope="row"
-                            >
-                                <img src={`http://localhost:4000/${item.hinh}`} alt={item.ten} width={70} />
-                            </TableCell>
-                            <TableCell
-                                sx={{ fontSize: "16px" }}
-                                align="right"
-                                component="th"
-                                scope="row"
-                            >
-                                {
-                                    item.soLuongL == 0 &&
-                                        item.soLuongM == 0 &&
-                                        item.soLuongXL == 0 ?
-                                        <p style={{ color: 'red', fontWeight: "bold" }}>
-                                            Hết hàng
-                                        </p>
-                                        :
-                                        <p style={{ color: '#0ccf0f', fontWeight: "bold" }}>
-                                            Còn hàng
-                                        </p>
-                                }
-                            </TableCell>
-                            <TableCell
-                                sx={{ fontSize: "16px" }}
-                                align="right"
-                                component="th"
-                                scope="row"
-                            >
-                                {
-                                    item.trangThai == 0 ?
-                                        <p style={{ color: 'red', fontWeight: "bold" }}>
-                                            Tạm ngừng
-                                        </p>
-                                        :
-                                        <p style={{ color: '#0ccf0f', fontWeight: "bold" }}>
-                                            Hoạt động
-                                        </p>
-                                }
-                            </TableCell>
-                            <TableCell
-                                sx={{ fontSize: "16px", width: "100px" }}
-                                align="right"
-                                component="th"
-                                scope="row"
-                            >
-                                <Link
-                                    to={`/admin/edit-product/${item.id}`}
-                                    className="btn btn-success btn-lg"
-                                    style={{ padding: "8px", borderRadius: "5px", fontSize: "16px", width: "100px" }}
+                                <TableCell
+                                    sx={{ fontSize: "16px" }}
+                                    align="right"
+                                    component="th"
+                                    scope="row"
+                                >{item.soLuongL}</TableCell>
+                                <TableCell
+                                    sx={{ fontSize: "16px" }}
+                                    align="right"
+                                    component="th"
+                                    scope="row"
                                 >
-                                    Xem chi tiết
-                                </Link>
-                            </TableCell>
-                            <TableCell
-                                sx={{ fontSize: "16px" }}
-                                align="right"
-                                component="th"
-                                scope="row"
-                            >
-                                <button
-                                    className='btn btn-primary btn-sm'
-                                    style={{ padding: "8px", borderRadius: "5px", fontSize: "16px", background: "red", color: "white", border: 0 }}
-                                    onClick={(e) => {
-                                        Swal.fire({
-                                            text: "Bạn có chắc muốn xóa không?",
-                                            icon: 'question',
-                                            showCancelButton: true,
-                                            confirmButtonColor: '#3085d6',
-                                            cancelButtonColor: '#d33',
-                                            confirmButtonText: 'Đồng ý!'
-                                        }).then((result) => {
-                                            if (result.isConfirmed) {
-        
-                                                deleteProduct(e, item.id);
-                                            }
-                                        })
-                                    }}
+                                    {item.soLuongXL}
+                                </TableCell>
+                                <TableCell
+                                    sx={{ fontSize: "16px" }}
+                                    align="right"
+                                    component="th"
+                                    scope="row"
                                 >
-                                    Xóa
-                                </button>
-                            </TableCell>
-                        </TableRow>
+                                    <img src={`http://localhost:4000/${item.hinh}`} alt={item.ten} width={70} />
+                                </TableCell>
+                                <TableCell
+                                    sx={{ fontSize: "16px" }}
+                                    align="right"
+                                    component="th"
+                                    scope="row"
+                                >
+                                    {
+                                        item.soLuongL == 0 &&
+                                            item.soLuongM == 0 &&
+                                            item.soLuongXL == 0 ?
+                                            <p style={{ color: 'red', fontWeight: "bold" }}>
+                                                Hết hàng
+                                            </p>
+                                            :
+                                            <p style={{ color: '#0ccf0f', fontWeight: "bold" }}>
+                                                Còn hàng
+                                            </p>
+                                    }
+                                </TableCell>
+                                <TableCell
+                                    sx={{ fontSize: "16px" }}
+                                    align="right"
+                                    component="th"
+                                    scope="row"
+                                >
+                                    {
+                                        item.soLuongL == 0 &&
+                                            item.soLuongM == 0 &&
+                                            item.soLuongXL == 0 ?
+                                            <p style={{ color: 'red', fontWeight: "bold" }}>
+                                                <ClearIcon color='#0ccf0f' style={{ fontSize: "35px", fontWeight: "800" }} />
+                                            </p>
+                                            :
+                                            <p style={{ color: '#0ccf0f', fontWeight: "bold" }}>
+                                                <CheckIcon color='#0ccf0f' style={{ fontSize: "35px", fontWeight: "800" }} />
+                                            </p>
+                                    }
+                                </TableCell>
+                                <TableCell
+                                    sx={{ fontSize: "16px", width: "100px" }}
+                                    align="right"
+                                    component="th"
+                                    scope="row"
+                                >
+                                    <Link
+                                        to={`/admin/edit-product/${item.id}`}
+                                        className="btn btn-success btn-lg"
+                                        style={{ padding: "8px", borderRadius: "5px", fontSize: "16px", width: "100px" }}
+                                    >
+                                        <DriveFileRenameOutlineIcon style={{ fontSize: "30px", color: "#5ec9ff" }} />
+                                    </Link>
+                                </TableCell>
+                                <TableCell
+                                    sx={{ fontSize: "16px" }}
+                                    align="right"
+                                    component="th"
+                                    scope="row"
+                                >
+                                    <button
+                                        className='btn btn-primary btn-lg'
+                                        style={{ padding: "8px", borderRadius: "5px", fontSize: "16px", background: "red", color: "white", border: 0 }}
+                                        onClick={(e) => {
+                                            Swal.fire({
+                                                text: "Bạn có chắc muốn xóa không?",
+                                                icon: 'question',
+                                                showCancelButton: true,
+                                                confirmButtonColor: '#3085d6',
+                                                cancelButtonColor: '#d33',
+                                                confirmButtonText: 'Đồng ý!',
+                                                cancelButtonText: 'Đóng',
+                                            }).then((result) => {
+                                                if (result.isConfirmed) {
+
+                                                    deleteProduct(e, item.id);
+                                                }
+                                            })
+                                        }}
+                                    >
+                                        <DeleteForeverIcon style={{ fontSize: "30px", color: "red" }} />
+                                    </button>
+                                </TableCell>
+                            </TableRow>
                         )
                     }
                     else {
@@ -572,14 +577,15 @@ function ViewProductCate() {
                     showCancelButton: true,
                     confirmButtonColor: '#3085d6',
                     cancelButtonColor: '#d33',
-                    confirmButtonText: 'Đồng ý!'
+                    confirmButtonText: 'Đồng ý!',
+                    cancelButtonText: 'Đóng',
                 }).then((result) => {
                     if (result.isConfirmed) {
 
                         deleteCategory(e);
                     }
                 })
-            }} className='btn btn-danger btn-sm fs-4 text float-end p-3'>Xóa Loại sản phẩm</button>)
+            }} className='btn btn-danger btn-lg fs-4 text float-end p-3'>Xóa Loại sản phẩm</button>)
         }
     }
     return (

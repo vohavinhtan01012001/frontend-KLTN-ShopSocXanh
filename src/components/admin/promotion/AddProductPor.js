@@ -11,7 +11,9 @@ import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
 import Pagination from 'react-bootstrap/Pagination';
-import Button from '@mui/material/Button';
+import CheckIcon from '@mui/icons-material/Check';
+import ClearIcon from '@mui/icons-material/Clear';
+import HighlightOffIcon from '@mui/icons-material/HighlightOff';
 
 function AddProductPor() {
     const [loading, setLoading] = useState(true);
@@ -132,6 +134,7 @@ function AddProductPor() {
         return <Loading />
     }
     else {
+
         display_Productdata = viewProduct.map((item, index) => {
             return (
                 <TableRow
@@ -144,7 +147,13 @@ function AddProductPor() {
                         component="th"
                         scope="row"
                     >
-                        {index + 1}
+                        <input
+                            type="checkbox"
+                            name="checkbox"
+                            onChange={checkValue}
+                            value={item.id}
+                            style={{ width: "20px", height: "20px" }}
+                        />
                     </TableCell>
                     <TableCell
                         sx={{ fontSize: "16px" }}
@@ -194,7 +203,7 @@ function AddProductPor() {
                         scope="row"
                         width={250}
                     >
-                        {item.KhuyenMai ? item.KhuyenMai.tieuDe : <p style={{ color: "red" }}>Chưa có</p>}
+                        {item.KhuyenMai ? item.KhuyenMai.tieuDe : <p style={{ color: "red",fontWeight:"600" }}><HighlightOffIcon style={{fontSize:"30px"}} /></p>}
                     </TableCell>
                     <TableCell
                         sx={{ fontSize: "16px" }}
@@ -232,11 +241,11 @@ function AddProductPor() {
                                 item.soLuongM == 0 &&
                                 item.soLuongXL == 0 ?
                                 <p style={{ color: 'red', fontWeight: "bold" }}>
-                                    Hết hàng
+                                    <ClearIcon color='#0ccf0f' style={{ fontSize: "35px", fontWeight: "800" }} />
                                 </p>
                                 :
                                 <p style={{ color: '#0ccf0f', fontWeight: "bold" }}>
-                                    Còn hàng
+                                    <CheckIcon color='#0ccf0f' style={{ fontSize: "35px", fontWeight: "800" }} />
                                 </p>
                         }
                     </TableCell>
@@ -249,17 +258,19 @@ function AddProductPor() {
                         {
                             item.trangThai == 0 ?
                                 <p style={{ color: 'red', fontWeight: "bold" }}>
-                                    Tạm ngừng
+                                    <ClearIcon color='#0ccf0f' style={{ fontSize: "35px", fontWeight: "800" }} />
                                 </p>
                                 :
                                 <p style={{ color: '#0ccf0f', fontWeight: "bold" }}>
-                                    Hoạt động
+                                    <CheckIcon color='#0ccf0f' style={{ fontSize: "35px", fontWeight: "800" }} />
                                 </p>
                         }
+
                     </TableCell>
                 </TableRow>
             )
         });
+
     }
 
     return (
@@ -272,34 +283,42 @@ function AddProductPor() {
                 onKeyDown={handleInput}
             />
             <div className="card-header" style={{ padding: "30px 0" }}>
-                <h2>Thêm Sản phẩm áp dụng &nbsp;
-                    {promotion ? promotion.tieuDe : ""}
-                    <Link to="/admin/view-promotion" className="btn btn-primary btn-sm float-end  fs-4 text">Quay lại</Link>
+                <h2>Thêm Sản phẩm áp dụng khuyến mãi &nbsp;"
+                    {promotion ? promotion.tieuDe : ""}"
+                    <Link to="/admin/view-promotion" className="btn btn-primary btn-lg float-end  fs-4 text">Quay lại</Link>
                 </h2>
             </div>
-            <TableContainer component={Paper} className='container' style={{ padding: "10px 20px", background: "#f8f9fa" }}>
-                <Table sx={{ minWidth: 650, fontSize: "16px" }} aria-label="caption table">
-                    <TableHead >
-                        <TableRow sx={{ '&:last-child tr, &:last-child th': { fontSize: '16px', fontWeight: "600" } }}>
-                            <TableCell >STT</TableCell>
-                            <TableCell align="right">Mã</TableCell>
-                            <TableCell align="right" >Tên</TableCell>
-                            <TableCell align="right">Loại</TableCell>
-                            <TableCell align="right">Thương hiệu</TableCell>
-                            <TableCell align="right" width={150}>Giá gốc</TableCell>
-                            <TableCell align="right">Khuyến mãi</TableCell>
-                            <TableCell align="right" width={150}>Giá đã giảm</TableCell>
-                            <TableCell align="right">Màu sắc</TableCell>
-                            <TableCell align="right" width={100}>Hình ảnh</TableCell>
-                            <TableCell align="right" width={120}>Trạng thái</TableCell>
-                            <TableCell align="right" width={120}>Hoạt động</TableCell>
-                        </TableRow>
-                    </TableHead>
-                    <TableBody>
-                        {display_Productdata}
-                    </TableBody>
-                </Table>
-            </TableContainer>
+            {viewProduct.length > 0 ? <form onSubmit={submitProduct}>
+                <TableContainer component={Paper} className='container' style={{ padding: "10px 20px", background: "#f8f9fa" }}>
+                    <Table sx={{ minWidth: 650, fontSize: "16px" }} aria-label="caption table">
+                        <TableHead >
+                            <TableRow sx={{ '&:last-child tr, &:last-child th': { fontSize: '16px', fontWeight: "600" } }}>
+                                <TableCell ></TableCell>
+                                <TableCell align="right">Mã</TableCell>
+                                <TableCell align="right" >Tên</TableCell>
+                                <TableCell align="right">Loại</TableCell>
+                                <TableCell align="right">Thương hiệu</TableCell>
+                                <TableCell align="right" width={150}>Giá gốc</TableCell>
+                                <TableCell align="right">Khuyến mãi</TableCell>
+                                <TableCell align="right" width={150}>Giá đã giảm</TableCell>
+                                <TableCell align="right">Màu sắc</TableCell>
+                                <TableCell align="right" width={100}>Hình ảnh</TableCell>
+                                <TableCell align="right" width={120}>Trạng thái</TableCell>
+                                <TableCell align="right" width={120}>Hoạt động</TableCell>
+                            </TableRow>
+                        </TableHead>
+                        <TableBody>
+                            {display_Productdata}
+                        </TableBody>
+                    </Table>
+                    <div style={{ width: "100%", paddingTop: "20px", textAlign: "center" }}
+                    >
+                        <button type="submit" className="btn btn-primary btn-lg px-4 mt-2 fs-4 text" style={{ padding: "10px", width: "200px" }}>
+                            Thêm
+                        </button>
+                    </div>
+                </TableContainer>
+            </form> : <h1 style={{ color: "red" }}>Không còn sản phẩm</h1>}
         </div>
     );
 }

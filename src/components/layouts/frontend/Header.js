@@ -28,22 +28,22 @@ function Header(props) {
 
 
     //Xử lý dữ liệu loại sản phẩm
-/*     useEffect(() => {
-        let isMounted = true;
-
-        axios.get(`/api/home-category`).then(res => {
-            if (isMounted) {
-                if (res.status === 200) {
-                    setCategorylist(res.data.category);
+    /*     useEffect(() => {
+            let isMounted = true;
+    
+            axios.get(`/api/home-category`).then(res => {
+                if (isMounted) {
+                    if (res.status === 200) {
+                        setCategorylist(res.data.category);
+                    }
                 }
-            }
-        });
-
-        return () => {
-            isMounted = false
-        };
-
-    }, []); */
+            });
+    
+            return () => {
+                isMounted = false
+            };
+    
+        }, []); */
 
     //xử lý search
     const handleSearchClose = () => {
@@ -206,10 +206,10 @@ function Header(props) {
                 <Link to="/about" className='header__menu-link'>GIỚI THIỆU</Link>
             </li>
             <li className='header__menu-item'>
-                <a href="https://www.facebook.com/phat.ngo.5454" target="_blank" rel="noreferrer" className='header__navbar-link' style={{textDecoration:"none",color:"white",fontSize:"1.6rem",display:"block",padding:"13px"}} >FANPAGE</a>
+                <a href="https://www.facebook.com/phat.ngo.5454" target="_blank" rel="noreferrer" className='header__navbar-link' style={{ textDecoration: "none", color: "white", fontSize: "1.6rem", display: "block", padding: "13px" }} >FANPAGE</a>
             </li>
             <li className='header__menu-item'>
-            <a href="https://www.instagram.com/" target="_blank" rel="noreferrer" className='header__navbar-link' style={{textDecoration:"none",color:"white",fontSize:"1.6rem",display:"block",padding:"13px"}} >INTAGRAM</a>
+                <a href="https://www.instagram.com/" target="_blank" rel="noreferrer" className='header__navbar-link' style={{ textDecoration: "none", color: "white", fontSize: "1.6rem", display: "block", padding: "13px" }} >INTAGRAM</a>
             </li>
         </ul>);
     }
@@ -235,27 +235,22 @@ function Header(props) {
         })
     )
     useEffect(() => {
-        let isMounted = true;
 
         axios.get(`/api/cart`).then(res => {
-            if (isMounted) {
-                if (res.data.status === 200) {
-                    setCart(res.data.cart);
-                }
+            if (res.data.status === 200) {
+                setCart(res.data.cart);
             }
         });
-        
-        return () => {
-            isMounted = false
-        };
+
+
     }, []);
-    
+
     var sumQuatity = 0;
     cart.map((item) => {
         sumQuatity = sumQuatity + item.product_qty;
         return (sumQuatity);
     });
-    
+
 
     return (
         <header className='header'>

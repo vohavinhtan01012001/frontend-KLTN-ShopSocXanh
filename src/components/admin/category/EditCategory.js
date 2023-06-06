@@ -4,6 +4,7 @@ import Form from 'react-bootstrap/Form';
 import Modal from 'react-bootstrap/Modal';
 import API from '../../../API';
 import Swal from 'sweetalert2';
+import DriveFileRenameOutlineIcon from '@mui/icons-material/DriveFileRenameOutline';
 
 function EditCategory
     ({
@@ -65,11 +66,16 @@ function EditCategory
     }
     return (
         <>
-            <Button className="btn btn-primary btn-sm float-end fs-4 text" style={{ padding: "8px 10px", borderRadius: "5px",fontSize:"16px" }} onClick={handleShowEditCategory}>Chỉnh sửa</Button>
+            <button
+                style={{ border: "0px", background: "none" }}
+                onClick={handleShowEditCategory}
+            >
+                <DriveFileRenameOutlineIcon style={{ fontSize: "30px", color: "#5ec9ff" }} />
+            </button>
             <Modal show={showEditCategory} onHide={handleCloseEditCategory} size="lg" style={{ padding: "20px" }}>
                 <form onSubmit={submitCategory}>
                     <Modal.Header closeButton>
-                        <Modal.Title><h1 style={{fontWeight:"600"}}>Cập nhật loại sản phẩm</h1></Modal.Title>
+                        <Modal.Title><h1 style={{ fontWeight: "600" }}>Cập nhật loại sản phẩm</h1></Modal.Title>
                     </Modal.Header>
                     <Modal.Body>
                         <Form>

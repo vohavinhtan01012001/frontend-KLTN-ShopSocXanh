@@ -73,7 +73,7 @@ function AddPromotion({
     return (
         <>
             <Button
-                className="btn btn-primary btn-sm float-end fs-4 text"
+                className="btn btn-primary btn-lg float-end fs-4 text"
                 style={{ padding: "8px 10px", borderRadius: "5px" }}
                 onClick={handleShowAddPromotion}
             >

@@ -165,7 +165,7 @@ function AddProduct() {
                 <div className="card-header" style={{ padding: "30px 0" }}>
                     <h1 style={{ fontWeight: "700" }}>Thêm sản phẩm
                         <Button
-                            className="btn btn-primary btn-sm float-end fs-4 text"
+                            className="btn btn-primary btn-lg float-end fs-4 text"
                             style={{ padding: "8px 10px", borderRadius: "5px" }}
                             onClick={() => history("/admin/view-product")}
                         >

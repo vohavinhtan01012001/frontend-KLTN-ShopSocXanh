@@ -15,6 +15,8 @@ import EditTrademark from "../components/admin/trademark/EditTrademark";
 import ViewProductTrademark from "../components/admin/trademark/ViewProductTrademark";
 import AddProductPor from "../components/admin/promotion/AddProductPor";
 import ViewProductPor from "../components/admin/promotion/ViewProductPor";
+import AddAccount from "../components/admin/account/AddAccount";
+import ViewAccount from "../components/admin/account/ViewAccount";
 
 
 const publicRoutes = [
@@ -72,6 +74,14 @@ const privateRoutes = [
     {
         path:'/view-trademark/:id',
         component: ViewProductTrademark,
+    },
+    {
+        path:'/add-account',
+        component: AddAccount,
+    },
+    {
+        path:'/view-account',
+        component: ViewAccount,
     },
 ];
 export { privateRoutes, publicRoutes };
