@@ -22,7 +22,11 @@ import API from '../../../API';
 import { AuthContext } from '../../../helpers/AuthContext';
 import Swal from 'sweetalert2';
 import Loading from '../../Loading';
-
+import AddCircleIcon from '@mui/icons-material/AddCircle';
+import ColorLensIcon from '@mui/icons-material/ColorLens';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faShirt } from '@fortawesome/free-solid-svg-icons';
+import StarIcon from '@mui/icons-material/Star';
 let PageSize = 7;
 function ViewProduct() {
 
@@ -140,6 +144,7 @@ function ViewProduct() {
         }).then((res) => {
             if (res.data.status === 200) {
                 setProduct(res.data.products)
+                console.log(res.data.products)
                 setLoading(false);
                 setCheckAction(prevCheckAction => {
                     const newCheckAction = { ...prevCheckAction };
@@ -224,7 +229,6 @@ function ViewProduct() {
             data: { trangThai: 1 },
         }).then((res) => {
             setRefersh(!refersh)
-            console.log("thanh cong")
         }).catch((err) =>
             Swal.fire({
                 title: 'Error!',
@@ -238,7 +242,6 @@ function ViewProduct() {
 
 
 
-    var role = authState.phanQuyen;
     var display_Productdata = "";
     if (loading) {
         return <Loading />
@@ -334,7 +337,15 @@ function ViewProduct() {
                         component="th"
                         scope="row"
                     >
-                        {item.mauSac}
+                        {item.MauSac.tenMau}
+                    </TableCell>
+                    <TableCell
+                        sx={{ fontSize: "16px" }}
+                        align="right"
+                        component="th"
+                        scope="row"
+                    >
+                        {item.ChatLieu.tenChatLieu}
                     </TableCell>
                     <TableCell
                         sx={{ fontSize: "16px" }}
@@ -445,8 +456,6 @@ function ViewProduct() {
                         scope="row"
                     >
                         <button
-                            /*  className='btn btn-primary btn-lg'
-                             style={{ padding: "8px", borderRadius: "5px", fontSize: "16px", background: "red", color: "white", border: 0 }} */
                             style={{ border: "0px", background: "none" }}
                             onClick={(e) => {
                                 Swal.fire({
@@ -509,41 +518,71 @@ function ViewProduct() {
             </Menu>
             <div className="card-header" style={{ padding: "30px 0" }}>
                 <h1 style={{ fontWeight: "700" }}>Danh sách sản phẩm
-                    <Link to="/admin/add-product" className="btn btn-primary btn-lg float-end fs-4 text">Thêm sản phẩm</Link>
+                    <Link
+                        to="/admin/add-product"
+                        className='float-end navbar__admin--background '
+                        style={{ borderRadius:"50%",margin:'0 10px',padding:"0",height:"40px",width:"40px",lineHeight:"35px",textAlign:"center" }}
+                    >
+                        <AddCircleIcon style={{ color: 'white', fontSize: "20px" }} />
+                    </Link>
+                    <Link
+                        to="/admin/view-color"
+                        className="float-end navbar__admin--background "
+                        style={{ borderRadius:"50%",margin:'0 10px',padding:"0",height:"40px",width:"40px",lineHeight:"35px",textAlign:"center" }}
+                    >
+                        <ColorLensIcon style={{ color: 'white', fontSize: "20px" }} />
+                    </Link>
+                    <Link
+                        to="/admin/view-material"
+                        className="float-end navbar__admin--background"
+                        style={{ borderRadius:"50%",margin:'0 10px',padding:"0",height:"40px",width:"40px",lineHeight:"35px",textAlign:"center" }}
+                        >
+                        <FontAwesomeIcon icon={faShirt} style={{ color: "white", fontSize: "15px" }} />
+                    </Link>
+                    <Link
+                        to="/admin/view-evaluate"
+                        className="float-end navbar__admin--background "
+                        style={{ borderRadius:"50%",margin:'0 10px',padding:"0",height:"40px",width:"40px",lineHeight:"35px",textAlign:"center" }}
+                    >
+                        <StarIcon style={{ color: "white", fontSize: "20px" }} />
+                    </Link>
                 </h1>
             </div>
-            <TableContainer component={Paper} className='container' style={{ padding: "10px 20px", background: "#f8f9fa" }}>
-                <Table sx={{ minWidth: 650, fontSize: "16px" }} aria-label="caption table">
-                    <TableHead >
-                        <TableRow sx={{ '&:last-child tr, &:last-child th': { fontSize: '16px', fontWeight: "600" } }}>
-                            <TableCell >STT</TableCell>
-                            <TableCell align="right">Mã</TableCell>
-                            <TableCell align="right" >Tên</TableCell>
-                            <TableCell align="right">Loại</TableCell>
-                            <TableCell align="right">Thương hiệu</TableCell>
-                            <TableCell align="right" width={150}>Giá gốc</TableCell>
-                            <TableCell align="right">Khuyến mãi</TableCell>
-                            <TableCell align="right" width={150}>Giá đã giảm</TableCell>
-                            <TableCell align="right">Màu sắc</TableCell>
-                            <TableCell align="right">M</TableCell>
-                            <TableCell align="right">L</TableCell>
-                            <TableCell align="right">XL</TableCell>
-                            <TableCell align="right" width={100}>Hình ảnh</TableCell>
-                            <TableCell align="right" width={120}>Trạng thái</TableCell>
-                            <TableCell align="right" width={120}>Hoạt động</TableCell>
-                            <TableCell align="right" width={120}></TableCell>
-                            <TableCell align="right"></TableCell>
-                            <TableCell align="right"></TableCell>
-                        </TableRow>
-                    </TableHead>
-                    <TableBody>
-                        {display_Productdata}
-                    </TableBody>
-                </Table>
-                <div style={{ margin: "20px 0 0 0", fontSize: "16px" }}>
-                    <Pagination size="lg" >{items}</Pagination>
-                </div>
-            </TableContainer>
+            {
+                viewProduct.length > 0 ?
+                    <TableContainer component={Paper} className='container' style={{ padding: "10px 20px", background: "#f8f9fa" }}>
+                        <Table sx={{ minWidth: 650, fontSize: "16px" }} aria-label="caption table">
+                            <TableHead >
+                                <TableRow sx={{ '&:last-child tr, &:last-child th': { fontSize: '16px', fontWeight: "600" } }}>
+                                    <TableCell >STT</TableCell>
+                                    <TableCell align="right">Mã</TableCell>
+                                    <TableCell align="right" >Tên</TableCell>
+                                    <TableCell align="right">Loại</TableCell>
+                                    <TableCell align="right">Thương hiệu</TableCell>
+                                    <TableCell align="right" width={150}>Giá gốc</TableCell>
+                                    <TableCell align="right">Khuyến mãi</TableCell>
+                                    <TableCell align="right" width={150}>Giá đã giảm</TableCell>
+                                    <TableCell align="right">Màu sắc</TableCell>
+                                    <TableCell align="right">Chất liệu</TableCell>
+                                    <TableCell align="right">M</TableCell>
+                                    <TableCell align="right">L</TableCell>
+                                    <TableCell align="right">XL</TableCell>
+                                    <TableCell align="right" width={100}>Hình ảnh</TableCell>
+                                    <TableCell align="right" width={120}>Còn hàng</TableCell>
+                                    <TableCell align="right" width={120}>Hoạt động</TableCell>
+                                    <TableCell align="right" width={120}></TableCell>
+                                    <TableCell align="right"></TableCell>
+                                    <TableCell align="right"></TableCell>
+                                </TableRow>
+                            </TableHead>
+                            <TableBody>
+                                {display_Productdata}
+                            </TableBody>
+                        </Table>
+                        <div style={{ margin: "20px 0 0 0", fontSize: "16px" }}>
+                            <Pagination size="lg" >{items}</Pagination>
+                        </div>
+                    </TableContainer> : <h1 style={{ color: "red" }}>Chưa có sản phẩm</h1>}
 
         </div>
     )

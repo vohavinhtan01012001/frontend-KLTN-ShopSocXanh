@@ -1,4 +1,4 @@
-import { faHandHoldingUsd, faPhoneVolume, faStar, faSync, faTruckMoving } from "@fortawesome/free-solid-svg-icons";
+import { faHandHoldingUsd, faPhoneVolume, faStar, faStarHalfStroke, faSync, faTruckMoving } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import Carousel from 'react-bootstrap/Carousel';
 import axios from "axios";
@@ -12,116 +12,52 @@ import Hoodie from "../../assets/frontend/img/category/hoodie.png";
 import Sweater from "../../assets/frontend/img/category/sweater.png";
 import Im from "../../assets/frontend/img/detail/lss.png";
 import API from "../../API";
+import StarIcon from '@mui/icons-material/Star';
+import StarBorderIcon from '@mui/icons-material/StarBorder';
+import StarHalfIcon from '@mui/icons-material/StarHalf';
 import { AuthContext } from "../../helpers/AuthContext";
 import Loading from "../Loading";
+import ProductItem from "./component/ProductItem";
 
 function Home() {
     const [viewProduct, setViewProduct] = useState([]);
-    const [loading, setLoading] = useState(true);
+    const [stars, setStars] = useState([]);
     useEffect(() => {
         API({
             method: 'get',
             url: 'product/show-all',
         }).then((res) => {
-                console.log(res.data)
-                setViewProduct(res.data.products);
-                setLoading(false);
+            console.log(res.data)
+            setViewProduct(res.data.products);
+        })
+    }, []);
+
+    useEffect(() => {
+        API({
+            method: 'get',
+            url: 'evaluate/show-star',
+        }).then((res) => {
+            setStars(res.data.stars);
+            console.log(res.data)
         })
     }, []);
 
     var display_products = "";
-    if (loading) {
-        return (<Loading />)
-    }
-    else {
-        viewProduct.sort(function (a, b) {
-            let left = a.id;
-            let right = b.id;
-            return left === right ? 0 : left < right ? 1 : -1;
-        });
-        display_products = viewProduct.map((item, index) => {
-            if (item.soLuongM == 0 && item.soLuongL == 0 && item.soLuongXL == 0) {
-                return (
-                    index < 10 ?
-                        <div key={index} className="col-lg-3 col-md-4 col-sm-4 col-xs-6 ">
-                            <div className="content__product">
-                                <div className="content__product-item">
-                                    <img src={`http://localhost:4000/${item.hinh}`}
-                                        className="content__product-img">
-                                    </img>
-                                    <img src={Im}
-                                        className="content__product-img2">
-                                    </img>
-                                    <p className="content__product-text">
-                                        {item.name}
-                                    </p>
-                                </div>
-                                <div className="content-product-item2">
-                                    <div className="content__product-text2">
-                                        VERGENCY
-                                    </div>
-                                    <div className="content__product-evaluate">
-                                        <FontAwesomeIcon icon={faStar} />
-                                        <FontAwesomeIcon icon={faStar} />
-                                        <FontAwesomeIcon icon={faStar} />
-                                        <FontAwesomeIcon icon={faStar} />
-                                        <FontAwesomeIcon icon={faStar} />
-                                    </div>
-                                    <div className="content__product-price">
-                                        <div className="content__product-price--item1 error">
-                                            Hết hàng
-                                        </div>
-                                    </div>
-                                    <div className="content__product-new">new</div>
-                                    {/* {item.promotion ? <div className="content__product-sale">{"-" + item.promotion.discount + "%"}</div> : ""} */}
-                                </div>
-                            </div>
-                        </div>
-                        : ""
-                )
-            }
-            else {
-                return (
-                    index < 10 ?
-                        <div key={index} className="col-lg-3 col-md-4 col-sm-4 col-xs-6 ">
-                            <div className="content__product">
+    viewProduct.sort(function (a, b) {
+        let left = a.id;
+        let right = b.id;
+        return left === right ? 0 : left < right ? 1 : -1;
+    });
+    display_products = viewProduct.map((item, index) => {
+        if (item.trangThai === 1) {
+            return (
+                index < 10 ?
+                    <ProductItem item={item} index={index} />
+                    : ""
+            )
+        }
 
-                                <Link to={`/${item.TheLoai.ten}/${item.id}`} className="content__product-item">
-                                    <img src={`http://localhost:4000/${item.hinh}`}
-                                        className="content__product-img">
-                                    </img>
-                                    <p className="content__product-text">
-                                        {item.ten}
-                                    </p>
-                                </Link>
-                                <div className="content-product-item2">
-                                    <div className="content__product-text2">
-                                        VERGENCY
-                                    </div>
-                                    <div className="content__product-evaluate">
-                                        <FontAwesomeIcon icon={faStar} />
-                                        <FontAwesomeIcon icon={faStar} />
-                                        <FontAwesomeIcon icon={faStar} />
-                                        <FontAwesomeIcon icon={faStar} />
-                                        <FontAwesomeIcon icon={faStar} />
-                                    </div>
-                                    <div className="content__product-price">
-                                        {/* {item.promotion ?
-                                            <div className="content__product-price--item1">{Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format((item.price * (100 - item.promotion.discount)) / 100)}</div> :
-                                            <div className="content__product-price--item1">{Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(item.price)}</div>}
-                                        {item.promotion ? <del className="content__product-price--item2">{Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(item.price)}</del> : ""} */}
-                                    </div>
-                                    <div className="content__product-new">new</div>
-                                    {/* {item.promotion ? <div className="content__product-sale">{"-" + item.promotion.discount + "%"}</div> : ""} */}
-                                </div>
-                            </div>
-                        </div>
-                        : ""
-                )
-            }
-
-        });
-    }
+    });
     return (
         <React.Fragment>
             <div className="container">

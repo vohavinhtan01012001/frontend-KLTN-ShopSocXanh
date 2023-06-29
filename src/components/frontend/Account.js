@@ -5,20 +5,20 @@ import { Link, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { AuthContext } from "../../helpers/AuthContext";
 import Swal from 'sweetalert2';
+import API from '../../API';
+import Button from 'react-bootstrap/esm/Button';
 
 
 
 function Account() {
     const history = useNavigate();
     const { authState } = useContext(AuthContext);
-    const [loading, setLoading] = useState(true);
-    /* const [order, setOrder] = useState([]); */
+    const [order, setOrder] = useState([]);
     const [viewAccount, setAccount] = useState([]);
     useEffect(() => {
         axios.get(`/api/view-accountAdd`).then(res => {
             if (res.data.status === 200) {
                 setAccount(res.data.user);
-                setLoading(false);
             }
         });
     }, []);
@@ -38,7 +38,7 @@ function Account() {
             text: 'Đăng xuất thành công',
             icon: 'success',
             confirmButtonText: 'Đóng'
-            
+
         })
         history("/");
         window.location.reload();
@@ -51,75 +51,79 @@ function Account() {
     var phone = authState.sdt;
 
 
-    /*  useEffect(() => {
-         let isMounted = true;
-         axios.get(`/api/home-order`).then(res => {
-             if (isMounted) {
-                 if (res.data.status === 200) {
-                     setOrder(res.data.orders);
-                     setLoading(false);
-                 }
-             }
-         });
- 
-         return () => {
-             isMounted = false
-         };
-     }, []) */
+    useEffect(() => {
+        API({
+            method: 'get',
+            url: `order/view-order`,
+        }).then((res) => {
+            if (res.data.status === 200) {
+                setOrder(res.data.orders);
+            }
+            else {
+                Swal.fire({
+                    text: res.data.message,
+                    icon: 'warning',
+                    confirmButtonText: 'Đóng'
+                })
+            }
+        })
+    }, [])
     var display_products = "";
     var indexShow = 0;
-    var i = 0;
- /*    if (loading) {
-        return (<Loading />)
-    } */
-    /* else {
-        if (order.length > 0) {
-            display_products = order.map((item, index) => {
-                if (item.user.email == email) {
-                    indexShow = indexShow + 1;
-                    return (
-                        <div key={index} className='app__container-product' style={{ marginBottom: "20px" }}>
-                            <div style={{ fontWeight: "bold", paddingLeft: "20px", paddingBottom: "20px", color: "#333", display: "block" }}>
-                                <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
-                                    <h2 style={{ fontWeight: "bold", marginRight: "10px" }}>Đơn hàng {indexShow} </h2>
-                                    {item.status === 1 ? <p className='fs-4 text' style={{ color: '#0ccf0f', fontWeight: "bold", fontSize: "1.6rem" }}>Đã được xác nhận</p> :
-                                        <p className='fs-4 text' style={{ color: 'red', fontWeight: "bold", fontSize: "1.6rem" }}>Chưa xác nhận</p>}
+    var display_heading = ""
+    if (order.length > 0) {
+        display_heading = (<h2 style={{ fontWeight: "bold", paddingTop: "20px" }}>Danh sách đơn hàng</h2>)
+        display_products = order.map((item, index) => {
+            indexShow = indexShow + 1;
+            return (
+                <div key={index} className='app__container-product' style={{ marginBottom: "20px" }}>
+                    <div style={{ fontWeight: "bold", paddingLeft: "20px", paddingBottom: "20px", color: "#333", display: "block" }}>
+                        <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+                            <h2 style={{ fontWeight: "bold", marginRight: "10px" }}>Đơn hàng {indexShow} </h2>
+                            {item.trangThai === 1 ? <p className='fs-4 text' style={{ color: '#0ccf0f', fontWeight: "bold", fontSize: "1.6rem" }}>Đã được xác nhận</p> :
+                                <p className='fs-4 text' style={{ color: 'red', fontWeight: "bold", fontSize: "1.6rem" }}>Chưa xác nhận</p>}
 
-                                </div>
-                                <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
-                                    <h2 style={{ fontWeight: "bold", marginRight: "10px" }}></h2>
-                                    {item.pay === 1 ? <p className='fs-4 text' style={{ color: '#0ccf0f', fontWeight: "bold", fontSize: "1.6rem" }}>Đã thanh toán</p> :
-                                        <p className='fs-4 text' style={{ color: 'red', fontWeight: "bold", fontSize: "1.6rem" }}>Chưa thanh toán</p>}
-                                </div>
-
-                                <div className='container__account-name' style={{ fontWeight: "bold", color: "#333" }}>
-                                    <span>Tên người nhận </span>
-                                    <span>:</span>
-                                    <span>{item.name}</span>
-                                </div>
-                                <div className='container__account-name' style={{ fontWeight: "bold", color: "#333" }}>
-                                    <span>Địa chỉ người nhận </span>
-                                    <span>:</span>
-                                    <span>{item.address}</span>
-                                </div>
-                                <div className='container__account-name' style={{ fontWeight: "bold", color: "#333" }}>
-                                    <span>Số điện thoại </span>
-                                    <span>:</span>
-                                    <span>{item.phone}</span>
-                                </div>
-                            </div>
-                            <Link to={`/order/${item.id}`} className='container__account-name' style={{ fontWeight: "bold", color: "#333", textAlign: "end", textDecoration: "none" }}>
-                                <span className='app_container-edit--text'>Xem chi tiết</span>
-                            </Link>
                         </div>
-                    )
-                }
-                else {
-                    i = index;
-                }
-            })
-        }
-    } */
+                        <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+                            <h2 style={{ fontWeight: "bold", marginRight: "10px" }}></h2>
+                            {item.thanhToanVnpay === 1 || item.thanhToanTienMat === 1 ? <p className='fs-4 text' style={{ color: '#0ccf0f', fontWeight: "bold", fontSize: "1.6rem" }}>Đã thanh toán</p> :
+                                <p className='fs-4 text' style={{ color: 'red', fontWeight: "bold", fontSize: "1.6rem" }}>Chưa thanh toán</p>}
+                        </div>
+                        <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+                            <h2 style={{ fontWeight: "bold", marginRight: "10px" }}></h2>
+                            {item.giaoHang === 1 ? <p className='fs-4 text' style={{ color: '#0ccf0f', fontWeight: "bold", fontSize: "1.6rem" }}>Đã giao</p> :
+                                <p className='fs-4 text' style={{ color: 'red', fontWeight: "bold", fontSize: "1.6rem" }}>Chưa giao</p>}
+                        </div>
+
+
+                        <div className='container__account-name' style={{ fontWeight: "bold", color: "#333" }}>
+                            <span>Tên người nhận </span>
+                            <span>:</span>
+                            <span>{name}</span>
+                        </div>
+                        <div className='container__account-name' style={{ fontWeight: "bold", color: "#333" }}>
+                            <span>Địa chỉ người nhận </span>
+                            <span>:</span>
+                            <span>{address}</span>
+                        </div>
+                        <div className='container__account-name' style={{ fontWeight: "bold", color: "#333" }}>
+                            <span>Số điện thoại </span>
+                            <span>:</span>
+                            <span>{phone}</span>
+                        </div>
+                    </div>
+                    <Link to={`/order/${item.id}`} className='container__account-name' style={{ fontWeight: "bold", color: "#333", textAlign: "end", textDecoration: "none" }}>
+                        <span className='app_container-edit--text'>Xem chi tiết</span>
+                    </Link>
+                </div>
+            )
+
+
+        })
+    }
+    else{
+        display_heading = (<h2 style={{ color:'red', fontWeight: "bold", paddingTop: "20px" }}>Chưa có đơn hàng nào!</h2>)
+    }
     return (
         <React.Fragment>
             <div className="app__container">
@@ -143,10 +147,10 @@ function Account() {
                         </div>
                     </div>
                     <div className='row'>
-                        {/* <div className='col-lg-8 col-md-12 col-xs-12 pd5'>
-                            <h2 style={{ fontWeight: "bold", paddingTop: "20px" }}>Danh sách đơn hàng</h2>
+                        <div className='col-lg-8 col-md-12 col-xs-12 pd5'>
+                            {display_heading}
                             {display_products}
-                        </div> */}
+                        </div>
                         <div className='col-lg-4 col-md-12 col-xs-12 pd5'>
                             <h2 style={{ fontWeight: "bold", paddingTop: "20px" }}>Thông tin của bạn</h2>
                             <div className='app_container-account'>
@@ -177,6 +181,7 @@ function Account() {
                                     </div>
                                 </Link>
                             </div>
+                            <Button className="cart__order--paying " style={{border: "none", fontSize: "20px",marginTop:"20px" }} onClick={()=>{history('/favourite')}} >Danh sách yêu thích </Button>
                         </div>
                     </div>
                 </div>

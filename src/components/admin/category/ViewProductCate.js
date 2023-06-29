@@ -95,7 +95,6 @@ function ViewProductCate() {
             url: `/admin-product/delete-product`,
             data: { id: id }
         }).then((res) => {
-            setRefersh(!refersh)
             Swal.fire(
                 'Thành công!',
                 'Đã xóa thành công!',
@@ -109,6 +108,8 @@ function ViewProductCate() {
                 confirmButtonText: 'Đóng'
             })
         });
+        setRefersh(!refersh)
+
     }
 
     //Xử lý xóa category

@@ -10,6 +10,8 @@ function AddProduct() {
     const [categorylist, setCategorylist] = useState([]);
     const [trademarklist, setTrademarklist] = useState([]);
     const [promotionlist, setPromotionlist] = useState([]);
+    const [colorlist, setColorlist] = useState([]);
+    const [materialList, setMaterialList] = useState([]);
     const history = useNavigate()
     const [image1, setImage1] = useState();
     const [image2, setImage2] = useState();
@@ -73,11 +75,50 @@ function AddProduct() {
         })
     }, []);
 
+    useEffect(() => {
+        API({
+            method: 'get',
+            url: `/admin-color/show-all`,
+        }).then((res) => {
+            if (res.status === 200) {
+                setColorlist(res.data.colors)
+                console.log(res.data.colors)
+            }
+            else {
+                Swal.fire({
+                    title: 'Error!',
+                    text: 'Do you want to continue',
+                    icon: 'error',
+                    confirmButtonText: 'Cool'
+                })
+            }
+        })
+    }, []);
+
+    useEffect(() => {
+        API({
+            method: 'get',
+            url: `/admin-material/show-all`,
+        }).then((res) => {
+            if (res.status === 200) {
+                setMaterialList(res.data.materials)
+            }
+            else {
+                Swal.fire({
+                    title: 'Error!',
+                    text: 'Do you want to continue',
+                    icon: 'error',
+                    confirmButtonText: 'Cool'
+                })
+            }
+        })
+    }, []);
     const initialValues = {
         TheLoaiId: '',
         ten: '',
         giaTien: '',
-        mauSac: '',
+        MauSacId: '',
+        ChatLieuId: '',
         soLuongM: '',
         soLuongL: '',
         soLuongXL: '',
@@ -100,8 +141,10 @@ function AddProduct() {
         giaTien: Yup.number()
             .min(0, 'Giá tiền không được bé hơn 0')
             .required('Giá tiền là bắt buộc'),
-        mauSac: Yup.string()
+        MauSacId: Yup.string()
             .required('Màu sắc là bắt buộc'),
+        ChatLieuId: Yup.string()
+            .required('Chất liệu là bắt buộc'),
         soLuongM: Yup.number()
             .min(0, 'số Lượng M không được bé hơn 0')
             .required('số Lượng M là bắt buộc'),
@@ -130,6 +173,9 @@ function AddProduct() {
                     confirmButtonText: 'Đóng'
                 })
                 return;
+            }
+            if (!values.KhuyenMaiId) {
+                values.KhuyenMaiId = 0;
             }
             console.log(values)
             API({
@@ -257,11 +303,34 @@ function AddProduct() {
                                         </div>
                                         <div className="form-group mb-3">
                                             <label>Màu sắc</label>
-                                            <div>
-                                                <Field placeholder="Nhập màu sắc..." name="mauSac"  className="form-control fs-4 text" style={{ padding: "7px 15px", fontSize: "16px", display: "flex", width: "20%", marginRight: "10px" }} />
-                                            </div>
+                                            <Field placeholder="Nhập" as="select" name="MauSacId" className="form-control fs-4 text" style={{ padding: "7px 15px", fontSize: "16px" }}>
+                                                <option value='0' >---Màu sắc---</option>
+                                                {
+                                                    colorlist.map((item) => {
+                                                        return (
+                                                            <option value={item.id} key={item.id}>{item.tenMau}</option>
+                                                        )
+                                                    })
+                                                }
+                                            </Field>
                                             <p className="text-danger">
-                                                <ErrorMessage name='mauSac' component="div" style={{ color: "red", fontWeight: "500" }} />
+                                                <ErrorMessage name='MauSacId' component="div" style={{ color: "red", fontWeight: "500" }} />
+                                            </p>
+                                        </div>
+                                        <div className="form-group mb-3">
+                                            <label>Chất liệu</label>
+                                            <Field placeholder="Nhập" as="select" name="ChatLieuId" className="form-control fs-4 text" style={{ padding: "7px 15px", fontSize: "16px" }}>
+                                                <option value='0' >---Chất liệu---</option>
+                                                {
+                                                    materialList.map((item) => {
+                                                        return (
+                                                            <option value={item.id} key={item.id}>{item.tenChatLieu}</option>
+                                                        )
+                                                    })
+                                                }
+                                            </Field>
+                                            <p className="text-danger">
+                                                <ErrorMessage name='ChatLieuId' component="div" style={{ color: "red", fontWeight: "500" }} />
                                             </p>
                                         </div>
                                         <div className="form-group mb-3" style={{ display: "flex" }}>

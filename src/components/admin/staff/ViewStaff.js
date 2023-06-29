@@ -12,28 +12,29 @@ import Paper from '@mui/material/Paper';
 import Pagination from 'react-bootstrap/Pagination';
 import API from '../../../API';
 import Swal from 'sweetalert2';
-import ToggleOnIcon from '@mui/icons-material/ToggleOn';
-import ToggleOffIcon from '@mui/icons-material/ToggleOff';
+import DriveFileRenameOutlineIcon from '@mui/icons-material/DriveFileRenameOutline';
+import EditPermission from './EditRole';
 import CheckIcon from '@mui/icons-material/Check';
 import ClearIcon from '@mui/icons-material/Clear';
+import ToggleOnIcon from '@mui/icons-material/ToggleOn';
+import ToggleOffIcon from '@mui/icons-material/ToggleOff';
 import DeleteForeverIcon from '@mui/icons-material/DeleteForever';
+import HighlightOffIcon from '@mui/icons-material/HighlightOff';
 
-
-
-function VỉewAccount() {
+function ViewStaff() {
     const [loading, setLoading] = useState(true);
     const [upload, setUpdate] = useState(1);
     const [viewAccount, setAccount] = useState([]);
-    const [checkAction, setCheckAction] = useState([]);
     const [userLength, setUserLength] = useState(0);
+    const [checkAction, setCheckAction] = useState([]);
     const [refersh, setRefersh] = useState(false);
 
 
-    //show length category
+    //show length user
     useEffect(() => {
         API({
             method: 'get',
-            url: `/auth/show-all`,
+            url: `/auth/show-all-staff`,
         }).then((res) => {
             if (res.status === 200) {
                 setUserLength(res.data.users.length)
@@ -54,7 +55,7 @@ function VỉewAccount() {
     useEffect(() => {
         API({
             method: 'get',
-            url: `/auth/user?page=${upload}&limit=${limit}`,
+            url: `/auth/user-staff?page=${upload}&limit=${limit}`,
         }).then((res) => {
             if (res.status === 200) {
                 setAccount(res.data.users)
@@ -132,6 +133,7 @@ function VỉewAccount() {
     }
 
 
+
     const handleChange = (id) => {
         setCheckAction({ ...checkAction, [id]: 0 });
         API({
@@ -171,7 +173,6 @@ function VỉewAccount() {
 
     }
 
-
     let viewAccount_HTMLTABLE = ""
     if (loading) {
         return <Loading />
@@ -184,7 +185,7 @@ function VỉewAccount() {
                     sx={{ '&:last-child tr, &:last-child th': { fontSize: '16px' } }}
                     id={item.id}
                     key={index}
-                    draggable={true}
+                    /* draggable={true} */
                     onDragStart={(e) => {
                         e.dataTransfer.setData('text/plain', index);
                     }}
@@ -203,18 +204,15 @@ function VỉewAccount() {
                     <TableCell sx={{ fontSize: "16px" }} align="right" component="th" scope="row">
                         {item.id}
                     </TableCell>
-                    <TableCell sx={{ fontSize: "16px" }} align="right">
-                        {item.hoTen}
-                    </TableCell>
-                    <TableCell sx={{ fontSize: "16px" }} align="right">
-                        {item.email}
-                    </TableCell>
-                    <TableCell sx={{ fontSize: "16px" }} align="right">
-                        {item.diaChi}
-                    </TableCell>
-                    <TableCell sx={{ fontSize: "16px" }} align="right">
-                        {item.sdt}
-                    </TableCell>
+                    <TableCell sx={{ fontSize: "16px", width: "200px" }} align="right">{item.hoTen}</TableCell>
+                    <TableCell sx={{ fontSize: "16px" }} align="right">{item.email}</TableCell>
+                    <TableCell sx={{ fontSize: "16px" }} align="right">{item.diaChi}</TableCell>
+                    <TableCell sx={{ fontSize: "16px" }} align="right">{item.sdt}</TableCell>
+                    <TableCell sx={{ fontSize: "16px", width: "200px" }} align="right">{item.VaiTro ? item.VaiTro.tenVaiTro :
+                        <p style={{ color: "red", fontWeight: "600" }}>
+                            <HighlightOffIcon style={{ fontSize: "30px" }} />
+                        </p>
+                    }</TableCell>
                     <TableCell
                         sx={{ fontSize: "16px" }}
                         align="right"
@@ -233,14 +231,13 @@ function VỉewAccount() {
                         }
 
                     </TableCell>
-                    {/* <TableCell
+                    <TableCell
                         sx={{ fontSize: "16px" }}
                         align="right"
                         component="th"
                         scope="row"
                     >
                         {
-
                             checkAction[item.id] == item.id ?
                                 (<ToggleOnIcon
                                     style={{ fontSize: "45px", color: "#5ec9ff" }}
@@ -252,7 +249,19 @@ function VỉewAccount() {
                                     onClick={() => handleChange1(item.id)}
                                 />
                         }
-                    </TableCell> */}
+                    </TableCell>
+                    <TableCell
+                        sx={{ fontSize: "16px", width: "100px" }}
+                        align="right"
+                        component="th"
+                        scope="row"
+                    >
+                        <EditPermission
+                            showItemPermission={item}
+                            setRefersh={setRefersh}
+                            refersh={refersh}
+                        />
+                    </TableCell>
                     <TableCell
                         sx={{ fontSize: "16px" }}
                         align="right"
@@ -293,7 +302,8 @@ function VỉewAccount() {
             <div className='container'>
                 <div  >
                     <div className="card-header" style={{ padding: "30px 0" }}>
-                        <h1 style={{ fontWeight: "700" }}>Danh sách khách hàng
+                        <h1 style={{ fontWeight: "700" }}>Danh sách nhân viên
+                            <Link to="/admin/add-account" className="btn btn-primary btn-sm float-end  fs-4 text">Thêm nhân viên</Link>
                         </h1>
                     </div>
                 </div>
@@ -307,7 +317,9 @@ function VỉewAccount() {
                                 <TableCell align="right">Email</TableCell>
                                 <TableCell align="right">Địa chỉ</TableCell>
                                 <TableCell align="right">Số điện thoại</TableCell>
+                                <TableCell align="right">Vai trò</TableCell>
                                 <TableCell align="right">Trạng thái</TableCell>
+                                <TableCell align="right"></TableCell>
                                 <TableCell align="right"></TableCell>
                                 <TableCell align="right"></TableCell>
                             </TableRow>
@@ -326,4 +338,4 @@ function VỉewAccount() {
 }
 
 
-export default VỉewAccount;
+export default ViewStaff;

@@ -48,16 +48,17 @@ function AddAccount() {
         console.log(data)
         API({
             method: 'post',
-            url: `auth/register`,
+            url: `auth/register-staff`,
             data: data,
         }).then((res) => {
-            
+
             if (res.data.status === 200) {
                 Swal.fire({
                     text: res.data.message,
                     icon: 'success',
                     confirmButtonText: 'Đóng'
                 })
+                history("/admin/view-staff")
             }
             else if (res.data.status === 400) {
                 Swal.fire({
@@ -81,46 +82,49 @@ function AddAccount() {
         <>
             <div className="container" >
                 <div className="card-header" style={{ padding: "30px 0" }}>
-                    <h1 style={{ fontWeight: "700" }}>Thêm tài khoản
+                    <h1 style={{ fontWeight: "700" }}>Thêm tài khoản nhân viên
                         <button
                             className="float-end"
-                            style={{ padding: "8px 10px", borderRadius: "5px", border: "0px", backgroundColor: "#fff" }}
-                            onClick={() => history("/admin/view-account")}
+                            style={{ borderRadius: "5px", border: "0px", backgroundColor: "#fff" }}
+                            onClick={() => history("/admin/view-staff")}
                         >
                             <ReplyIcon style={{ fontSize: "50px", color: "#5ec9ff" }} />
                         </button>
                     </h1>
                 </div>
             </div>
-            <div className="container px-4 fs-4 text " style={{ fontWeight: "600" }}>
-                <div className="card mt-4 box-addProduct" style={{ background: "#f8f9fa" }}>
-                    <div className="card-body">
+            <div className="container px-4 fs-4 text " style={{ fontWeight: "600" }} >
+                <div className="card mt-4 box-addProduct" style={{ background: "#f8f9fa",width:"70%",margin:"0 auto" }}>
+                    <div className="card-body" >
                         <Formik
                             initialValues={initialValues}
                             onSubmit={onSubmit}
                             validationSchema={validationSchema}
                         >
                             <Form>
-                                <div className="tab-content" id="myTabContent">
+                                <div className="tab-content" id="myTabContent" >
                                     <div className="tab-pane card-body border fade show active" id="home" role="tabpanel" aria-labelledby="home-tab">
                                         <div className="form-group mb-3">
                                             <label>Họ và tên</label>
-                                            <Field name="hoTen" className="form-control fs-4 text" />
+                                            <Field name="hoTen"
+                                                
+                                                className="form-control fs-4 text" />
                                             <small className="text-danger">
                                                 <ErrorMessage name='hoTen' component="div" style={{ color: "red" }} />
                                             </small>
                                         </div>
                                         <div className="form-group mb-3">
                                             <label>Email</label>
-                                            <Field type="gmail" name="email" className="form-control fs-4 text" />
+                                            <Field type="gmail" name="email" 
+                                             className="form-control fs-4 text" />
                                             <small className="text-danger">
                                                 <ErrorMessage name='email' component="div" style={{ color: "red" }} />
                                             </small>
                                         </div>
                                         <div className="form-group mb-3">
                                             <label>Địa chỉ</label>
-                                            <Field 
-                                            as="textarea" name="diaChi"className="form-control fs-4 text" />
+                                            <Field
+                                                as="textarea" name="diaChi" className="form-control fs-4 text" />
                                             <small className="text-danger">
                                                 <ErrorMessage name='diaChi' component="div" style={{ color: "red" }} />
                                             </small>

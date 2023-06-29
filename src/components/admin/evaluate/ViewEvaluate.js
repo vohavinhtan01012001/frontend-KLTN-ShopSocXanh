@@ -9,73 +9,48 @@ import TableContainer from '@mui/material/TableContainer';
 import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
-import DriveFileRenameOutlineIcon from '@mui/icons-material/DriveFileRenameOutline';
-import ContentPasteIcon from '@mui/icons-material/ContentPaste';
 import Pagination from 'react-bootstrap/Pagination';
-import EditCategory from './EditCategory';
-import AddCategory from './AddCategory';
 import Loading from '../../Loading';
 
 
-function ViewCategory() {
+function ViewEvaluate() {
     const [loading, setLoading] = useState(true);
-    const [categorylist, setCategorylist] = useState([]);
-    const [categoryLength, setCategoryLength] = useState(0);
+    const [evaluateList, setEvaluateList] = useState([]);
+    const [evaluateLength, setEvaluateLength] = useState(0);
     const [upload, setUpdate] = useState(1);
-    const [showAddCategory, setShowAddCategory] = useState(false);
+    const [showAddColor, setShowAddColor] = useState(false);
     const [refersh, setRefersh] = useState(false);
 
-    //show length category
+
     useEffect(() => {
         API({
             method: 'get',
-            url: `/admin-category/show-all`,
+            url: `/admin-evaluate/evaluate?page=${upload}&limit=${limit}`,
         }).then((res) => {
             if (res.status === 200) {
-                setCategoryLength(res.data.categories.length)
-                setLoading(false);
+                setEvaluateLength(res.data.evaluateLength)
+                setEvaluateList(res.data.evaluate)
+                setLoading(false)
             }
-            else {
-                Swal.fire({
-                    text: 'Do you want to continue',
-                    icon: 'warning',
-                    confirmButtonText: 'Cool'
-                })
-            }
+        }).catch(err => {
+            Swal.fire({
+                text: 'Error',
+                icon: 'error',
+                confirmButtonText:"Đóng"
+            })
         })
 
-    }, [refersh]);
+    }, []);
 
     //Số lượng trong 1 trang
     const limit = 5;
-
-    //show list category
-    useEffect(() => {
-        API({
-            method: 'get',
-            url: `/admin-category/category?page=${upload}&limit=${limit}`,
-        }).then((res) => {
-            if (res.status === 200) {
-                setCategorylist(res.data.categories)
-                setLoading(false);
-            }
-            else {
-                Swal.fire({
-                    text: 'Do you want to continue',
-                    icon: 'warning',
-                    confirmButtonText: 'Cool'
-                })
-            }
-        })
-
-    }, [upload, refersh]);
 
     const handlePagination = (e) => {
         setUpdate(e.target.name)
     }
 
     let items = [];
-    for (let number = 1; number <= Math.ceil(categoryLength / limit); number++) {
+    for (let number = 1; number <= Math.ceil(evaluateLength / limit); number++) {
         items.push(
             <Pagination.Item
                 onClick={handlePagination}
@@ -96,7 +71,7 @@ function ViewCategory() {
         return <Loading />
     }
     else {
-        viewcategory_HTMLTABLE = categorylist.map((item, index) => {
+        viewcategory_HTMLTABLE = evaluateList.map((item, index) => {
             const offset = (upload - 1) * limit;
             return (
                 <TableRow
@@ -120,31 +95,13 @@ function ViewCategory() {
                         {offset + index + 1}
                     </TableCell>
                     <TableCell sx={{ fontSize: "16px" }} align="right" component="th" scope="row">
-                        {item.id}
+                        {item.productId}
                     </TableCell>
                     <TableCell sx={{ fontSize: "16px" }} align="right">
-                        {item.ten}
+                        {item.productName}
                     </TableCell>
                     <TableCell sx={{ fontSize: "16px" }} align="right">
-                        {item.moTa}
-                    </TableCell>
-                    <TableCell sx={{ fontSize: "16px" }} align="right">
-                        <EditCategory
-                            showItemCategory={item}
-                            setRefersh={setRefersh}
-                            refersh={refersh}
-                        />
-                    </TableCell>
-                    <TableCell
-
-                        align="right"
-                    >
-                        <Link
-                            to={`${item.id}`}
-
-                        >
-                            <ContentPasteIcon style={{ fontSize: "30px", color: "#5ec9ff" }} />
-                        </Link>
+                        {item.evaluate}
                     </TableCell>
                 </TableRow>
             )
@@ -153,27 +110,22 @@ function ViewCategory() {
 
 
     const handleRowDrag = (dragIndex, hoverIndex) => {
-        const draggedRow = categorylist[dragIndex];
-        const updatedList = [...categorylist];
+        const draggedRow = evaluateList[dragIndex];
+        const updatedList = [...evaluateList];
         updatedList.splice(dragIndex, 1);
         updatedList.splice(hoverIndex, 0, draggedRow);
-        setCategorylist(updatedList);
+        setEvaluateList(updatedList);
     };
 
     const formatMoney = (value) => {
         return value.toLocaleString('vi-VN') + ' VNĐ';
     };
     return (
-        <div className="" /* style={{ width: "100%", height: "100%", background: "var(--bs-gray-200)" }} */ >
+        <div className="">
             <div className='container'>
                 <div  >
                     <div className="card-header" style={{ padding: "30px 0" }}>
-                        <h1 style={{ fontWeight: "700" }}>Danh sách loại sản phẩm
-                            <AddCategory
-                                setShowAddCategory={setShowAddCategory} showAddCategory={showAddCategory}
-                                setRefersh={setRefersh}
-                                refersh={refersh}
-                            />
+                        <h1 style={{ fontWeight: "700" }}>Danh sách đánh giá
                         </h1>
                     </div>
                 </div>
@@ -182,11 +134,9 @@ function ViewCategory() {
                         <TableHead >
                             <TableRow sx={{ '&:last-child tr, &:last-child th': { fontSize: '16px', fontWeight: "600" } }}>
                                 <TableCell >STT</TableCell>
-                                <TableCell align="right">Mã</TableCell>
-                                <TableCell align="right">Tên Loại sản phẩm</TableCell>
-                                <TableCell align="right">Mô tả</TableCell>
-                                <TableCell align="right"></TableCell>
-                                <TableCell align="right"></TableCell>
+                                <TableCell align="right">Mã sản phẩm</TableCell>
+                                <TableCell align="right">Tên sản phẩm</TableCell>
+                                <TableCell align="right">Đánh giá (0 -- 5)</TableCell>
                             </TableRow>
                         </TableHead>
                         <TableBody>
@@ -203,4 +153,4 @@ function ViewCategory() {
     );
 }
 
-export default ViewCategory;
+export default ViewEvaluate;

@@ -11,6 +11,8 @@ function EditProduct() {
     const [categorylist, setCategorylist] = useState([]);
     const [trademarklist, setTrademarklist] = useState([]);
     const [promotionlist, setPromotionlist] = useState([]);
+    const [colorList, setColorList] = useState([]);
+    const [materialList, setMaterialList] = useState([]);
     const [loading, setLoading] = useState(true);
     const [product, setProduct] = useState({});
     const history = useNavigate()
@@ -62,6 +64,46 @@ function EditProduct() {
     useEffect(() => {
         API({
             method: 'get',
+            url: `/admin-material/show-all`,
+        }).then((res) => {
+            if (res.status === 200) {
+                setMaterialList(res.data.materials)
+                console.log(res.data.materials)
+            }
+            else {
+                Swal.fire({
+                    title: 'Error!',
+                    text: 'Do you want to continue',
+                    icon: 'error',
+                    confirmButtonText: 'Cool'
+                })
+            }
+        })
+    }, []);
+
+    useEffect(() => {
+        API({
+            method: 'get',
+            url: `/admin-color/show-all`,
+        }).then((res) => {
+            if (res.status === 200) {
+                setColorList(res.data.colors)
+                console.log(res.data.colors)
+            }
+            else {
+                Swal.fire({
+                    title: 'Error!',
+                    text: 'Do you want to continue',
+                    icon: 'error',
+                    confirmButtonText: 'Cool'
+                })
+            }
+        })
+    }, []);
+
+    useEffect(() => {
+        API({
+            method: 'get',
             url: `/admin-promotion/show-all`,
         }).then((res) => {
             if (res.status === 200) {
@@ -82,7 +124,8 @@ function EditProduct() {
         TheLoaiId: '',
         ten: '',
         giaTien: '',
-        mauSac: '',
+        MauSacId: '',
+        ChatLieuId: '',
         soLuongM: '',
         soLuongL: '',
         soLuongXL: '',
@@ -107,7 +150,8 @@ function EditProduct() {
                 console.log(res.data.product)
                 initialValues.id = res.data.product[0].id
                 initialValues.TheLoaiId = res.data.product[0].TheLoaiId
-                initialValues.mauSac = res.data.product[0].mauSac
+                initialValues.MauSacId = res.data.product[0].MauSacId
+                initialValues.ChatLieuId = res.data.product[0].ChatLieuId
                 initialValues.ThuongHieuId = res.data.product[0].ThuongHieuId
                 initialValues.KhuyenMaiId = res.data.product[0].KhuyenMaiId ? res.data.product[0].KhuyenMaiId : null
                 initialValues.ten = res.data.product[0].ten
@@ -139,8 +183,10 @@ function EditProduct() {
         giaTien: Yup.number()
             .min(0, 'Giá tiền không được bé hơn 0')
             .required('Giá tiền là bắt buộc'),
-        mauSac: Yup.string()
+            MauSacId: Yup.string()
             .required('Màu sắc là bắt buộc'),
+            ChatLieuId: Yup.string()
+            .required('Chất liệu là bắt buộc'),
         soLuongM: Yup.number()
             .min(0, 'số Lượng M không được bé hơn 0')
             .required('số Lượng M là bắt buộc'),
@@ -328,18 +374,47 @@ function EditProduct() {
                                     </div>
                                     <div className="form-group mb-3">
                                         <label>Màu sắc</label>
-                                        <div >
-                                            <input
-                                                placeholder="Nhập màu săc..."
-                                                name="mauSac"
-                                                type="text"
-                                                value={formik.values.mauSac}
-                                                onChange={formik.handleChange}
-                                                className="form-control fs-4 text" style={{ padding: "7px 15px", fontSize: "16px", display: "flex", width: "20%", marginRight: "10px" }} />
-                                        </div>
+                                        <select
+                                            placeholder="Nhập"
+                                            name="MauSacId"
+                                            value={formik.values.MauSacId}
+                                            onChange={formik.handleChange} className="form-control fs-4 text" style={{ padding: "7px 15px", fontSize: "16px" }}
+                                        >
+                                            <option value={0}>---Màu sắc---</option>
+                                            {
+                                                colorList.map((item) => {
+                                                    return (
+                                                        <option value={item.id} key={item.id}>{item.tenMau}</option>
+                                                    )
+                                                })
+                                            }
+                                        </select>
                                         <p className="text-danger">
-                                            {formik.errors.mauSac ? (
-                                                <p>{formik.errors.mauSac}</p>
+                                            {formik.errors.MauSacId ? (
+                                                <p>{formik.errors.MauSacId}</p>
+                                            ) : null}
+                                        </p>
+                                    </div>
+                                    <div className="form-group mb-3">
+                                        <label>Chất liệu</label>
+                                        <select
+                                            placeholder="Nhập"
+                                            name="ChatLieuId"
+                                            value={formik.values.ChatLieuId}
+                                            onChange={formik.handleChange} className="form-control fs-4 text" style={{ padding: "7px 15px", fontSize: "16px" }}
+                                        >
+                                            <option value={0}>---Chất liệu---</option>
+                                            {
+                                                materialList.map((item) => {
+                                                    return (
+                                                        <option value={item.id} key={item.id}>{item.tenChatLieu}</option>
+                                                    )
+                                                })
+                                            }
+                                        </select>
+                                        <p className="text-danger">
+                                            {formik.errors.ChatLieuId ? (
+                                                <p>{formik.errors.ChatLieuId}</p>
                                             ) : null}
                                         </p>
                                     </div>
@@ -462,7 +537,9 @@ function EditProduct() {
                                     </div>
                                     <div className="form-group mb-3">
                                         <label>Mô tả chi tiết</label>
-                                        <textarea name="moTa" className="form-control fs-4 text" style={{ padding: "7px 15px", fontSize: "16px" }} />
+                                        <textarea name="moTa" className="form-control fs-4 text" 
+                                        onChange={formik.handleChange} 
+                                        style={{ padding: "7px 15px", fontSize: "16px" }} />
                                         <p className="text-danger">
                                             <h1 name='moTa' component="div" style={{ color: "red", fontWeight: "500" }} />
                                         </p>

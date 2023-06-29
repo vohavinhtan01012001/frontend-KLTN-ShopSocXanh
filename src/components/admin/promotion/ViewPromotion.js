@@ -178,14 +178,6 @@ function ViewPromotion() {
                         component="th"
                         scope="row"
                     >
-                        Trạng thái
-                    </TableCell>
-                    <TableCell
-                        sx={{ fontSize: "16px" }}
-                        align="right"
-                        component="th"
-                        scope="row"
-                    >
                         <Link
                             to={`/admin/promotion/view-product/${item.id}`}
                             
@@ -283,7 +275,6 @@ function ViewPromotion() {
                                 <TableCell align="right">Mã khuyến mãi</TableCell>
                                 <TableCell align="right">Tiêu đề</TableCell>
                                 <TableCell align="right">Giá trị khuyến mãi(%)</TableCell>
-                                <TableCell align="right">Trạng thái</TableCell>
                                 <TableCell align="right"></TableCell>
                                 <TableCell align="right"></TableCell>
                                 <TableCell align="right"></TableCell>

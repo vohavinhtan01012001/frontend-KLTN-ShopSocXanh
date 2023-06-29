@@ -1,7 +1,7 @@
-import React, { useState, useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
+import axios from 'axios';
 import { Link } from 'react-router-dom';
-import Swal from 'sweetalert2'
-import API from '../../../API';
+import Loading from '../../Loading';
 import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
 import TableCell from '@mui/material/TableCell';
@@ -9,30 +9,31 @@ import TableContainer from '@mui/material/TableContainer';
 import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
-import DriveFileRenameOutlineIcon from '@mui/icons-material/DriveFileRenameOutline';
-import ContentPasteIcon from '@mui/icons-material/ContentPaste';
 import Pagination from 'react-bootstrap/Pagination';
-import EditCategory from './EditCategory';
-import AddCategory from './AddCategory';
-import Loading from '../../Loading';
+import API from '../../../API';
+import Swal from 'sweetalert2';
+import ContentPasteIcon from '@mui/icons-material/ContentPaste';
+import EditPermission from './EditPermission';
+import AddRole from './AddRole';
+import EditRole from './EditRole';
 
-
-function ViewCategory() {
+function ViewPermission() {
     const [loading, setLoading] = useState(true);
-    const [categorylist, setCategorylist] = useState([]);
-    const [categoryLength, setCategoryLength] = useState(0);
     const [upload, setUpdate] = useState(1);
-    const [showAddCategory, setShowAddCategory] = useState(false);
+    const [role, setRole] = useState([]);
+    const [userLength, setRolePermissionLength] = useState(0);
+    const [showAddRole, setShowAddRole] = useState(false);
     const [refersh, setRefersh] = useState(false);
 
-    //show length category
+
+    //show length user
     useEffect(() => {
         API({
             method: 'get',
-            url: `/admin-category/show-all`,
+            url: `/admin-permission/show-all`,
         }).then((res) => {
             if (res.status === 200) {
-                setCategoryLength(res.data.categories.length)
+                setRolePermissionLength(res.data.role.length)
                 setLoading(false);
             }
             else {
@@ -45,18 +46,17 @@ function ViewCategory() {
         })
 
     }, [refersh]);
-
     //Số lượng trong 1 trang
     const limit = 5;
 
-    //show list category
+    //show list user
     useEffect(() => {
         API({
             method: 'get',
-            url: `/admin-category/category?page=${upload}&limit=${limit}`,
+            url: `/admin-permission/role?page=${upload}&limit=${limit}`,
         }).then((res) => {
-            if (res.status === 200) {
-                setCategorylist(res.data.categories)
+            if (res.data.status === 200) {
+                setRole(res.data.roles)
                 setLoading(false);
             }
             else {
@@ -70,12 +70,35 @@ function ViewCategory() {
 
     }, [upload, refersh]);
 
+    /* const deleteAccount = (e, id) => {
+        e.preventDefault();
+        const thisclicked = e.target.closest('tr');
+        axios.delete(`/api/delete-account/${id}`).then(res => {
+            if (res.data.status === 200) {
+                swal('Success', res.data.message, "success");
+                thisclicked.closest("tr").remove();
+            }
+            else if (res.data.status === 404) {
+                swal('Warning', res.data.message, "warning");
+            }
+        })
+    } */
+
+    const handleRowDrag = (dragIndex, hoverIndex) => {
+        const draggedRow = userLength[dragIndex];
+        const updatedList = [...userLength];
+        updatedList.splice(dragIndex, 1);
+        updatedList.splice(hoverIndex, 0, draggedRow);
+        setRolePermissionLength(updatedList);
+    };
+
+
     const handlePagination = (e) => {
         setUpdate(e.target.name)
     }
 
     let items = [];
-    for (let number = 1; number <= Math.ceil(categoryLength / limit); number++) {
+    for (let number = 1; number <= Math.ceil(userLength / limit); number++) {
         items.push(
             <Pagination.Item
                 onClick={handlePagination}
@@ -88,15 +111,12 @@ function ViewCategory() {
             </Pagination.Item>,
         );
     }
-
-
-
-    var viewcategory_HTMLTABLE = "";
+    let viewAccount_HTMLTABLE = ""
     if (loading) {
         return <Loading />
     }
     else {
-        viewcategory_HTMLTABLE = categorylist.map((item, index) => {
+        viewAccount_HTMLTABLE = role.map((item, index) => {
             const offset = (upload - 1) * limit;
             return (
                 <TableRow
@@ -119,58 +139,53 @@ function ViewCategory() {
                     <TableCell sx={{ fontSize: "16px" }} component="th" scope="row">
                         {offset + index + 1}
                     </TableCell>
-                    <TableCell sx={{ fontSize: "16px" }} align="right" component="th" scope="row">
-                        {item.id}
-                    </TableCell>
                     <TableCell sx={{ fontSize: "16px" }} align="right">
-                        {item.ten}
+                        {item.tenVaiTro}
                     </TableCell>
                     <TableCell sx={{ fontSize: "16px" }} align="right">
                         {item.moTa}
                     </TableCell>
-                    <TableCell sx={{ fontSize: "16px" }} align="right">
-                        <EditCategory
-                            showItemCategory={item}
+                    <TableCell
+                        align="right"
+                    >
+
+                        <EditPermission
+                            showItemPermission={item}
                             setRefersh={setRefersh}
                             refersh={refersh}
                         />
                     </TableCell>
                     <TableCell
-
                         align="right"
                     >
-                        <Link
+                        {/*  <Link
                             to={`${item.id}`}
 
                         >
                             <ContentPasteIcon style={{ fontSize: "30px", color: "#5ec9ff" }} />
-                        </Link>
+                        </Link> */}
+                        <EditRole
+                            showItemRole={item}
+                            setRefersh={setRefersh}
+                            refersh={refersh}
+                        />
                     </TableCell>
                 </TableRow>
             )
+
         });
+
     }
 
 
-    const handleRowDrag = (dragIndex, hoverIndex) => {
-        const draggedRow = categorylist[dragIndex];
-        const updatedList = [...categorylist];
-        updatedList.splice(dragIndex, 1);
-        updatedList.splice(hoverIndex, 0, draggedRow);
-        setCategorylist(updatedList);
-    };
-
-    const formatMoney = (value) => {
-        return value.toLocaleString('vi-VN') + ' VNĐ';
-    };
     return (
-        <div className="" /* style={{ width: "100%", height: "100%", background: "var(--bs-gray-200)" }} */ >
+        <div className="" >
             <div className='container'>
                 <div  >
                     <div className="card-header" style={{ padding: "30px 0" }}>
-                        <h1 style={{ fontWeight: "700" }}>Danh sách loại sản phẩm
-                            <AddCategory
-                                setShowAddCategory={setShowAddCategory} showAddCategory={showAddCategory}
+                        <h1 style={{ fontWeight: "700" }}>Danh sách vai trò
+                            <AddRole
+                                setShowAddRole={setShowAddRole} showAddRole={showAddRole}
                                 setRefersh={setRefersh}
                                 refersh={refersh}
                             />
@@ -182,15 +197,14 @@ function ViewCategory() {
                         <TableHead >
                             <TableRow sx={{ '&:last-child tr, &:last-child th': { fontSize: '16px', fontWeight: "600" } }}>
                                 <TableCell >STT</TableCell>
-                                <TableCell align="right">Mã</TableCell>
-                                <TableCell align="right">Tên Loại sản phẩm</TableCell>
+                                <TableCell align="right">Tên vai trò</TableCell>
                                 <TableCell align="right">Mô tả</TableCell>
                                 <TableCell align="right"></TableCell>
                                 <TableCell align="right"></TableCell>
                             </TableRow>
                         </TableHead>
                         <TableBody>
-                            {viewcategory_HTMLTABLE}
+                            {viewAccount_HTMLTABLE}
                         </TableBody>
                     </Table>
                     <div style={{ margin: "20px 0 0 0", fontSize: "16px" }}>
@@ -199,8 +213,8 @@ function ViewCategory() {
                 </TableContainer>
             </div>
         </div>
-
     );
 }
 
-export default ViewCategory;
+
+export default ViewPermission;

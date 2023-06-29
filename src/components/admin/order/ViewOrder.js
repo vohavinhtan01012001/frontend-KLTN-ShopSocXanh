@@ -12,27 +12,26 @@ import Paper from '@mui/material/Paper';
 import DriveFileRenameOutlineIcon from '@mui/icons-material/DriveFileRenameOutline';
 import ContentPasteIcon from '@mui/icons-material/ContentPaste';
 import Pagination from 'react-bootstrap/Pagination';
-import EditCategory from './EditCategory';
-import AddCategory from './AddCategory';
 import Loading from '../../Loading';
+import CheckIcon from '@mui/icons-material/Check';
+import ClearIcon from '@mui/icons-material/Clear';
 
-
-function ViewCategory() {
+function ViewOrder() {
     const [loading, setLoading] = useState(true);
-    const [categorylist, setCategorylist] = useState([]);
-    const [categoryLength, setCategoryLength] = useState(0);
+    const [orders, setOrders] = useState([]);
+    const [orderLength, setOrderLength] = useState(0);
     const [upload, setUpdate] = useState(1);
-    const [showAddCategory, setShowAddCategory] = useState(false);
+    const [showAddOrder, setShowAddOrder] = useState(false);
     const [refersh, setRefersh] = useState(false);
 
-    //show length category
+    //show length order
     useEffect(() => {
         API({
             method: 'get',
-            url: `/admin-category/show-all`,
+            url: `/admin-order/show-all`,
         }).then((res) => {
             if (res.status === 200) {
-                setCategoryLength(res.data.categories.length)
+                setOrderLength(res.data.orders.length)
                 setLoading(false);
             }
             else {
@@ -49,14 +48,14 @@ function ViewCategory() {
     //Số lượng trong 1 trang
     const limit = 5;
 
-    //show list category
+    //show list order
     useEffect(() => {
         API({
             method: 'get',
-            url: `/admin-category/category?page=${upload}&limit=${limit}`,
+            url: `/admin-order/order?page=${upload}&limit=${limit}`,
         }).then((res) => {
             if (res.status === 200) {
-                setCategorylist(res.data.categories)
+                setOrders(res.data.orders)
                 setLoading(false);
             }
             else {
@@ -75,7 +74,7 @@ function ViewCategory() {
     }
 
     let items = [];
-    for (let number = 1; number <= Math.ceil(categoryLength / limit); number++) {
+    for (let number = 1; number <= Math.ceil(orderLength / limit); number++) {
         items.push(
             <Pagination.Item
                 onClick={handlePagination}
@@ -90,14 +89,18 @@ function ViewCategory() {
     }
 
 
-
+    console.log(orders)
     var viewcategory_HTMLTABLE = "";
+    const formatMoney = (value) => {
+        return value.toLocaleString('vi-VN') + ' VNĐ';
+    };
     if (loading) {
         return <Loading />
     }
     else {
-        viewcategory_HTMLTABLE = categorylist.map((item, index) => {
+        viewcategory_HTMLTABLE = orders.map((item, index) => {
             const offset = (upload - 1) * limit;
+            const date = new Date(item.createdAt).toLocaleString('en-US');
             return (
                 <TableRow
                     sx={{ '&:last-child tr, &:last-child th': { fontSize: '16px' } }}
@@ -122,26 +125,66 @@ function ViewCategory() {
                     <TableCell sx={{ fontSize: "16px" }} align="right" component="th" scope="row">
                         {item.id}
                     </TableCell>
-                    <TableCell sx={{ fontSize: "16px" }} align="right">
-                        {item.ten}
+                    <TableCell sx={{ fontSize: "16px" }} width={200} align="right" component="th" scope="row">
+                        {item.NguoiDung ? item.NguoiDung.email : ""}
+                    </TableCell>
+                    <TableCell sx={{ fontSize: "16px", }} width={300} align="left">
+                        {item.hoTen}
+                    </TableCell>
+                    <TableCell sx={{ fontSize: "16px" }} width={300} align="left">
+                        {item.diaChi}
                     </TableCell>
                     <TableCell sx={{ fontSize: "16px" }} align="right">
-                        {item.moTa}
+                        {item.sdt}
+                    </TableCell>
+                    <TableCell sx={{ fontSize: "16px" }} align="left" width={400}>
+                        {formatMoney(item.tongTien)}
+                    </TableCell>
+                    <TableCell sx={{ fontSize: "16px" }} align="left" width={300}>
+                        {item.thanhToanVnpay == 1 ? "VNPay" : ""}
+                        {item.thanhToanTienMat == 1 ? "Tiền mặt" : ""}
+
                     </TableCell>
                     <TableCell sx={{ fontSize: "16px" }} align="right">
-                        <EditCategory
-                            showItemCategory={item}
-                            setRefersh={setRefersh}
-                            refersh={refersh}
-                        />
+                        {
+                            item.trangThai == 0 ?
+                                <p style={{ color: 'red', fontWeight: "bold" }}>
+                                    <ClearIcon color='#0ccf0f' style={{ fontSize: "35px", fontWeight: "800" }} />
+                                </p>
+                                :
+                                <p style={{ color: '#0ccf0f', fontWeight: "bold" }}>
+                                    <CheckIcon color='#0ccf0f' style={{ fontSize: "35px", fontWeight: "800" }} />
+                                </p>
+                        }
+
+                    </TableCell>
+                    <TableCell sx={{ fontSize: "16px" }} align="right">
+                        {
+                            item.giaoHang == 0 ?
+                                <p style={{ color: 'red', fontWeight: "bold" }}>
+                                    <ClearIcon color='#0ccf0f' style={{ fontSize: "35px", fontWeight: "800" }} />
+                                </p>
+                                :
+                                <p style={{ color: '#0ccf0f', fontWeight: "bold" }}>
+                                    <CheckIcon color='#0ccf0f' style={{ fontSize: "35px", fontWeight: "800" }} />
+                                </p>
+                        }
+
+                    </TableCell>
+                    <TableCell sx={{ fontSize: "16px" }} align="left" width={200}>
+                        {date}
+                    </TableCell>
+                    <TableCell sx={{ fontSize: "16px" }} align="left" width={350}>
+                        {item.ghiChu}
                     </TableCell>
                     <TableCell
-
+                        sx={{ fontSize: "16px" }}
                         align="right"
+                        component="th"
+                        scope="row"
                     >
                         <Link
                             to={`${item.id}`}
-
                         >
                             <ContentPasteIcon style={{ fontSize: "30px", color: "#5ec9ff" }} />
                         </Link>
@@ -153,40 +196,45 @@ function ViewCategory() {
 
 
     const handleRowDrag = (dragIndex, hoverIndex) => {
-        const draggedRow = categorylist[dragIndex];
-        const updatedList = [...categorylist];
+        const draggedRow = orders[dragIndex];
+        const updatedList = [...orders];
         updatedList.splice(dragIndex, 1);
         updatedList.splice(hoverIndex, 0, draggedRow);
-        setCategorylist(updatedList);
+        setOrders(updatedList);
     };
 
-    const formatMoney = (value) => {
-        return value.toLocaleString('vi-VN') + ' VNĐ';
-    };
     return (
         <div className="" /* style={{ width: "100%", height: "100%", background: "var(--bs-gray-200)" }} */ >
             <div className='container'>
                 <div  >
                     <div className="card-header" style={{ padding: "30px 0" }}>
-                        <h1 style={{ fontWeight: "700" }}>Danh sách loại sản phẩm
-                            <AddCategory
-                                setShowAddCategory={setShowAddCategory} showAddCategory={showAddCategory}
+                        <h1 style={{ fontWeight: "700" }}>Danh sách đơn hàng
+                            {/* <AddCategory
+                                setShowAddOrder={setShowAddOrder} showAddOrder={showAddOrder}
                                 setRefersh={setRefersh}
                                 refersh={refersh}
-                            />
+                            /> */}
                         </h1>
                     </div>
                 </div>
-                <TableContainer component={Paper} className='container' style={{ padding: "10px 20px", background: "#f8f9fa" }}>
+                <TableContainer component={Paper} className='container' style={{width:"120%", background: "#f8f9fa" }}>
                     <Table sx={{ minWidth: 650, fontSize: "16px" }} aria-label="caption table">
                         <TableHead >
                             <TableRow sx={{ '&:last-child tr, &:last-child th': { fontSize: '16px', fontWeight: "600" } }}>
                                 <TableCell >STT</TableCell>
-                                <TableCell align="right">Mã</TableCell>
-                                <TableCell align="right">Tên Loại sản phẩm</TableCell>
-                                <TableCell align="right">Mô tả</TableCell>
-                                <TableCell align="right"></TableCell>
-                                <TableCell align="right"></TableCell>
+                                <TableCell>Mã</TableCell>
+                                <TableCell>Tài khoản</TableCell>
+                                <TableCell>Tên khách hàng</TableCell>
+                                <TableCell>Địa chỉ</TableCell>
+                                <TableCell>Số điện thoại</TableCell>
+                                <TableCell width={400} align='center'>Giá tiền <br />
+                                    (đã bao gồm phí vận chuyển)</TableCell>
+                                <TableCell>Phương thức thanh toán</TableCell>
+                                <TableCell>Xác nhận</TableCell>
+                                <TableCell>Giao Hàng</TableCell>
+                                <TableCell>Ngày tạo</TableCell>
+                                <TableCell>Ghi chú</TableCell>
+                                <TableCell></TableCell>
                             </TableRow>
                         </TableHead>
                         <TableBody>
@@ -203,4 +251,4 @@ function ViewCategory() {
     );
 }
 
-export default ViewCategory;
+export default ViewOrder;

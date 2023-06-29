@@ -17,33 +17,35 @@ import {
     faUserCircle,
 } from '@fortawesome/free-solid-svg-icons';
 import axios from "axios";
+import API from "../../../API";
+import Swal from "sweetalert2";
 
-function Header(props) {
+function Header({ cart }) {
     const history = useNavigate();
     const [onSearch, setOnSearch] = useState(false);
     const [onMenu, setOnMenu] = useState(false);
     const [onMenu2, setOnMenu2] = useState(false);
     const [categorylist, setCategorylist] = useState([]);
-    const [cart, setCart] = useState([]);
 
 
     //Xử lý dữ liệu loại sản phẩm
-    /*     useEffect(() => {
-            let isMounted = true;
-    
-            axios.get(`/api/home-category`).then(res => {
-                if (isMounted) {
-                    if (res.status === 200) {
-                        setCategorylist(res.data.category);
-                    }
-                }
-            });
-    
-            return () => {
-                isMounted = false
-            };
-    
-        }, []); */
+    useEffect(() => {
+        API({
+            method: 'get',
+            url: `/category/show-all`,
+        }).then((res) => {
+            setCategorylist(res.data.categories)
+        }).catch((err) =>
+            Swal.fire({
+                title: 'Error!',
+                text: 'Do you want to continue',
+                icon: 'error',
+                confirmButtonText: 'Close'
+            })
+        )
+
+
+    }, []);
 
     //xử lý search
     const handleSearchClose = () => {
@@ -61,12 +63,12 @@ function Header(props) {
     }
 
     var inputSearch = "";
-    const handleInput = (e) => {
-        if (e.key === 'Enter') {
-            props.parentCallback(e.target.value);
-        }
-    }
-
+    /*  const handleInput = (e) => {
+         if (e.key === 'Enter') {
+             props.parentCallback(e.target.value);
+         }
+     }
+  */
     /* const handleClickSearch = (e) => {
         e.preventDefault();
     } */
@@ -74,7 +76,7 @@ function Header(props) {
     if (onSearch) {
         inputSearch = (<div className="header__content-put">
             <input name="name" /* value={search} */ type="text" id='header__content-inputid' className="header__content-input fs-4 text"
-                placeholder="Tìm kiếm..." /* onChange={handleInputChange} */ onKeyDown={handleInput} />
+                placeholder="Tìm kiếm..." /* onChange={handleInputChange} */ /* onKeyDown={handleInput} */ />
             <div className="header__content-input--close" onClick={handleSearchClose}>
                 <FontAwesomeIcon icon={faClose} />
             </div>
@@ -102,7 +104,7 @@ function Header(props) {
         menuMobile2 = (<ul className='header__menu-list2'>
             {categorylist.map((item, index) => {
                 return (<li key={index} className='haeder__menu-item2'>
-                    <Link to={`/category/${item.name}`} className='header__menu-link2'>{item.name}</Link>
+                    <Link to={`/category/${item.ten}`} className='header__menu-link2'>{item.ten}</Link>
                 </li>)
             })}
         </ul>)
@@ -219,37 +221,21 @@ function Header(props) {
     }
 
     //Xử lý scroll menu Tablet và PC
-    const handleScroll = (
-        window.addEventListener('scroll', () => {
-            var menuPC = document.getElementById('header__navbar-listid');
-            var x = window.scrollY;
+    const handleScroll = () => {
+        var menuPC = document.getElementById('header__navbar-listid');
+        var x = window.scrollY;
+        if (menuPC) {
             if (x > 100) {
                 menuPC.style.top = 0;
                 menuPC.style.boxShadow = '0 14px 20px -17px rgb(0 0 0 / 75%)';
                 menuPC.style.position = 'fixed';
-            }
-            else {
-                menuPC.style.boxShadow = "none";
+            } else {
+                menuPC.style.boxShadow = 'none';
                 menuPC.style.position = 'relative';
             }
-        })
-    )
-    useEffect(() => {
+        }
+    };
 
-        axios.get(`/api/cart`).then(res => {
-            if (res.data.status === 200) {
-                setCart(res.data.cart);
-            }
-        });
-
-
-    }, []);
-
-    var sumQuatity = 0;
-    cart.map((item) => {
-        sumQuatity = sumQuatity + item.product_qty;
-        return (sumQuatity);
-    });
 
 
     return (
@@ -293,7 +279,7 @@ function Header(props) {
                                 <li className='header__content-item2'>
                                     <Link to="/cart" className='header__content-cart'>
                                         <FontAwesomeIcon icon={faShoppingCart} />
-                                        <p>{sumQuatity}</p>
+                                        <p>{cart}</p>
                                     </Link >
                                 </li>
                             </ul>
@@ -316,7 +302,7 @@ function Header(props) {
                                     {
                                         categorylist.map((item, index) => {
                                             return (<li key={index} className='haeder__navbar-item2'>
-                                                <Link to={`/category/${item.name}`} className='header__navbar-link2'>{item.name}</Link>
+                                                <Link to={`/category/${item.ten}`} className='header__navbar-link2'>{item.ten}</Link>
                                             </li>)
                                         })
                                     }

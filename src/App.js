@@ -17,6 +17,7 @@ function App() {
     document.title = "Shop sóc xanh";
   }, [])
 
+  const [permission, setPermission] = useState([]);
 
   const [authState, setAuthState] = useState({
     email: "",
@@ -26,6 +27,7 @@ function App() {
     sdt: "",
     phanQuyen: '',
     status: false,
+    VaiTroId: '',
   });
 
   useEffect(() => {
@@ -45,12 +47,21 @@ function App() {
           sdt: res.data.sdt,
           phanQuyen: res.data.phanQuyen,
           status: true,
+          VaiTroId: res.data.VaiTroId,
         });
       }
     })
   }, [])
 
-
+  useEffect(() => {
+    API({
+      method: 'get',
+      url: `admin-permission/permission/${authState.VaiTroId}`,
+    }).then((res) => {
+      setPermission(res.data.RolePermissions);
+      console.log(res.data.RolePermissions);
+    })
+  }, [authState.VaiTroId])
 
 
   return (
@@ -85,36 +96,118 @@ function App() {
                   </DefaultLayout>)
               }
             />
-            {publicRoutes.map((route, index) => {
-              const Layout = route.layout || DefaultLayout;
-              const Page = route.component;
-              return (
-                <Route
-                  key={index}
-                  path={route.path}
-                  element={
-                    <Layout>
+            {
+              publicRoutes.map((route, index) => {
+                const Layout = route.layout || DefaultLayout;
+                const Page = route.component;
+                return (route.path == "/pay" ?
+                  <Route
+                    key={index}
+                    path={route.path}
+                    element={
                       <Page />
-                    </Layout>
-                  }
-                />
-              );
-            })}
+                    }
+                  /> :
+                  <Route
+                    key={index}
+                    path={route.path}
+                    element={
+                      <Layout>
+                        <Page />
+                      </Layout>
+                    }
+                  />
+                );
+              })}
             {
               <Route path='/admin' name="Admin" element={<MasterLayout />} >
                 {
-                  privateRoutes.map((route, index) => {
-                    const Page = route.component;
-                    return (
-                      <Route
-                        key={index}
-                        path={`/admin${route.path}`}
-                        element={
-                          <Page />
+                  authState.phanQuyen === 1 ?
+                    privateRoutes.map((route, index) => {
+                      const Page = route.component;
+                      return (
+                        <Route
+                          key={index}
+                          path={`/admin${route.path}`}
+                          element={
+                            <Page />
+                          }
+                        />)
+                    })
+                    :
+                    authState.phanQuyen === 2 ?
+                      privateRoutes.map((route, index) => {
+                        for (let i = 0; i < permission.length; i++) {
+                          if (permission[i].PhanQuyenId === route.value) {
+                            const Page = route.component;
+                            return (
+                              <Route
+                                key={index}
+                                path={`/admin${route.path}`}
+                                element={
+                                  <Page />
+                                }
+                              />)
+                          }
                         }
-                      />)
-                  })
+                      })
+                      : ""
                 }
+                {/* {
+                  authState.phanQuyen === 2 ?
+                    permission.map((item, index) => {
+                      if (item.PhanQuyenId === 1) {
+                        return (<>
+                          <Route path='/admin/add-product' element={<AddProduct />} />
+                          <Route path='/admin/edit-product/:id' element={<EditProduct />} />
+                          <Route path='/admin/view-product' element={<ViewProduct />} />
+                          <Route path='/admin/view-color' element={<ViewColor />} />
+                          <Route path='/admin/view-material' element={<ViewMaterial />} />
+                        </>)
+                      }
+                      else if (item.PhanQuyenId === 2) {
+                        return (<>
+                          <Route path='/admin/view-category' element={<ViewCategory />} />
+                          <Route path='/admin/edit-category/:id' element={<EditCategory />} />
+                          <Route path='/admin/view-category/:id' element={<ViewProductCate />} />
+                        </>)
+                      }
+                      else if (item.PhanQuyenId === 3) {
+                        return (<>
+                          <Route path='/admin/view-promotion' element={<ViewPromotion />} />
+                          <Route path='/admin/promotion/view-product/:id' element={<ViewProductPor />} />
+                          <Route path='/admin/promotion/add-product/:id' element={<AddProductPor />} />
+                        </>)
+                      }
+                      else if (item.PhanQuyenId === 4) {
+                        return (<>
+                          <Route path='/admin/view-trademark' element={<ViewTrademark />} />
+                          <Route path='/admin/view-trademark/:id' element={<ViewProductTrademark />} />
+                        </>)
+                      }
+                      else if (item.PhanQuyenId === 5) {
+                        return (<>
+
+                        </>)
+                      }
+                      else if (item.PhanQuyenId === 6) {
+                        return (<>
+                          <Route path='/admin/view-account' element={<ViewAccount />} />
+                        </>)
+                      }
+                      else if (item.PhanQuyenId === 7) {
+                        return (<>
+                          <Route path='/admin/view-staff' element={<ViewStaff />} />
+                          <Route path='/admin/add-account' element={<AddAccount />} />
+                        </>)
+                      }
+                      else if (item.PhanQuyenId === 8) {
+                        return (<>
+                          <Route path='/admin/view-role' element={<ViewPermission />} />
+                        </>)
+                      }
+                    }) : ""
+                } */}
               </Route>
             }
           </Routes>

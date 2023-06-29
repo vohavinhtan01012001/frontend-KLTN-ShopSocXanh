@@ -9,29 +9,28 @@ import TableContainer from '@mui/material/TableContainer';
 import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
-import ContentPasteIcon from '@mui/icons-material/ContentPaste';
 import Pagination from 'react-bootstrap/Pagination';
-import AddTrademark from './AddTrademark';
 import Loading from '../../Loading';
-import EditTrademark from './EditTrademark';
+import AddColor from './AddColor';
+import EditColor from './EditColor';
 
 
-function ViewTrademark() {
+function ViewColor() {
     const [loading, setLoading] = useState(true);
-    const [trademarklist, setTrademarklist] = useState([]);
-    const [trademarkLength, setTrademarkLength] = useState(0);
+    const [colorlist, setColorlist] = useState([]);
+    const [colorLength, setColorLength] = useState(0);
     const [upload, setUpdate] = useState(1);
-    const [showAddTrademark, setShowAddTrademark] = useState(false);
+    const [showAddColor, setShowAddColor] = useState(false);
     const [refersh, setRefersh] = useState(false);
 
-    //show length trademark
+    //show length color
     useEffect(() => {
         API({
             method: 'get',
-            url: `/admin-trademark/show-all`,
+            url: `/admin-color/show-all`,
         }).then((res) => {
             if (res.status === 200) {
-                setTrademarkLength(res.data.trademarks.length)
+                setColorLength(res.data.colors.length)
                 setLoading(false);
             }
             else {
@@ -48,14 +47,14 @@ function ViewTrademark() {
     //Số lượng trong 1 trang
     const limit = 5;
 
-    //show list trademark
+    //show list color
     useEffect(() => {
         API({
             method: 'get',
-            url: `/admin-trademark/trademark?page=${upload}&limit=${limit}`,
+            url: `/admin-color/color?page=${upload}&limit=${limit}`,
         }).then((res) => {
             if (res.status === 200) {
-                setTrademarklist(res.data.trademarks)
+                setColorlist(res.data.colors)
                 setLoading(false);
             }
             else {
@@ -74,7 +73,7 @@ function ViewTrademark() {
     }
 
     let items = [];
-    for (let number = 1; number <= Math.ceil(trademarkLength / limit); number++) {
+    for (let number = 1; number <= Math.ceil(colorLength / limit); number++) {
         items.push(
             <Pagination.Item
                 onClick={handlePagination}
@@ -90,12 +89,12 @@ function ViewTrademark() {
 
 
 
-    var viewTrademark_HTMLTABLE = "";
+    var viewcategory_HTMLTABLE = "";
     if (loading) {
         return <Loading />
     }
     else {
-        viewTrademark_HTMLTABLE = trademarklist.map((item, index) => {
+        viewcategory_HTMLTABLE = colorlist.map((item, index) => {
             const offset = (upload - 1) * limit;
             return (
                 <TableRow
@@ -121,25 +120,18 @@ function ViewTrademark() {
                     <TableCell sx={{ fontSize: "16px" }} align="right" component="th" scope="row">
                         {item.id}
                     </TableCell>
-                    <TableCell sx={{ fontSize: "16px" }} align="right">{item.ten}</TableCell>
-                    <TableCell sx={{ fontSize: "16px" }} align="right">{item.moTa}</TableCell>
                     <TableCell sx={{ fontSize: "16px" }} align="right">
-                        <EditTrademark
-                            showItemTrademark={item}
+                        {item.tenMau}
+                    </TableCell>
+                    <TableCell sx={{ fontSize: "16px" }} align="right">
+                        {item.moTa}
+                    </TableCell>
+                    <TableCell sx={{ fontSize: "16px" }} align="right">
+                        <EditColor
+                            showItemColor={item}
                             setRefersh={setRefersh}
                             refersh={refersh}
                         />
-                    </TableCell>
-                    <TableCell
-
-                        align="right"
-                    >
-                        <Link
-                            to={`${item.id}`}
-
-                        >
-                            <ContentPasteIcon style={{ fontSize: "30px", color: "#5ec9ff" }} />
-                        </Link>
                     </TableCell>
                 </TableRow>
             )
@@ -148,60 +140,54 @@ function ViewTrademark() {
 
 
     const handleRowDrag = (dragIndex, hoverIndex) => {
-        const draggedRow = trademarklist[dragIndex];
-        const updatedList = [...trademarklist];
+        const draggedRow = colorlist[dragIndex];
+        const updatedList = [...colorlist];
         updatedList.splice(dragIndex, 1);
         updatedList.splice(hoverIndex, 0, draggedRow);
-        setTrademarklist(updatedList);
+        setColorlist(updatedList);
     };
 
     const formatMoney = (value) => {
         return value.toLocaleString('vi-VN') + ' VNĐ';
     };
     return (
-        <div className="" /* style={{ width: "100%", height: "100%", background: "var(--bs-gray-200)" }} */ >
+        <div className="">
             <div className='container'>
                 <div  >
                     <div className="card-header" style={{ padding: "30px 0" }}>
-                        <h1 style={{ fontWeight: "700" }}>Danh sách Thương hiệu
-                            <AddTrademark
-                                setShowAddTrademark={setShowAddTrademark} showAddTrademark={showAddTrademark}
+                        <h1 style={{ fontWeight: "700" }}>Danh sách màu sắc
+                            <AddColor
+                                setShowAddColor={setShowAddColor}
+                                showAddColor={showAddColor}
                                 setRefersh={setRefersh}
                                 refersh={refersh}
                             />
                         </h1>
                     </div>
                 </div>
-                {
-                    trademarklist.length > 0 ?
-                    <TableContainer component={Paper} className='container' style={{ padding: "10px 20px", background: "#f8f9fa" }}>
-                        <Table sx={{ minWidth: 650, fontSize: "16px" }} aria-label="caption table">
-                            <TableHead >
-                                <TableRow sx={{ '&:last-child tr, &:last-child th': { fontSize: '16px', fontWeight: "600" } }}>
-                                    <TableCell >STT</TableCell>
-                                    <TableCell align="right">Mã</TableCell>
-                                    <TableCell align="right">Tên thương hiệu</TableCell>
-                                    <TableCell align="right">Mô tả</TableCell>
-                                    <TableCell align="right"></TableCell>
-                                    <TableCell align="right"></TableCell>
-                                </TableRow>
-                            </TableHead>
-                            <TableBody>
-                                {viewTrademark_HTMLTABLE}
-                            </TableBody>
-                        </Table>
-                        <div style={{ margin: "20px 0 0 0", fontSize: "16px" }}>
-                            <Pagination size="lg" >{items}</Pagination>
-                        </div>
-                    </TableContainer>:
-                    <h1 style={{color:"red"}}>
-                        Chưa có Thương hiệu
-                        </h1>
-                }
+                <TableContainer component={Paper} className='container' style={{ padding: "10px 20px", background: "#f8f9fa" }}>
+                    <Table sx={{ minWidth: 650, fontSize: "16px" }} aria-label="caption table">
+                        <TableHead >
+                            <TableRow sx={{ '&:last-child tr, &:last-child th': { fontSize: '16px', fontWeight: "600" } }}>
+                                <TableCell >STT</TableCell>
+                                <TableCell align="right">Mã</TableCell>
+                                <TableCell align="right">Tên màu</TableCell>
+                                <TableCell align="right">Mô tả</TableCell>
+                                <TableCell align="right"></TableCell>
+                            </TableRow>
+                        </TableHead>
+                        <TableBody>
+                            {viewcategory_HTMLTABLE}
+                        </TableBody>
+                    </Table>
+                    <div style={{ margin: "20px 0 0 0", fontSize: "16px" }}>
+                        <Pagination size="lg" >{items}</Pagination>
+                    </div>
+                </TableContainer>
             </div>
         </div>
 
     );
 }
 
-export default ViewTrademark;
+export default ViewColor;
