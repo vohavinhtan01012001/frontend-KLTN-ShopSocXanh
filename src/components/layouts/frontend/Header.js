@@ -16,11 +16,10 @@ import {
     faUserAlt,
     faUserCircle,
 } from '@fortawesome/free-solid-svg-icons';
-import axios from "axios";
 import API from "../../../API";
 import Swal from "sweetalert2";
 
-function Header({ cart }) {
+function Header({ cart, setMessage }) {
     const history = useNavigate();
     const [onSearch, setOnSearch] = useState(false);
     const [onMenu, setOnMenu] = useState(false);
@@ -63,20 +62,19 @@ function Header({ cart }) {
     }
 
     var inputSearch = "";
-    /*  const handleInput = (e) => {
-         if (e.key === 'Enter') {
-             props.parentCallback(e.target.value);
-         }
-     }
-  */
-    /* const handleClickSearch = (e) => {
+    const handleInput = (e) => {
+        if (e.key === 'Enter') {
+            setMessage(e.target.value);
+        }
+    }
+    const handleClickSearch = (e) => {
         e.preventDefault();
-    } */
+    }
 
     if (onSearch) {
         inputSearch = (<div className="header__content-put">
             <input name="name" /* value={search} */ type="text" id='header__content-inputid' className="header__content-input fs-4 text"
-                placeholder="Tìm kiếm..." /* onChange={handleInputChange} */ /* onKeyDown={handleInput} */ />
+                placeholder="Tìm kiếm..." /* onChange={handleInputChange} */ onKeyDown={handleInput} />
             <div className="header__content-input--close" onClick={handleSearchClose}>
                 <FontAwesomeIcon icon={faClose} />
             </div>

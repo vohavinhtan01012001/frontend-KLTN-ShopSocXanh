@@ -4,6 +4,7 @@ import Form from 'react-bootstrap/Form';
 import Modal from 'react-bootstrap/Modal';
 import Swal from 'sweetalert2'
 import API from '../../../API';
+import AddCircleIcon from '@mui/icons-material/AddCircle';
 
 function AddCategory
     ({
@@ -62,13 +63,13 @@ function AddCategory
     }
     return (
         <>
-            <Button
-                className="btn btn-primary btn-lg float-end fs-4 text"
-                style={{ padding: "8px 10px", borderRadius: "5px" }}
+            <button
+                className='float-end navbar__admin--background '
+                style={{ borderRadius: "50%", margin: '0 10px', padding: "0", height: "40px", width: "40px", lineHeight: "15px", textAlign: "center" }}
                 onClick={handleShowAddCategory}
             >
-                Thêm loại sản phẩm
-            </Button>
+                <AddCircleIcon style={{ fontSize: "20px" }}/>
+            </button>
             <Modal
                 show={showAddCategory}
                 onHide={handleCloseAddCategory}

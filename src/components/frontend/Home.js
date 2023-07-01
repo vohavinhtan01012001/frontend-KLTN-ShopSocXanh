@@ -205,7 +205,7 @@ function Home() {
                         <div className="row">
                             <div className="col l-12 m-12 c-12">
                                 <div className="content__btn">
-                                    <Link to="/category/t-shirts">XEM TẤT CẢ</Link>
+                                    <Link to="/category/áo thun">XEM TẤT CẢ</Link>
                                 </div>
                             </div>
                         </div>
@@ -232,7 +232,7 @@ function Home() {
                             <div className="col-lg-3 col-md-4 col-sm-4 col-xs-6">
                                 <div className="content__category">
                                     <div className="content__category-item">
-                                        <Link to="/category/t-shirts" className="content__category-link">
+                                        <Link to="/category/Áo thun" className="content__category-link">
                                             <img src={Tshirt}
                                                 alt="Banner 1" />
                                         </Link>
@@ -242,7 +242,7 @@ function Home() {
                             <div className="col-lg-3 col-md-4 col-sm-4 col-xs-6">
                                 <div className="content__category">
                                     <div className="content__category-item">
-                                        <Link to="/category/shirts" className="content__category-link">
+                                        <Link to="/category/Áo sơ mi" className="content__category-link">
                                             <img src={Shirt}
                                                 alt="Banner 1" />
                                         </Link>
@@ -252,7 +252,7 @@ function Home() {
                             <div className="col-lg-3 col-md-4 col-sm-4 col-xs-6">
                                 <div className="content__category">
                                     <div className="content__category-item">
-                                        <Link to="/category/sweaters" className="content__category-link">
+                                        <Link to="/category/Áo khoác" className="content__category-link">
                                             <img src={Sweater}
                                                 alt="Banner 1" />
                                         </Link>
@@ -262,7 +262,7 @@ function Home() {
                             <div className="col-lg-3 col-md-4 col-sm-4 col-xs-6">
                                 <div className="content__category">
                                     <div className="content__category-item">
-                                        <Link to="/category/hoodies" className="content__category-link">
+                                        <Link to="/category/Quần đùi" className="content__category-link">
                                             <img src={Hoodie}
                                                 alt="Banner 1" />
                                         </Link>

@@ -39,10 +39,6 @@ function OrderItems() {
     }, [id, history]);
 
     useEffect(() => {
-        /* for (let i = 0; i < data.length; i++) {
-            console.log(data[i]);
-            setData2({...data2, [data[i]]: data[i] })
-        } */
         console.log(data)
         API({
             method: 'put',

@@ -16,28 +16,7 @@ import ProductItem from "./component/ProductItem";
 function Favourite() {
     const history = useNavigate();
     const [product, setProduct] = useState([]);
-    /* const productCount = product.length; */
-    const [stars, setStars] = useState([]);
 
-    const [shouldRefresh, setRefresh] = useState(false);
-    const [message, setMessage] = useState('')
-
-
-    const [productitem, setProductItem] = useState([]);
-
-
-
-
-
-    useEffect(() => {
-        API({
-            method: 'get',
-            url: 'evaluate/show-star',
-        }).then((res) => {
-            setStars(res.data.stars);
-            console.log(res.data)
-        })
-    }, []);
 
     //xử lý hiện sản phẩm
     useEffect(() => {
@@ -47,7 +26,6 @@ function Favourite() {
         }).then((res) => {
             if (res.data.status === 200) {
                 setProduct(res.data.productList);
-                setProductItem(res.data.productList)
             }
             else {
                 Swal.fire({

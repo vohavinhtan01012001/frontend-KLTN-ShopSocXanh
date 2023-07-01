@@ -106,6 +106,10 @@ function Login() {
                                 </Form>
                             </Formik>
                             <div className="formLogin__register">
+                                <Link to="/forgotpassword" className="formLogin__register--link">
+                                    Quên mật khẩu
+                                </Link>
+                                <p className="fs-4 text">hoặc</p>
                                 <Link to="/register" className="formLogin__register--link">
                                     Đăng ký
                                 </Link>

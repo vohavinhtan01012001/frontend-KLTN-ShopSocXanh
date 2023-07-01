@@ -291,6 +291,7 @@ function ProductDetails() {
                     text: res.data.message,
                     confirmButtonText: 'Đóng'
                 })
+                history('/login')
             }
             else if (res.data.status == 404) {
                 Swal.fire({
@@ -359,6 +360,7 @@ function ProductDetails() {
                     text: res.data.message,
                     confirmButtonText: 'Đóng'
                 })
+                history('/login')
             }
             else if (res.data.status == 404) {
                 Swal.fire({
@@ -400,6 +402,7 @@ function ProductDetails() {
                     text: res.data.message,
                     confirmButtonText: 'Đóng'
                 })
+                history('/login')
             }
         });
     }

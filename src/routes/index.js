@@ -31,6 +31,9 @@ import PayVNPAY from "../components/frontend/PayVNPAY";
 import OrderItems from "../components/frontend/OrderItems";
 import Favourite from "../components/frontend/Favourite";
 import ViewEvaluate from "../components/admin/evaluate/ViewEvaluate";
+import Search from "../components/frontend/Search";
+import ForgotPassword from "../components/frontend/auth/ForgotPassword";
+import ResetPassword from "../components/frontend/auth/ResetPassword";
 
 
 const publicRoutes = [
@@ -75,6 +78,10 @@ const publicRoutes = [
         component: Favourite,
     },
     {
+        path: '/search',
+        component: Search,
+    },
+    {
         path: '/pay',
         component: Pay,
     },
@@ -85,6 +92,14 @@ const publicRoutes = [
     {
         path: '/thanks',
         component: Thanks,
+    },
+    {
+        path: '/forgotpassword',
+        component: ForgotPassword,
+    },
+    {
+        path: '/reset/:slug',
+        component: ResetPassword,
     },
 
 ];
@@ -107,6 +122,11 @@ const privateRoutes = [
     {
         path: '/view-color',
         component: ViewColor,
+        value: 1
+    },
+    {
+        path: '/view-evaluate',
+        component: ViewEvaluate,
         value: 1
     },
     {
@@ -142,11 +162,6 @@ const privateRoutes = [
     {
         path: '/promotion/add-product/:id',
         component: AddProductPor,
-        value: 3
-    },
-    {
-        path: '/view-evaluate',
-        component: ViewEvaluate,
         value: 3
     },
     {

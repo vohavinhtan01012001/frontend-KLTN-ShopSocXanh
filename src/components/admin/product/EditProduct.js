@@ -384,7 +384,7 @@ function EditProduct() {
                                             {
                                                 colorList.map((item) => {
                                                     return (
-                                                        <option value={item.id} key={item.id}>{item.tenMau}</option>
+                                                        <option value={item.id} key={item.id}>{item.ten}</option>
                                                     )
                                                 })
                                             }
@@ -407,7 +407,7 @@ function EditProduct() {
                                             {
                                                 materialList.map((item) => {
                                                     return (
-                                                        <option value={item.id} key={item.id}>{item.tenChatLieu}</option>
+                                                        <option value={item.id} key={item.id}>{item.ten}</option>
                                                     )
                                                 })
                                             }

@@ -121,7 +121,7 @@ function ViewColor() {
                         {item.id}
                     </TableCell>
                     <TableCell sx={{ fontSize: "16px" }} align="right">
-                        {item.tenMau}
+                        {item.ten}
                     </TableCell>
                     <TableCell sx={{ fontSize: "16px" }} align="right">
                         {item.moTa}

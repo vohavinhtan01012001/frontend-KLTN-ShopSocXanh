@@ -22,6 +22,7 @@ function ViewEvaluate() {
     const [refersh, setRefersh] = useState(false);
 
 
+
     useEffect(() => {
         API({
             method: 'get',
@@ -36,11 +37,11 @@ function ViewEvaluate() {
             Swal.fire({
                 text: 'Error',
                 icon: 'error',
-                confirmButtonText:"Đóng"
+                confirmButtonText: "Đóng"
             })
         })
 
-    }, []);
+    }, [upload, refersh]);
 
     //Số lượng trong 1 trang
     const limit = 5;

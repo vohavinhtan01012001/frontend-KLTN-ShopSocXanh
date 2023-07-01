@@ -5,6 +5,7 @@ import API from "../../../API";
 import Swal from "sweetalert2";
 import Modal from 'react-bootstrap/Modal';
 import Button from 'react-bootstrap/Button';
+import AddCircleIcon from '@mui/icons-material/AddCircle';
 import Form from 'react-bootstrap/Form';
 
 
@@ -42,7 +43,7 @@ function AddPromotion({
             })
             return;
         }
-        if(promotionInput.giamGia > 100 || promotionInput.giamGia < 0) {
+        if (promotionInput.giamGia > 100 || promotionInput.giamGia < 0) {
             Swal.fire({
                 text: 'Nhập giá trị trong khoảng 0 đến 100%',
                 icon: 'warning',
@@ -72,13 +73,13 @@ function AddPromotion({
     }
     return (
         <>
-            <Button
-                className="btn btn-primary btn-lg float-end fs-4 text"
-                style={{ padding: "8px 10px", borderRadius: "5px" }}
+            <button
+                className='float-end navbar__admin--background '
+                style={{ borderRadius: "50%", margin: '0 10px', padding: "0", height: "40px", width: "40px", lineHeight: "15px", textAlign: "center" }}
                 onClick={handleShowAddPromotion}
             >
-                Thêm khuyến mãi
-            </Button>
+                <AddCircleIcon style={{ fontSize: "20px" }} />
+            </button>
             <Modal
                 show={showAddPromotion}
                 onHide={handleCloseAddPromotion}

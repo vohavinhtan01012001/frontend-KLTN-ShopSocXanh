@@ -1370,6 +1370,7 @@ html {
     justify-content: flex-start;
     border-bottom: 1px solid #ccc;
     padding-bottom: 10px;
+    padding-top: 40px;
 }
 
 .cart__product--link {
@@ -2425,6 +2426,7 @@ html {
         opacity: 0;
     }
 }
+
 .icon-form::before {
     content: '';
     position: absolute;
@@ -2436,4 +2438,17 @@ html {
     border-width: 8px;
     width: 0;
     height: 0;
-  }
+}
+
+
+.my-swal-confirm-button{
+    display: block;
+} 
+.my-swal-deny-button{
+    display: block;
+    
+} 
+.my-swal-cancel-button{
+    display: block;
+    
+}

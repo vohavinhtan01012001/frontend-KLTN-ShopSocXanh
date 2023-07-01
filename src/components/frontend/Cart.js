@@ -258,6 +258,11 @@ function Cart() {
                                 cancelButtonText: "Hủy",
                                 showCloseButton: true,
                                 confirmButtonText: "Đồng ý!",
+                                customClass: {
+                                    confirmButton: 'my-swal-confirm-button',
+                                    denyButton: 'my-swal-deny-button',
+                                    cancelButton: 'my-swal-cancel-button',
+                                },
                             }).then((result) => {
                                 if (result.isConfirmed) {
                                     // Gửi yêu cầu tạo URL thanh toán VNPay đến máy chủ

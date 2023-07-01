@@ -123,7 +123,7 @@ function ViewMaterial() {
                         {item.id}
                     </TableCell>
                     <TableCell sx={{ fontSize: "16px" }} align="right">
-                        {item.tenChatLieu}
+                        {item.ten}
                     </TableCell>
                     <TableCell sx={{ fontSize: "16px" }} align="right">
                         {item.moTa}

@@ -76,6 +76,13 @@ function App() {
                 </DefaultLayout>
               }
             />
+            <Route path='admin/*'
+              element={
+                <DefaultLayout>
+                  <Page404 />
+                </DefaultLayout>
+              }
+            />
             <Route
               path='/login'
               element={

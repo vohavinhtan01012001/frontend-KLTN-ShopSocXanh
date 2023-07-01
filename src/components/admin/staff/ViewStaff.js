@@ -12,7 +12,6 @@ import Paper from '@mui/material/Paper';
 import Pagination from 'react-bootstrap/Pagination';
 import API from '../../../API';
 import Swal from 'sweetalert2';
-import DriveFileRenameOutlineIcon from '@mui/icons-material/DriveFileRenameOutline';
 import EditPermission from './EditRole';
 import CheckIcon from '@mui/icons-material/Check';
 import ClearIcon from '@mui/icons-material/Clear';
@@ -20,6 +19,10 @@ import ToggleOnIcon from '@mui/icons-material/ToggleOn';
 import ToggleOffIcon from '@mui/icons-material/ToggleOff';
 import DeleteForeverIcon from '@mui/icons-material/DeleteForever';
 import HighlightOffIcon from '@mui/icons-material/HighlightOff';
+import ButtonIcon from '../product/components/ButtonIcon';
+import AddCircleIcon from '@mui/icons-material/AddCircle';
+
+
 
 function ViewStaff() {
     const [loading, setLoading] = useState(true);
@@ -303,7 +306,9 @@ function ViewStaff() {
                 <div  >
                     <div className="card-header" style={{ padding: "30px 0" }}>
                         <h1 style={{ fontWeight: "700" }}>Danh sách nhân viên
-                            <Link to="/admin/add-account" className="btn btn-primary btn-sm float-end  fs-4 text">Thêm nhân viên</Link>
+                        <ButtonIcon to={'/admin/add-account'} icon={
+                        <AddCircleIcon style={{ fontSize: "20px" }} />
+                    } />
                         </h1>
                     </div>
                 </div>

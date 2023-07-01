@@ -32,7 +32,7 @@ const Comment2 = ({ author, text }) => (
 );
 
 
-const Comment = ({ author, text, setShowReply, commentId, setShowIcon, showIconForm, showIcon, setIcon, icons }) => {
+const Comment = ({ author, text, setShowReply, commentId, setShowIcon, showIconForm, showIcon, setIcon, icons,refershIcon1,setRefershIcon1 }) => {
   let countIcon1 = 0;
   let countIcon2 = 0;
   let countIcon3 = 0;
@@ -66,6 +66,7 @@ const Comment = ({ author, text, setShowReply, commentId, setShowIcon, showIconF
   const handleIcon = (icon, commentId) => {
     setIcon({ icon: icon, commentId: commentId })
     setShowIcon(0)
+    setRefershIcon1(!refershIcon1)
   }
   return <ListItem alignItems="flex-start" >
     <ListItemText
@@ -99,11 +100,12 @@ const Comment = ({ author, text, setShowReply, commentId, setShowIcon, showIconF
                   if (countIcon1 > 1) {
                     dis_icon1 = (
                       <>
-                        <TransitionsModal title={"yêu thích"} userName={userName1} fontIcon={<FontAwesomeIcon
-                          icon={faHeart}
-                          color="red"
-                          style={{ marginRight: "5px", fontSize: "20px" }}
-                        />} />
+                        <TransitionsModal
+                          title={"yêu thích"} userName={userName1}  fontIcon={<FontAwesomeIcon
+                            icon={faHeart}
+                            color="red"
+                            style={{ marginRight: "5px", fontSize: "20px" }}
+                          />} />
                         <span
                           style={{
                             fontSize: "12px",
@@ -156,7 +158,7 @@ const Comment = ({ author, text, setShowReply, commentId, setShowIcon, showIconF
                     countIcon2 = 0;
                   } else if (countIcon2 === 1) {
                     dis_icon2 = (
-                      <TransitionsModal userName={userName2} title={"like"}  fontIcon={<FontAwesomeIcon
+                      <TransitionsModal userName={userName2} title={"like"} fontIcon={<FontAwesomeIcon
                         icon={faThumbsUp}
                         color="#0d6efd"
                         style={{ marginRight: "5px", fontSize: "20px" }}
@@ -208,7 +210,7 @@ const Comment = ({ author, text, setShowReply, commentId, setShowIcon, showIconF
                   if (countIcon4 > 1) {
                     dis_icon4 = (
                       <>
-                        <TransitionsModal userName={userName4} title={"phẩn nộ"}    fontIcon={<FontAwesomeIcon
+                        <TransitionsModal userName={userName4} title={"phẫn nộ"} fontIcon={<FontAwesomeIcon
                           icon={faFaceAngry}
                           color="#971919"
                           style={{ marginRight: "5px", fontSize: "20px" }}
@@ -229,7 +231,7 @@ const Comment = ({ author, text, setShowReply, commentId, setShowIcon, showIconF
                     countIcon4 = 0;
                   } else if (countIcon4 === 1) {
                     dis_icon4 = (
-                      <TransitionsModal userName={userName4} title={"phẩn nộ"}  fontIcon={<FontAwesomeIcon
+                      <TransitionsModal userName={userName4} title={"phẫn nộ"} fontIcon={<FontAwesomeIcon
                         icon={faFaceAngry}
                         color="#971919"
                         style={{ marginRight: "5px", fontSize: "20px" }}
@@ -245,7 +247,7 @@ const Comment = ({ author, text, setShowReply, commentId, setShowIcon, showIconF
                   if (countIcon5 > 1) {
                     dis_icon5 = (
                       <>
-                        <TransitionsModal userName={userName5} title={"kiss"}  fontIcon={<FontAwesomeIcon
+                        <TransitionsModal userName={userName5} title={"kiss"} fontIcon={<FontAwesomeIcon
                           icon={faFaceKissWinkHeart}
                           color="#dc3545"
                           style={{ marginRight: "5px", fontSize: "20px" }}
@@ -266,7 +268,7 @@ const Comment = ({ author, text, setShowReply, commentId, setShowIcon, showIconF
                     countIcon5 = 0;
                   } else if (countIcon5 === 1) {
                     dis_icon5 = (
-                      <TransitionsModal userName={userName5} title={"kiss"}  fontIcon={<FontAwesomeIcon
+                      <TransitionsModal userName={userName5} title={"kiss"} fontIcon={<FontAwesomeIcon
                         icon={faFaceKissWinkHeart}
                         color="#dc3545"
                         style={{ marginRight: "5px", fontSize: "20px" }}
@@ -381,6 +383,7 @@ const CommentList = ({ commentList, authName, productId, commentList2, refersh2,
   const [icon, setIcon] = useState(0);
   const [icons, setIconList] = useState([])
   const [refershIcon, setRefershIcon] = useState(false)
+  const [refershIcon1, setRefershIcon1] = useState(false)
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   useEffect(() => {
@@ -397,12 +400,12 @@ const CommentList = ({ commentList, authName, productId, commentList2, refersh2,
       }
     }).then((res) => {
       if (res.data.status === 200) {
-        console.log("thanh cong")
+        console.log(res.data.message)
         setRefershIcon(!refershIcon)
         setShowIcon(0)
       }
     })
-  }, [icon.icon, icon.commentId]);
+  }, [refershIcon1]);
 
   useEffect(() => {
     API({
@@ -469,8 +472,8 @@ const CommentList = ({ commentList, authName, productId, commentList2, refersh2,
             showIcon={showIcon}
             setIcon={setIcon}
             icons={icons}
-            setRefershIcon={setRefershIcon}
-            refershIcon={setRefershIcon}
+            setRefershIcon1={setRefershIcon1}
+            refershIcon1={refershIcon1}
           />
 
           {matchingComments.map((matchingComment, subIndex) => (

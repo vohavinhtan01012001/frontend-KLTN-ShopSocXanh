@@ -87,14 +87,6 @@ function CategoryList() {
         setProduct(result);
     }
 
-    //phân trang
-    /*  const [currentPage, setCurrentPage] = useState(1);
-     
-     const currentTableData = useMemo(() => {
-         const firstPageIndex = (currentPage - 1) * PageSize;
-         const lastPageIndex = firstPageIndex + PageSize;
-         return product.slice(firstPageIndex, lastPageIndex);
-     }, [currentPage, product]); */
 
     //xử lý hiện sản phẩm
     const { slug } = useParams();
@@ -214,8 +206,8 @@ function CategoryList() {
                         <MenuCategory parentCallback={callbackFunction} />
                         <div className="col l-9">
                             <div className="tshirts__title">
-                                <h3 className="tshirts__title--heading">{/* category.name */}</h3>
-                                <div className="tshirts__title--sort">
+                                <h3 className="tshirts__title--heading">{category.ten}</h3>
+                                {/* <div className="tshirts__title--sort">
                                     <div className="tshirts__title--option">
                                         <select onChange={e => { handleOptionMaterial(e) }} id="search" className="tshirts__title--select">
                                             <option >---Chất liệu---</option>
@@ -238,7 +230,7 @@ function CategoryList() {
                                             }
                                         </select>
                                     </div>
-                                </div>
+                                </div> */}
                                 <div className="tshirts__title--sort">
                                     <div className="tshirts__title--option">
                                         <select onChange={e => { handleOption(e) }} id="search" className="tshirts__title--select">

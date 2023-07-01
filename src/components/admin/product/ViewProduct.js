@@ -1,6 +1,6 @@
 import React, { useContext, useEffect, useMemo, useState } from 'react';
 import { Link } from 'react-router-dom';
-import FilterAltIcon from '@mui/icons-material/FilterAlt';
+
 import ToggleOnIcon from '@mui/icons-material/ToggleOn';
 import ToggleOffIcon from '@mui/icons-material/ToggleOff';
 import Table from '@mui/material/Table';
@@ -27,6 +27,8 @@ import ColorLensIcon from '@mui/icons-material/ColorLens';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faShirt } from '@fortawesome/free-solid-svg-icons';
 import StarIcon from '@mui/icons-material/Star';
+import MenuFilter from './components/MenuFilter';
+import ButtonIcon from './components/ButtonIcon';
 let PageSize = 7;
 function ViewProduct() {
 
@@ -35,37 +37,107 @@ function ViewProduct() {
     const [viewProduct, setProduct] = useState([]);
     const [upload, setUpdate] = useState(1);
     const [category, setCategory] = useState([])
+    const [trademark, setTrademark] = useState([])
+    const [color, setColor] = useState([]);
+    const [material, setMaterial] = useState([]);
     const [productLength, setProductLength] = useState(0);
     const [checkAction, setCheckAction] = useState([]);
-    const [anchorEl, setAnchorEl] = React.useState(null);
-    const open = Boolean(anchorEl);
     const [refersh, setRefersh] = useState(false)
-    const handleClick = (event) => {
-        setAnchorEl(event.currentTarget);
-    };
-    const handleClose = () => {
-        setAnchorEl(null);
-    };
-
+    const [message, setMessage] = useState(0);
+    const [filter, setFilter] = useState()
     //Xử lý search
-    /*  const handleInput = (e) => {
-         if (e.key === 'Enter') {
-             setMessage(e.target.value);
-         }
-     }
-     const slug = message;
-     useEffect(() => {
-         if (slug != "") {
-             axios.get(`/api/search/${slug}`).then(res => {
-                 if (res.data.status === 200) {
-                     setProduct(res.data.product);
-                 }
-                 else if (res.data.status === 404) {
- 
-                 }
-             });
-         }
-     }, [message]) */
+    const handleInput = (e) => {
+        if (e.key === 'Enter') {
+            setMessage(e.target.value);
+            setProductLength(null);
+        }
+    }
+    useEffect(() => {
+        API({
+            method: 'post',
+            url: `admin-product/search/${message}`,
+            data: {
+                title: filter ? filter[0] : '',
+                id: filter ? filter[1] : "",
+            }
+        }).then(res => {
+            if (res.data.status === 400) {
+                Swal.fire({
+                    text: res.data.message,
+                    icon: 'warning',
+                    confirmButtonText: 'Đóng'
+                })
+            }
+            setProduct(res.data.products);
+        })
+    }, [message, filter])
+
+    //show colors
+    useEffect(() => {
+        API({
+            method: 'get',
+            url: `/admin-color/show-all`,
+        }).then((res) => {
+            if (res.status === 200) {
+                setColor(res.data.colors)
+                setLoading(false);
+            }
+            else {
+                Swal.fire({
+                    title: 'Error!',
+                    text: 'Do you want to continue',
+                    icon: 'error',
+                    confirmButtonText: 'Cool'
+                })
+            }
+        })
+
+    }, []);
+
+    //show trademarks
+    useEffect(() => {
+        API({
+            method: 'get',
+            url: `/admin-trademark/show-all`,
+        }).then((res) => {
+            if (res.status === 200) {
+                setTrademark(res.data.trademarks)
+                setLoading(false);
+            }
+            else {
+                Swal.fire({
+                    title: 'Error!',
+                    text: 'Do you want to continue',
+                    icon: 'error',
+                    confirmButtonText: 'Cool'
+                })
+            }
+        })
+
+    }, []);
+
+    //show material
+    useEffect(() => {
+        API({
+            method: 'get',
+            url: `/admin-material/show-all`,
+        }).then((res) => {
+            if (res.status === 200) {
+                setMaterial(res.data.materials);
+                setLoading(false);
+            }
+            else {
+                Swal.fire({
+                    title: 'Error!',
+                    text: 'Do you want to continue',
+                    icon: 'error',
+                    confirmButtonText: 'Cool'
+                })
+            }
+        })
+
+    }, []);
+
 
     //show categories
     useEffect(() => {
@@ -337,7 +409,7 @@ function ViewProduct() {
                         component="th"
                         scope="row"
                     >
-                        {item.MauSac.tenMau}
+                        {item.MauSac.ten}
                     </TableCell>
                     <TableCell
                         sx={{ fontSize: "16px" }}
@@ -345,7 +417,7 @@ function ViewProduct() {
                         component="th"
                         scope="row"
                     >
-                        {item.ChatLieu.tenChatLieu}
+                        {item.ChatLieu.ten}
                     </TableCell>
                     <TableCell
                         sx={{ fontSize: "16px" }}
@@ -482,70 +554,48 @@ function ViewProduct() {
         });
     }
 
-
+    console.log(filter)
     return (
         <div className="container">
-            <input type="text" placeholder="Nhập tên sản phẩm cần tìm kiếm..." className="admin__search--input" style={{ margin: "20px", marginLeft: "0" }} /* onKeyDown={handleInput} */ />
-            <Button
-                id="basic-button"
-                aria-controls={open ? 'basic-menu' : undefined}
-                aria-haspopup="true"
-                aria-expanded={open ? 'true' : undefined}
-                onClick={handleClick}
-            >
-                <FilterAltIcon
-                    className='filterIcon'
-                    style={{ fontSize: "30px" }}
-                />
-            </Button>
-            <Menu
-                id="basic-menu"
-                anchorEl={anchorEl}
-                open={open}
-                onClose={handleClose}
-                MenuListProps={{
-                    'aria-labelledby': 'basic-button',
-                }}
-            >
-                {
-                    category.map((item, index) => {
-                        return (
-                            <MenuItem onClick={handleClose} style={{ fontSize: "16px" }} key={index}>{item.ten}</MenuItem>
-                        )
-                    })
-                }
-
-            </Menu>
+            <input type="text" placeholder="Nhập tên sản phẩm cần tìm kiếm..." className="admin__search--input" style={{ margin: "20px", marginLeft: "0" }} onKeyDown={handleInput} />
+            <MenuFilter setProductLength={setProductLength}
+                title={"Thể loại"}
+                menu={category}
+                value={1}
+                setFilter={setFilter}
+            />
+            <MenuFilter setProductLength={setProductLength}
+                title={"Thương hiệu"}
+                menu={trademark}
+                value={2}
+                setFilter={setFilter}
+            />
+            <MenuFilter setProductLength={setProductLength}
+                title={"Màu sắc"}
+                menu={color}
+                value={3}
+                setFilter={setFilter}
+            />
+            <MenuFilter setProductLength={setProductLength}
+                title={"Chất liệu"}
+                menu={material}
+                value={4}
+                setFilter={setFilter}
+            />
             <div className="card-header" style={{ padding: "30px 0" }}>
                 <h1 style={{ fontWeight: "700" }}>Danh sách sản phẩm
-                    <Link
-                        to="/admin/add-product"
-                        className='float-end navbar__admin--background '
-                        style={{ borderRadius:"50%",margin:'0 10px',padding:"0",height:"40px",width:"40px",lineHeight:"35px",textAlign:"center" }}
-                    >
-                        <AddCircleIcon style={{ color: 'white', fontSize: "20px" }} />
-                    </Link>
-                    <Link
-                        to="/admin/view-color"
-                        className="float-end navbar__admin--background "
-                        style={{ borderRadius:"50%",margin:'0 10px',padding:"0",height:"40px",width:"40px",lineHeight:"35px",textAlign:"center" }}
-                    >
-                        <ColorLensIcon style={{ color: 'white', fontSize: "20px" }} />
-                    </Link>
-                    <Link
-                        to="/admin/view-material"
-                        className="float-end navbar__admin--background"
-                        style={{ borderRadius:"50%",margin:'0 10px',padding:"0",height:"40px",width:"40px",lineHeight:"35px",textAlign:"center" }}
-                        >
+                    <ButtonIcon to={'/admin/add-product'} icon={
+                        <AddCircleIcon style={{ fontSize: "20px" }} />
+                    } />
+                    <ButtonIcon to={"/admin/view-color"} icon={
+                        <ColorLensIcon style={{ fontSize: "20px" }} />
+                    } />
+                    <ButtonIcon to={"/admin/view-material"} icon={
                         <FontAwesomeIcon icon={faShirt} style={{ color: "white", fontSize: "15px" }} />
-                    </Link>
-                    <Link
-                        to="/admin/view-evaluate"
-                        className="float-end navbar__admin--background "
-                        style={{ borderRadius:"50%",margin:'0 10px',padding:"0",height:"40px",width:"40px",lineHeight:"35px",textAlign:"center" }}
-                    >
-                        <StarIcon style={{ color: "white", fontSize: "20px" }} />
-                    </Link>
+                    } />
+                    <ButtonIcon to={"/admin/view-evaluate"} icon={
+                        <StarIcon style={{ fontSize: "20px" }} />
+                    } />
                 </h1>
             </div>
             {
