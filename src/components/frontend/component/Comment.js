@@ -541,6 +541,7 @@ const CommentApp = ({ productId, authName }) => {
       url: `comment/show-all/${productId}`
     }).then((response) => {
       setCommentList(response.data.comments)
+      console.log(response.data.comments)
     })
   }, [refersh, productId])
 

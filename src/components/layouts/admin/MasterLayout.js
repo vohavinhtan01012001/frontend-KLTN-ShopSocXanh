@@ -57,7 +57,7 @@ function MasterLayout() {
     }
 
     return (
-        <div className="container__admin">
+        <div className="container__admin" style={{background:'#f5f5f5'}}>
             {menuAdminTabletMobile}
             <div id="layoutSidenav_content">
                 <main>

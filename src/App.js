@@ -10,6 +10,7 @@ import Swal from "sweetalert2";
 import Login from './components/frontend/auth/Login';
 import Register from './components/frontend/auth/Register';
 import Page404 from './components/errors/Page404';
+import PersistentDrawerLeft from './components/layouts/admin/Layout';
 
 
 function App() {
@@ -127,7 +128,7 @@ function App() {
                 );
               })}
             {
-              <Route path='/admin' name="Admin" element={<MasterLayout />} >
+              <Route path='/admin' name="Admin" element={<PersistentDrawerLeft />} >
                 {
                   authState.phanQuyen === 1 ?
                     privateRoutes.map((route, index) => {

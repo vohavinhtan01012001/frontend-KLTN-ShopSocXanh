@@ -94,7 +94,7 @@ function AddAccount() {
                 </div>
             </div>
             <div className="container px-4 fs-4 text " style={{ fontWeight: "600" }} >
-                <div className="card mt-4 box-addProduct" style={{ background: "#f8f9fa",width:"70%",margin:"0 auto" }}>
+                <div className="card mt-4 box-addProduct" style={{ background: "white",width:"70%",margin:"0 auto" }}>
                     <div className="card-body" >
                         <Formik
                             initialValues={initialValues}

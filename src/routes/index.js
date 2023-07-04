@@ -34,6 +34,8 @@ import ViewEvaluate from "../components/admin/evaluate/ViewEvaluate";
 import Search from "../components/frontend/Search";
 import ForgotPassword from "../components/frontend/auth/ForgotPassword";
 import ResetPassword from "../components/frontend/auth/ResetPassword";
+import ViewDashboard from "../components/admin/dashboard/ViewDashboard";
+
 
 
 const publicRoutes = [
@@ -104,6 +106,11 @@ const publicRoutes = [
 
 ];
 const privateRoutes = [
+    {
+        path: '/dashboard',
+        component: ViewDashboard,
+        value: 1
+    },
     {
         path: '/view-product',
         component: ViewProduct,

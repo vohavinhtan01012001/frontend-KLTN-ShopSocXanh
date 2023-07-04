@@ -129,7 +129,7 @@ function ProductDetails() {
 
     //fixx
     productList = viewProduct.map((item) => {
-        if (count < 6 && id != item.id) {
+        if (count < 6 && id != item.id && item.trangThai === 1 && item.soLuongM > 0 && item.soLuongL > 0 && item.soLuongXL > 0) {
             count = count + 1;
             return (
                 <li key={item.id} >
@@ -418,7 +418,7 @@ function ProductDetails() {
                                 <FontAwesomeIcon icon={faChevronRight} />
                                 <Link to={`/category/${categoryName}`} className="app__container--link">{categoryName}</Link>
                                 <FontAwesomeIcon icon={faChevronRight} />
-                                <p className="app__container--text">{product.name}</p>
+                                <p className="app__container--text">{product.ten}</p>
                             </div>
                         </div>
                     </div>

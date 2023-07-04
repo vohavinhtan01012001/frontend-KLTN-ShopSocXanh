@@ -557,31 +557,33 @@ function ViewProduct() {
     console.log(filter)
     return (
         <div className="container">
-            <input type="text" placeholder="Nhập tên sản phẩm cần tìm kiếm..." className="admin__search--input" style={{ margin: "20px", marginLeft: "0" }} onKeyDown={handleInput} />
-            <MenuFilter setProductLength={setProductLength}
-                title={"Thể loại"}
-                menu={category}
-                value={1}
-                setFilter={setFilter}
-            />
-            <MenuFilter setProductLength={setProductLength}
-                title={"Thương hiệu"}
-                menu={trademark}
-                value={2}
-                setFilter={setFilter}
-            />
-            <MenuFilter setProductLength={setProductLength}
-                title={"Màu sắc"}
-                menu={color}
-                value={3}
-                setFilter={setFilter}
-            />
-            <MenuFilter setProductLength={setProductLength}
-                title={"Chất liệu"}
-                menu={material}
-                value={4}
-                setFilter={setFilter}
-            />
+           <div>
+                <input type="text" placeholder="Nhập tên sản phẩm cần tìm kiếm..." className="admin__search--input" style={{ margin: "20px", marginLeft: "0" }} onKeyDown={handleInput} />
+                <MenuFilter setProductLength={setProductLength}
+                    title={"Thể loại"}
+                    menu={category}
+                    value={1}
+                    setFilter={setFilter}
+                />
+                <MenuFilter setProductLength={setProductLength}
+                    title={"Thương hiệu"}
+                    menu={trademark}
+                    value={2}
+                    setFilter={setFilter}
+                />
+                <MenuFilter setProductLength={setProductLength}
+                    title={"Màu sắc"}
+                    menu={color}
+                    value={3}
+                    setFilter={setFilter}
+                />
+                <MenuFilter setProductLength={setProductLength}
+                    title={"Chất liệu"}
+                    menu={material}
+                    value={4}
+                    setFilter={setFilter}
+                />
+           </div>
             <div className="card-header" style={{ padding: "30px 0" }}>
                 <h1 style={{ fontWeight: "700" }}>Danh sách sản phẩm
                     <ButtonIcon to={'/admin/add-product'} icon={
@@ -600,7 +602,7 @@ function ViewProduct() {
             </div>
             {
                 viewProduct.length > 0 ?
-                    <TableContainer component={Paper} className='container' style={{ padding: "10px 20px", background: "#f8f9fa" }}>
+                    <TableContainer component={Paper} className='container' style={{ padding: "10px 20px", background: "white" }}>
                         <Table sx={{ minWidth: 650, fontSize: "16px" }} aria-label="caption table">
                             <TableHead >
                                 <TableRow sx={{ '&:last-child tr, &:last-child th': { fontSize: '16px', fontWeight: "600" } }}>

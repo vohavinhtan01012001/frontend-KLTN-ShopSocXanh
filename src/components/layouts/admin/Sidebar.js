@@ -128,7 +128,7 @@ function Sidebar({ onCloseClick }) {
                     authState.phanQuyen === 1 &&
                     <>
                         <li className="admin__menu--account">
-                            <Link to="/admin/view-category" className="admin__menu--account-link">
+                            <Link to="/admin/dashboard" className="admin__menu--account-link">
                                 <FontAwesomeIcon icon={faGauge} className="account__link--icon" />
                                 <p>Thống kê</p>
                             </Link>

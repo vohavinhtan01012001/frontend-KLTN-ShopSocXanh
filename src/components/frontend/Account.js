@@ -14,23 +14,8 @@ function Account() {
     const history = useNavigate();
     const { authState } = useContext(AuthContext);
     const [order, setOrder] = useState([]);
-    const [viewAccount, setAccount] = useState([]);
-    useEffect(() => {
-        axios.get(`/api/view-accountAdd`).then(res => {
-            if (res.data.status === 200) {
-                setAccount(res.data.user);
-            }
-        });
-    }, []);
 
-    var emailToken = localStorage.getItem('auth_email');
-    var user_id = "";
-    viewAccount.map((item, index) => {
-        if (item.email == emailToken) {
-            user_id = item.id;
-        }
-        return user_id;
-    })
+
 
     const logoutSubmit = (e) => {
         localStorage.removeItem('accessToken');
@@ -174,7 +159,7 @@ function Account() {
                                     <span>:</span>
                                     <span>{phone}</span>
                                 </div>
-                                <Link to={`/address/${user_id}`} className='app_container-edit'>
+                                <Link to={`/address/`} className='app_container-edit'>
                                     <div className='app_container-edit--text' >Chỉnh sửa</div>
                                     <div className='app_container-edit--icon'>
                                         <FontAwesomeIcon icon={faPenToSquare} />

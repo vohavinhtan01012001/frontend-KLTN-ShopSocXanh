@@ -267,7 +267,7 @@ function ViewPromotion() {
                     </div>
                 </div>
                 {
-                    promotionList.length > 0 ? <TableContainer component={Paper} className='container' style={{ padding: "10px 20px", background: "#f8f9fa" }}>
+                    promotionList.length > 0 ? <TableContainer component={Paper} className='container' style={{ padding: "10px 20px", background: "white" }}>
                     <Table sx={{ minWidth: 650, fontSize: "16px" }} aria-label="caption table">
                         <TableHead >
                             <TableRow sx={{ '&:last-child tr, &:last-child th': { fontSize: '16px', fontWeight: "600" } }}>

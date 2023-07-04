@@ -221,7 +221,7 @@ function AddProduct() {
                 </div>
             </div>
             <div className="container px-4 fs-4 text " style={{ fontWeight: "600" }}>
-                <div className="card mt-4 box-addProduct" style={{ background: "#f8f9fa" }}>
+                <div className="card mt-4 box-addProduct" style={{ background: "white" }}>
 
                     <div className="card-body">
                         <Formik
