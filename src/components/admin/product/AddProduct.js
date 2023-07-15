@@ -291,10 +291,6 @@ function AddProduct() {
                                                 <option value='1' >Nữ</option>
                                                 <option value='2' >Cả hai</option>
                                             </Field>
-                                            <p className="text-danger">
-                                                <ErrorMessage name='KhuyenMaiId' component="div" style={{ color: "red", fontWeight: "500" }}
-                                                />
-                                            </p>
                                         </div>
                                         <div className="form-group mb-3">
                                             <label>Chương trình khuyến mãi</label>

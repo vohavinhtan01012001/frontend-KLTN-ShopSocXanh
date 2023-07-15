@@ -405,6 +405,11 @@ function ProductDetails() {
             }
         });
     }
+
+    const handleQt = () => {
+        console.log('sss')
+    }
+
     console.log(product)
     return (
         <>
@@ -427,21 +432,21 @@ function ProductDetails() {
                         <div className="col-lg-6 col-md-12 2 container__product">
                             <ul className="product__img--list">
                                 <li className="product__img--item">
-                                    <img src={`http://localhost:4000/${product.hinh}`} onClick={hanldeImg} className="product__img--image" alt={product.name} />
+                                    <img src={`http://localhost:4000/${product.hinh}`} onClick={hanldeImg} className="product__img--image" alt={product.ten} />
                                 </li>
                                 <li className="product__img--item">
-                                    <img src={`http://localhost:4000/${product.hinh2}`} onClick={hanldeImg2} className="product__img--image" alt={product.name} />
+                                    <img src={`http://localhost:4000/${product.hinh2}`} onClick={hanldeImg2} className="product__img--image" alt={product.ten} />
                                 </li>
                                 <li className="product__img--item">
-                                    <img src={`http://localhost:4000/${product.hinh3}`} onClick={hanldeImg3} className="product__img--image" alt={product.name} />
+                                    <img src={`http://localhost:4000/${product.hinh3}`} onClick={hanldeImg3} className="product__img--image" alt={product.ten} />
                                 </li>
                                 <li className="product__img--item">
-                                    <img src={`http://localhost:4000/${product.hinh4}`} onClick={hanldeImg4} className="product__img--image" alt={product.name} />
+                                    <img src={`http://localhost:4000/${product.hinh4}`} onClick={hanldeImg4} className="product__img--image" alt={product.ten} />
                                 </li>
                             </ul>
                             {bigImg}
                         </div>
-                        <div className="col-lg-4 col-md-12 col-sm-12 col-xs-12 pd5 information-product"style={{marginBottom:"10px"}} >
+                        <div className="col-lg-4 col-md-12 col-sm-12 col-xs-12 pd5 information-product" style={{ marginBottom: "10px" }} >
                             <div className="product-title">
                                 <h1>{product.ten}</h1>
                             </div>
@@ -488,51 +493,88 @@ function ProductDetails() {
                                 <div>
 
                                     <div className="select-wrapper clearfix fs-4 text" style={{ padding: "15px 0" }}>
-                                        <div style={{ padding: "10px 0" }}>Màu sắc:<span
-                                            style={{ border: "1px solid #5ec9ff", background: "#5ec9ff", color: "white", borderRadius: "5px", padding: "5px", textAlign: "center", fontWeight: 600, margin: "0 10px" }}
-                                            className="fs-4 text"
-                                        >
-                                            {product.MauSac?.ten}
-                                        </span></div>
-                                        <div style={{ paddingTop: "10px",paddingBottom:"20px" }}>Chất liệu:<span
-                                            style={{ border: "1px solid #5ec9ff", background: "#5ec9ff", color: "white", borderRadius: "5px", padding: "5px", textAlign: "center", fontWeight: 600, margin: "0 10px" }}
-                                            className="fs-4 text"
-                                        >
-                                            {product.ChatLieu?.ten}
-                                        </span></div>
-                                        <label>Số lượng: </label>
-                                        {
-                                            radios.map((radio, idx) => (
-                                                idx === 0 ?
-                                                    <span
-                                                        style={{ border: "1px solid #5ec9ff", background: "#5ec9ff", color: "white", borderRadius: "5px", padding: "5px", textAlign: "center", fontWeight: 600, margin: "0 10px" }}
-                                                        className="fs-4 text"
-                                                    >
-                                                        {" " + radio.name + ":" + " " + product.soLuongM}
-                                                    </span> :
-                                                    idx === 1 ?
-                                                        <span style={{ border: "1px solid #5ec9ff", background: "#5ec9ff", color: "white", borderRadius: "5px", padding: "5px", textAlign: "center", fontWeight: 600, margin: "0 10px" }} className="fs-4 text">{" " + radio.name + ":" + " " + product.soLuongL}
+                                        <div className="d-flex">
+                                            <div style={{ padding: "10px 0" }}>Màu sắc:<span
+                                                style={{ border: "1px solid #5ec9ff", background: "#5ec9ff", color: "white", borderRadius: "5px", padding: "5px", textAlign: "center", fontWeight: 600, margin: "0 10px" }}
+                                                className="fs-4 text"
+                                            >
+                                                {product.MauSac?.ten}
+                                            </span></div>
+                                            <div style={{ paddingTop: "10px", paddingBottom: "20px", marginLeft: "10px" }}>Chất liệu:<span
+                                                style={{ border: "1px solid #5ec9ff", background: "#5ec9ff", color: "white", borderRadius: "5px", padding: "5px", textAlign: "center", fontWeight: 600, margin: "0 10px" }}
+                                                className="fs-4 text"
+                                            >
+                                                {product.ChatLieu?.ten}
+                                            </span></div>
+                                        </div>
+                                        <div className="d-flex">
+                                            <div style={{ paddingBottom: "20px" }}>Thể loại:<span
+                                                style={{ border: "1px solid #5ec9ff", background: "#5ec9ff", color: "white", borderRadius: "5px", padding: "5px", textAlign: "center", fontWeight: 600, margin: "0 10px" }}
+                                                className="fs-4 text"
+                                            >
+                                                {product.TheLoai?.ten}
+                                            </span></div>
+                                            <div style={{ paddingBottom: "20px" }}>Thương hiệu:<span
+                                                style={{ border: "1px solid #5ec9ff", background: "#5ec9ff", color: "white", borderRadius: "5px", padding: "5px", textAlign: "center", fontWeight: 600, margin: "0 10px" }}
+                                                className="fs-4 text"
+                                            >
+                                                {product.ThuongHieu?.ten}
+                                            </span></div>
+                                        </div>
+                                        <div className="d-flex">
+                                            <div style={{ paddingBottom: "20px" }}>Kiểu dáng:<span
+                                                style={{ border: "1px solid #5ec9ff", background: "#5ec9ff", color: "white", borderRadius: "5px", padding: "5px", textAlign: "center", fontWeight: 600, margin: "0 10px" }}
+                                                className="fs-4 text"
+                                            >
+                                                {product.KieuDang?.ten}
+                                            </span></div>
+                                            <div style={{ paddingBottom: "20px" }}>Giới tính:<span
+                                                style={{ border: "1px solid #5ec9ff", background: "#5ec9ff", color: "white", borderRadius: "5px", padding: "5px", textAlign: "center", fontWeight: 600, margin: "0 10px" }}
+                                                className="fs-4 text"
+                                            >
+                                                {product.gioiTinh === 0 ? "Nam" : product.gioiTinh === 1 ? "Nữ" : product.gioiTinh === 2 ? "Nam và nữ" : ""}
+                                            </span></div>
+                                        </div>
+                                        <div className="d-flex" style={{ alignItems: "center" }}>
+                                            <label>Số lượng: </label>
+                                            {
+                                                radios.map((radio, idx) => (
+                                                    idx === 0 ?
+                                                        <span
+                                                            style={{ border: "1px solid #5ec9ff", background: "#5ec9ff", color: "white", borderRadius: "5px", padding: "5px", textAlign: "center", fontWeight: 600, margin: "0 10px" }}
+                                                            className="fs-4 text"
+                                                        >
+                                                            {" Size " + radio.name + ":" + " " + product.soLuongM}
                                                         </span> :
-                                                        idx === 2 ?
-                                                            <span style={{ border: "1px solid #5ec9ff", background: "#5ec9ff", color: "white", borderRadius: "5px", padding: "5px", textAlign: "center", fontWeight: 600, margin: "0 10px" }} className="fs-4 text">
-                                                                {" " + radio.name + ":" + " " + product.soLuongXL}
-                                                            </span> : ""
-                                            ))}
+                                                        idx === 1 ?
+                                                            <span style={{ border: "1px solid #5ec9ff", background: "#5ec9ff", color: "white", borderRadius: "5px", padding: "5px", textAlign: "center", fontWeight: 600, margin: "0 10px" }} className="fs-4 text">{" Size " + radio.name + ":" + " " + product.soLuongL}
+                                                            </span> :
+                                                            idx === 2 ?
+                                                                <span style={{ border: "1px solid #5ec9ff", background: "#5ec9ff", color: "white", borderRadius: "5px", padding: "5px", textAlign: "center", fontWeight: 600, margin: "0 10px" }} className="fs-4 text">
+                                                                    {" Size " + radio.name + ":" + " " + product.soLuongXL}
+                                                                </span> : ""
+                                                ))}
 
+                                        </div>
                                         <div className="input-group fs-4 text">
                                             <input type="button" value="-" onClick={hanldeMinusQuantity} className="qty-btn" />
                                             <div className="qty-btn fs-4 text text-center lh-lg p-2">{radioValue == 1 ? "" : quantity}</div>
+                                            {/* <input type="number" onMouseDownCapture={handleQt} /> */}
                                             <input type="button" value="+" onClick={hanldePlusQuantity} className="qty-btn" />
+                                            <div style={{ marginLeft: "20px" }}>
+                                                {
+                                                    refershLike ?
+                                                        <FavoriteIcon style={{ color: 'red', fontSize: "40px" }} onClick={(e) => handleLike(e)} /> :
+                                                        <FavoriteIcon
+                                                            FavoriteIcon style={{ color: 'gray', fontSize: "40px" }} onClick={(e) => handleLike(e)}
+                                                        />
+                                                }
+                                            </div>
+
                                         </div>
-                                        <div className="input-group fs-4 text " >
-                                            {
-                                                refershLike ?
-                                                    <FavoriteIcon style={{ color: 'red', fontSize: "40px" }} onClick={(e) => handleLike(e)} /> :
-                                                    <FavoriteIcon
-                                                        FavoriteIcon style={{ color: 'gray', fontSize: "40px" }} onClick={(e) => handleLike(e)} />}
-                                        </div>
+
                                     </div>
-                                    <div className="clearfix button__buy" style={{marginTop:"0"}}>
+                                    <div className="clearfix button__buy" style={{ marginTop: "0", marginBottom: "30px" }}>
                                         <button type="button" onClick={submitAddtocart} className="btn-style-add add-to-cart btn__cart">
                                             <FontAwesomeIcon className="button__buy--icon" icon={faCartShopping} />
                                             <span className="txt">Thêm vào giỏ</span>

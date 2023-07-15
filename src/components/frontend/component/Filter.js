@@ -3,7 +3,7 @@ import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
 import Modal from '@mui/material/Modal';
-import { TextField } from '@mui/material';
+import { Slider, TextField } from '@mui/material';
 import InputLabel from '@mui/material/InputLabel';
 import MenuItem from '@mui/material/MenuItem';
 import FormControl from '@mui/material/FormControl';
@@ -21,20 +21,40 @@ const style = {
   fontWeight: 'bold',
   fontSize: '16px',
   textAlign: 'center',
+  borderRadius: '10px',
   p: 4,
 };
 
-export default function Filter({ iconButton, setValue, value }) {
+export default function Filter({ iconButton, setValue, value, setProduct }) {
   const [open, setOpen] = React.useState(false);
-  const handleOpen = () => setOpen(true);
-  const handleClose = () => setOpen(false);
   const [material, setMaterial] = React.useState([]);
   const [color, setColor] = React.useState([]);
   const [styleList, setStyle] = React.useState([]);
+  const [trademark, setTrademark] = React.useState([]);
   const [category, setCategory] = React.useState('');
-  const handleChange = (e) => {
-    setValue([...value, { [e.target.name]: e.target.value }])
+  const [price, setPrice] = React.useState([]);
+
+  const handleOpen = () => setOpen(true);
+  const handleClose = () => {
+    setOpen(false)
+    setValue({})
   };
+
+
+  const handleChange = (e) => {
+    setValue({ ...value, [e.target.name]: e.target.value })
+  };
+  console.log(value)
+
+
+  React.useEffect(() => {
+    API({
+      method: 'get',
+      url: `product/priceminmax`,
+    }).then((res) => {
+      setPrice([res.data.minMaxTongTien.minTongTien, res.data.minMaxTongTien.maxTongTien])
+    })
+  }, []);
 
   React.useEffect(() => {
     API({
@@ -44,7 +64,6 @@ export default function Filter({ iconButton, setValue, value }) {
       setCategory(res.data)
     })
   }, []);
-
 
 
   React.useEffect(() => {
@@ -73,7 +92,36 @@ export default function Filter({ iconButton, setValue, value }) {
       setStyle(res.data.styles);
     })
   }, [])
-  console.log(value)
+
+  React.useEffect(() => {
+    API({
+      method: 'get',
+      url: 'trademark/show-all',
+    }).then((res) => {
+      setTrademark(res.data.trademarks);
+      console.log(res.data)
+    })
+  }, [])
+
+
+  const handleFilter = () => {
+    console.log(value)
+    API({
+      method: 'post',
+      url: 'product/filter',
+      data: {
+        value: value
+      }
+    }).then((res) => {
+      setProduct(res.data.products);
+      console.log(res.data)
+    })
+  }
+
+
+  const formatMoney = (value) => {
+    return value.toLocaleString('vi-VN') + ' VNĐ';
+  };
   return (
     <div>
       <Button onClick={handleOpen}>{iconButton}</Button>
@@ -86,16 +134,6 @@ export default function Filter({ iconButton, setValue, value }) {
         <Box sx={style}>
           <h1 style={{ fontWeight: "bold", fontSize: "30px", textAlign: "center" }}>Lọc sản phẩm</h1>
           <div style={{ marginTop: "20px" }}>
-            <TextField
-              label={
-                <label style={{ fontSize: '16px' }}>
-                  Tên sản phẩm
-                </label>
-              }
-              sx={{ 'input': { fontSize: '16px', padding: "12px" }, width: '70%' }}
-              variant="outlined"
-            />
-
             <div style={{ marginTop: "20px" }}>
               <InputLabel id="demo-simple-select-label" style={{ fontSize: "16px", marginTop: "20px" }}>Thể loại</InputLabel>
               <Select
@@ -117,7 +155,23 @@ export default function Filter({ iconButton, setValue, value }) {
               <Select
                 labelId="demo-simple-select-label"
                 id="demo-simple-select"
+                onChange={handleChange}
+                sx={{ width: '70%', fontSize: '16px' }}
                 name='thuonghieu'
+              >
+                {
+                  trademark && trademark.map((item) => {
+                    return <MenuItem style={{ fontSize: "16px" }} value={item.id}>{item.ten}</MenuItem>
+                  })
+                }
+              </Select>
+            </div>
+            <div style={{ marginTop: "20px" }}>
+              <InputLabel id="demo-simple-select-label" style={{ fontSize: "16px", marginTop: "20px" }}>Chất liệu</InputLabel>
+              <Select
+                labelId="demo-simple-select-label"
+                id="demo-simple-select"
+                name='chatlieu'
                 onChange={handleChange}
                 sx={{ width: '70%', fontSize: '16px' }}
               >
@@ -174,7 +228,22 @@ export default function Filter({ iconButton, setValue, value }) {
                 }
               </Select>
             </div>
-            <Button style={{ fontSize: "16px", background: "#0d6efd", marginTop: "20px", padding: "10px 20px", color: "white" }}>Tìm kiếm</Button>
+            <div>
+              <InputLabel id="demo-simple-select-label" style={{ fontSize: "16px", marginTop: "20px" }}>Giá tiền</InputLabel>
+              <Slider
+                /* value={price[1]} */
+                onChange={handleChange}
+                valueLabelDisplay="auto"
+                aria-labelledby="price-range"
+                name="sotien"
+                min={price[0]}
+                max={price[1]}
+                step={1}
+                style={{ width: '70%' }}
+              />
+              <InputLabel id="demo-simple-select-label" style={{ fontSize: "16px" }}>Từ {price[0] && formatMoney(price[0])} đến {price[1] && formatMoney(price[1])} </InputLabel>
+            </div>
+            <Button style={{ fontSize: "16px", background: "#0d6efd", marginTop: "20px", padding: "10px 20px", color: "white" }} onClick={handleFilter}>Lọc</Button>
           </div>
         </Box>
       </Modal>

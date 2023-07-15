@@ -25,13 +25,17 @@ function CategoryList() {
 
     const [shouldRefresh, setRefresh] = useState(false);
     const [message, setMessage] = useState('')
-    const [value, setValue] = useState([]);
+    const [value, setValue] = useState({});
 
     const callbackFunction = (childData) => {
         setMessage(childData)
         setRefresh(!shouldRefresh);
     }
     const [productitem, setProductItem] = useState([]);
+    console.log(value)
+
+
+
 
     //sắp xếp
     function handleOption(e) {
@@ -156,7 +160,7 @@ function CategoryList() {
     }, [message])
 
 
-
+    console.log(product)
     //xuất dữ liệu 
     var showProductsList = "";
 
@@ -194,7 +198,7 @@ function CategoryList() {
                             <div className="tshirts__title">
                                 <h3 className="tshirts__title--heading">{category.ten}</h3>
                                 <div className="tshirts__title--sort">
-                                    <p style={{ fontSize: "16px", fontWeight: "bold", margin: "0 0 0 20px" }}>Bộ lọc</p><Filter iconButton={<FilterAltIcon style={{ fontSize: "35px" }} />} setValue={setValue} value={value} />
+                                    <p style={{ fontSize: "16px", fontWeight: "bold", margin: "0 0 0 20px" }}>Bộ lọc</p><Filter iconButton={<FilterAltIcon style={{ fontSize: "35px" }} />} setValue={setValue} value={value} setProduct={setProduct} />
                                     <div className="tshirts__title--option" style={{ marginLeft: "20px" }}>
                                         <select onChange={e => { handleOption(e) }} id="search" className="tshirts__title--select">
                                             <option >---Sắp xếp---</option>

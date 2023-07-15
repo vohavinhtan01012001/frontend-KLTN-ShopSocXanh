@@ -15,7 +15,6 @@ function ProductItem({ item, index }) {
             url: 'evaluate/show-star',
         }).then((res) => {
             setStars(res.data.stars);
-            console.log(res.data)
         })
     }, []);
 
@@ -33,7 +32,6 @@ function ProductItem({ item, index }) {
         sumStar += evaluates[i];
     }
     sumStar = sumStar / evaluates.length;
-    console.log(sumStar);
     const starIcons = [];
     for (let i = 0; i < 5; i++) {
         if (sumStar <= i) {
@@ -62,7 +60,6 @@ function ProductItem({ item, index }) {
             url: '/admin-dashboard/products/bestseller',
         }).then((res) => {
             setBestSellerProducts(res.data.bestSellerProducts)
-            console.log(res.data)
         })
     }, []);
 
@@ -86,7 +83,7 @@ function ProductItem({ item, index }) {
                 </div>
                 <div className="content-product-item2">
                     <div className="content__product-text2">
-                        VERGENCY
+                        {item.ThuongHieu?.ten}
                     </div>
                     <div className="content__product-evaluate">
                         {starIcons}
