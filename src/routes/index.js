@@ -34,7 +34,11 @@ import ViewEvaluate from "../components/admin/evaluate/ViewEvaluate";
 import Search from "../components/frontend/Search";
 import ForgotPassword from "../components/frontend/auth/ForgotPassword";
 import ResetPassword from "../components/frontend/auth/ResetPassword";
-import ViewDashboard from "../components/admin/dashboard/ViewDashboard";
+import ViewDashboard from "../components/admin/order/ViewChartOrder";
+import TabsList from "../components/admin/order/component/TabsList";
+import Dashboard from "../components/admin/dashboard/Dashboard";
+import ViewGender from "../components/admin/gender/ViewGender";
+import ViewStyle from "../components/admin/style/ViewStyle";
 
 
 
@@ -106,11 +110,11 @@ const publicRoutes = [
 
 ];
 const privateRoutes = [
-    {
+   /*  {
         path: '/dashboard',
         component: ViewDashboard,
         value: 1
-    },
+    }, */
     {
         path: '/view-product',
         component: ViewProduct,
@@ -139,6 +143,11 @@ const privateRoutes = [
     {
         path: '/view-material',
         component: ViewMaterial,
+        value: 1
+    },
+    {
+        path: '/view-style',
+        component: ViewStyle,
         value: 1
     },
     {
@@ -183,7 +192,7 @@ const privateRoutes = [
     },
     {
         path: '/view-order',
-        component: ViewOrder,
+        component: TabsList,
         value: 5
     },
     {
@@ -211,7 +220,11 @@ const privateRoutes = [
         component: ViewPermission,
         value: 8
     },
-    
+    {
+        path: '/dashboard',
+        component: Dashboard,
+        value: 9,
+    },
 
 ];
 export { privateRoutes, publicRoutes };

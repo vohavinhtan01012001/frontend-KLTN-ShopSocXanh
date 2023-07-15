@@ -47,12 +47,26 @@ function ProductItem({ item, index }) {
         }
     }
     const handleClick = () => {
-        if(item.soLuongM == 0 && item.soLuongL == 0 && item.soLuongXL == 0 ){
+        if (item.soLuongM == 0 && item.soLuongL == 0 && item.soLuongXL == 0) {
 
-        }else{
+        } else {
             history(`/${item.TheLoai.ten}/${item.id}`)
         }
     }
+
+
+    const [bestSellerProducts, setBestSellerProducts] = useState([])
+    useEffect(() => {
+        API({
+            method: 'get',
+            url: '/admin-dashboard/products/bestseller',
+        }).then((res) => {
+            setBestSellerProducts(res.data.bestSellerProducts)
+            console.log(res.data)
+        })
+    }, []);
+
+
     return (
         <div key={index} className="col-lg-3 col-md-4 col-sm-4 col-xs-6 ">
             <div className="content__product" style={{ height: "95%" }}>
@@ -91,7 +105,12 @@ function ProductItem({ item, index }) {
                                 {item.KhuyenMaiId ? <del className="content__product-price--item2">{Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(item.giaTien)}</del> : ""}
                             </div>
                     }
-                    <div className="content__product-new">new</div>
+
+                    {
+                        bestSellerProducts.map((product) => {
+                            return product.SanPhamId === item.id ? <div className="content__product-new">Chạy</div> : ""
+                        })
+                    }
                     {item.KhuyenMai ? <div className="content__product-sale">{"-" + item.KhuyenMai.giamGia + "%"}</div> : ""}
                 </div>
             </div>

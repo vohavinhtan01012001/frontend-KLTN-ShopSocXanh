@@ -17,6 +17,7 @@ import MenuItem from '@mui/material/MenuItem';
 import CheckIcon from '@mui/icons-material/Check';
 import ClearIcon from '@mui/icons-material/Clear';
 import DriveFileRenameOutlineIcon from '@mui/icons-material/DriveFileRenameOutline';
+import StyleIcon from '@mui/icons-material/Style';
 import DeleteForeverIcon from '@mui/icons-material/DeleteForever';
 import API from '../../../API';
 import { AuthContext } from '../../../helpers/AuthContext';
@@ -29,6 +30,7 @@ import { faShirt } from '@fortawesome/free-solid-svg-icons';
 import StarIcon from '@mui/icons-material/Star';
 import MenuFilter from './components/MenuFilter';
 import ButtonIcon from './components/ButtonIcon';
+import { Tooltip } from '@mui/material';
 let PageSize = 7;
 function ViewProduct() {
 
@@ -228,14 +230,6 @@ function ViewProduct() {
                     return newCheckAction;
                 });
             }
-            else {
-                Swal.fire({
-                    title: 'Error!',
-                    text: 'Do you want to continue',
-                    icon: 'error',
-                    confirmButtonText: 'Close'
-                })
-            }
         })
     }, [upload, refersh]);
 
@@ -311,8 +305,13 @@ function ViewProduct() {
         )
 
     }
-
-
+    const formatDate = (value) => {
+        const date = new Date(value);
+        const day = date.getDate();
+        const month = date.getMonth() + 1; // Tháng bắt đầu từ 0, nên cần cộng thêm 1
+        const year = date.getFullYear();
+        return `${month}/${day}/${year}`;
+    };
 
     var display_Productdata = "";
     if (loading) {
@@ -361,6 +360,15 @@ function ViewProduct() {
 
                     >
                         {item.ten}
+                    </TableCell>
+                    <TableCell
+                        sx={{ fontSize: "16px", width: '250px' }}
+                        align="right"
+                        component="th"
+                        scope="row"
+
+                    >
+                        {item.gioiTinh === 0 ? "Nam" : item.gioiTinh === 1 ? "Nữ " : item.gioiTinh === 2 ? "Nam và nữ" : ""}
                     </TableCell>
                     <TableCell
                         sx={{ fontSize: "16px" }}
@@ -491,6 +499,24 @@ function ViewProduct() {
                         align="right"
                         component="th"
                         scope="row"
+                    >
+                        {formatDate(item.createdAt)}
+
+                    </TableCell>
+                    <TableCell
+                        sx={{ fontSize: "16px" }}
+                        align="right"
+                        component="th"
+                        scope="row"
+                    >
+                        {formatDate(item.updatedAt)}
+
+                    </TableCell>
+                    <TableCell
+                        sx={{ fontSize: "16px" }}
+                        align="right"
+                        component="th"
+                        scope="row"
                     /* onClick={() => handleChange(item.id)} */
                     >
                         {
@@ -557,7 +583,7 @@ function ViewProduct() {
     console.log(filter)
     return (
         <div className="container">
-           <div>
+            <div className='fs-4 text'>
                 <input type="text" placeholder="Nhập tên sản phẩm cần tìm kiếm..." className="admin__search--input" style={{ margin: "20px", marginLeft: "0" }} onKeyDown={handleInput} />
                 <MenuFilter setProductLength={setProductLength}
                     title={"Thể loại"}
@@ -583,7 +609,7 @@ function ViewProduct() {
                     value={4}
                     setFilter={setFilter}
                 />
-           </div>
+            </div>
             <div className="card-header" style={{ padding: "30px 0" }}>
                 <h1 style={{ fontWeight: "700" }}>Danh sách sản phẩm
                     <ButtonIcon to={'/admin/add-product'} icon={
@@ -595,6 +621,9 @@ function ViewProduct() {
                     <ButtonIcon to={"/admin/view-material"} icon={
                         <FontAwesomeIcon icon={faShirt} style={{ color: "white", fontSize: "15px" }} />
                     } />
+                    <ButtonIcon to={"/admin/view-style"} icon={
+                        <StyleIcon style={{ fontSize: "20px" }} />
+                    } />
                     <ButtonIcon to={"/admin/view-evaluate"} icon={
                         <StarIcon style={{ fontSize: "20px" }} />
                     } />
@@ -602,13 +631,14 @@ function ViewProduct() {
             </div>
             {
                 viewProduct.length > 0 ?
-                    <TableContainer component={Paper} className='container' style={{ padding: "10px 20px", background: "white" }}>
+                    <TableContainer component={Paper} className='container' style={{ padding: "10px 20px", background: "#f8f9fa" }}>
                         <Table sx={{ minWidth: 650, fontSize: "16px" }} aria-label="caption table">
                             <TableHead >
                                 <TableRow sx={{ '&:last-child tr, &:last-child th': { fontSize: '16px', fontWeight: "600" } }}>
                                     <TableCell >STT</TableCell>
                                     <TableCell align="right">Mã</TableCell>
                                     <TableCell align="right" >Tên</TableCell>
+                                    <TableCell align="right" >Giới tính</TableCell>
                                     <TableCell align="right">Loại</TableCell>
                                     <TableCell align="right">Thương hiệu</TableCell>
                                     <TableCell align="right" width={150}>Giá gốc</TableCell>
@@ -622,6 +652,8 @@ function ViewProduct() {
                                     <TableCell align="right" width={100}>Hình ảnh</TableCell>
                                     <TableCell align="right" width={120}>Còn hàng</TableCell>
                                     <TableCell align="right" width={120}>Hoạt động</TableCell>
+                                    <TableCell align="right" >Ngày nhập hàng</TableCell>
+                                    <TableCell align="right" >Ngày cập nhật</TableCell>
                                     <TableCell align="right" width={120}></TableCell>
                                     <TableCell align="right"></TableCell>
                                     <TableCell align="right"></TableCell>

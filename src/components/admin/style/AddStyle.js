@@ -1,42 +1,38 @@
-import React, { useEffect, useState } from 'react'
+import React, { useState } from 'react'
 import Button from 'react-bootstrap/Button';
 import Form from 'react-bootstrap/Form';
 import Modal from 'react-bootstrap/Modal';
+import Swal from 'sweetalert2'
 import API from '../../../API';
-import Swal from 'sweetalert2';
-import DriveFileRenameOutlineIcon from '@mui/icons-material/DriveFileRenameOutline';
 
-function EditRole
+function AddStyle
     ({
-        showItemRole,
+        setShowAddStyle,
+        showAddStyle,
         setRefersh,
         refersh
     }) {
-    const [roleInput, setRole] = useState([]);
-    const [showEditRole, setShowEditRole] = useState(false);
-    //modal Add Category
-
-
-    const handleCloseEditRole = () => {
-        setShowEditRole(false);
-        setRefersh(!refersh)
-    }
-    const handleShowEditRole = (e) => {
-        setShowEditRole(true)
-        setRole(showItemRole)
+    //modal Add Style
+    const handleCloseAddStyle = () => {
+        setShowAddStyle(false)
+        setRefersh(!refersh);
     };
-
+    const handleShowAddStyle = () => setShowAddStyle(true);
+    const [styleInput, setStyle] = useState({
+        ten: '',
+        moTa: ''
+    });
 
     const handleInput = (e) => {
         e.persist();
-        setRole({ ...roleInput, [e.target.name]: e.target.value })
+        setStyle({ ...styleInput, [e.target.name]: e.target.value })
     }
 
 
-    //event onSubmit edit Category
-    const submitCategory = (e) => {
+    //event onSubmit add Category
+    const submitStyle = (e) => {
         e.preventDefault();
-        if (roleInput.tenVaiTro == '') {
+        if (styleInput.tenMauSac == '') {
             Swal.fire({
                 text: 'Tên không được để trống!',
                 icon: 'error',
@@ -46,36 +42,48 @@ function EditRole
         }
 
         const data = {
-            id: roleInput.id,
-            tenVaiTro: roleInput.tenVaiTro,
-            moTa: roleInput.moTa,
+            ten: styleInput.ten,
+            moTa: styleInput.moTa,
         }
 
         API({
-            method: 'put',
-            url: `/admin-permission/upload-role`,
+            method: 'post',
+            url: `admin-style/add-style`,
             data: data,
         }).then((res) => {
             Swal.fire({
-                text: 'Cập nhật thành công!',
+                text: 'Thêm thành công!',
                 icon: 'success',
                 confirmButtonText: 'Đóng'
             })
+            setRefersh(!refersh);
         });
 
     }
     return (
         <>
-            <button
-                style={{ border: "0px", background: "none" }}
-                onClick={handleShowEditRole}
+            <Button
+                className="btn btn-primary btn-lg float-end fs-4 text"
+                style={{ padding: "8px 10px", borderRadius: "5px" }}
+                onClick={handleShowAddStyle}
             >
-                <DriveFileRenameOutlineIcon style={{ fontSize: "30px", color: "#5ec9ff" }} />
-            </button>
-            <Modal show={showEditRole} onHide={handleCloseEditRole} size="lg" style={{ padding: "20px" }}>
-                <form onSubmit={submitCategory}>
+                Thêm kiểu
+            </Button>
+            <Modal
+                show={showAddStyle}
+                onHide={handleCloseAddStyle}
+                size="lg"
+                style={{ padding: "20px" }}
+            >
+                <form onSubmit={submitStyle}>
                     <Modal.Header closeButton>
-                        <Modal.Title><h1 style={{ fontWeight: "600" }}>Cập nhật vai trò</h1></Modal.Title>
+                        <Modal.Title>
+                            <h1
+                                style={{ fontWeight: "600" }}
+                            >
+                                Thêm kiểu dáng
+                            </h1>
+                        </Modal.Title>
                     </Modal.Header>
                     <Modal.Body>
                         <Form>
@@ -85,9 +93,8 @@ function EditRole
                                     onChange={handleInput}
                                     style={{ padding: "10px 15px", fontSize: "16px" }}
                                     type="text"
-                                    name='tenVaiTro'
-                                    value={roleInput.tenVaiTro}
-                                    placeholder="Nhập tên vai trò..."
+                                    name='ten'
+                                    placeholder="Nhập tên kiểu dáng..."
                                     autoFocus
                                 />
                             </Form.Group>
@@ -96,21 +103,19 @@ function EditRole
                                 controlId="exampleForm.ControlTextarea1"
                             >
                                 <Form.Label><h2>Mô tả</h2></Form.Label>
-                                <Form.Control
-                                    as="textarea"
+                                <Form.Control as="textarea"
                                     onChange={handleInput}
                                     name="moTa"
-                                    value={roleInput.moTa}
                                     style={{ padding: "10px 15px", fontSize: "16px" }} placeholder="Nhập mô tả..." rows={3} />
                             </Form.Group>
                         </Form>
                     </Modal.Body>
                     <Modal.Footer>
-                        <Button variant="secondary fs" style={{ fontSize: "16px" }} onClick={handleCloseEditRole}>
+                        <Button variant="secondary fs" style={{ fontSize: "16px" }} onClick={handleCloseAddStyle}>
                             Đóng
                         </Button>
-                        <Button variant="primary lg" style={{ fontSize: "16px" }} type='submit'>
-                            Cập nhật
+                        <Button variant="primary lg" type='submit' style={{ fontSize: "16px" }} >
+                            Thêm
                         </Button>
                     </Modal.Footer>
                 </form>
@@ -119,4 +124,4 @@ function EditRole
     )
 }
 
-export default EditRole
+export default AddStyle

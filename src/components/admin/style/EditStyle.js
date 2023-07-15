@@ -6,37 +6,37 @@ import API from '../../../API';
 import Swal from 'sweetalert2';
 import DriveFileRenameOutlineIcon from '@mui/icons-material/DriveFileRenameOutline';
 
-function EditRole
+function EditStyle
     ({
-        showItemRole,
+        showItemStyle,
         setRefersh,
         refersh
     }) {
-    const [roleInput, setRole] = useState([]);
-    const [showEditRole, setShowEditRole] = useState(false);
-    //modal Add Category
+    const [styleInput, setStyle] = useState([]);
+    const [showEditStyle, setShowEditStyle] = useState(false);
+    //modal Add color
 
 
-    const handleCloseEditRole = () => {
-        setShowEditRole(false);
+    const handleCloseEditStyle = () => {
+        setShowEditStyle(false);
         setRefersh(!refersh)
     }
-    const handleShowEditRole = (e) => {
-        setShowEditRole(true)
-        setRole(showItemRole)
+    const handleShowEditStyle = (e) => {
+        setShowEditStyle(true)
+        setStyle(showItemStyle)
     };
 
 
     const handleInput = (e) => {
         e.persist();
-        setRole({ ...roleInput, [e.target.name]: e.target.value })
+        setStyle({ ...styleInput, [e.target.name]: e.target.value })
     }
 
 
     //event onSubmit edit Category
     const submitCategory = (e) => {
         e.preventDefault();
-        if (roleInput.tenVaiTro == '') {
+        if (styleInput.ten == '') {
             Swal.fire({
                 text: 'Tên không được để trống!',
                 icon: 'error',
@@ -46,14 +46,14 @@ function EditRole
         }
 
         const data = {
-            id: roleInput.id,
-            tenVaiTro: roleInput.tenVaiTro,
-            moTa: roleInput.moTa,
+            id: styleInput.id,
+            ten: styleInput.ten,
+            moTa: styleInput.moTa,
         }
-
+        console.log(data);
         API({
             method: 'put',
-            url: `/admin-permission/upload-role`,
+            url: `/admin-style/upload-style`,
             data: data,
         }).then((res) => {
             Swal.fire({
@@ -68,14 +68,14 @@ function EditRole
         <>
             <button
                 style={{ border: "0px", background: "none" }}
-                onClick={handleShowEditRole}
+                onClick={handleShowEditStyle}
             >
                 <DriveFileRenameOutlineIcon style={{ fontSize: "30px", color: "#5ec9ff" }} />
             </button>
-            <Modal show={showEditRole} onHide={handleCloseEditRole} size="lg" style={{ padding: "20px" }}>
+            <Modal show={showEditStyle} onHide={handleCloseEditStyle} size="lg" style={{ padding: "20px" }}>
                 <form onSubmit={submitCategory}>
                     <Modal.Header closeButton>
-                        <Modal.Title><h1 style={{ fontWeight: "600" }}>Cập nhật vai trò</h1></Modal.Title>
+                        <Modal.Title><h1 style={{ fontWeight: "600" }}>Cập nhật màu sắc</h1></Modal.Title>
                     </Modal.Header>
                     <Modal.Body>
                         <Form>
@@ -85,9 +85,9 @@ function EditRole
                                     onChange={handleInput}
                                     style={{ padding: "10px 15px", fontSize: "16px" }}
                                     type="text"
-                                    name='tenVaiTro'
-                                    value={roleInput.tenVaiTro}
-                                    placeholder="Nhập tên vai trò..."
+                                    name='ten'
+                                    value={styleInput.ten}
+                                    placeholder="Nhập tên màu sắc..."
                                     autoFocus
                                 />
                             </Form.Group>
@@ -100,13 +100,13 @@ function EditRole
                                     as="textarea"
                                     onChange={handleInput}
                                     name="moTa"
-                                    value={roleInput.moTa}
+                                    value={styleInput.moTa}
                                     style={{ padding: "10px 15px", fontSize: "16px" }} placeholder="Nhập mô tả..." rows={3} />
                             </Form.Group>
                         </Form>
                     </Modal.Body>
                     <Modal.Footer>
-                        <Button variant="secondary fs" style={{ fontSize: "16px" }} onClick={handleCloseEditRole}>
+                        <Button variant="secondary fs" style={{ fontSize: "16px" }} onClick={handleCloseEditStyle}>
                             Đóng
                         </Button>
                         <Button variant="primary lg" style={{ fontSize: "16px" }} type='submit'>
@@ -119,4 +119,4 @@ function EditRole
     )
 }
 
-export default EditRole
+export default EditStyle

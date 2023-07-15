@@ -83,7 +83,7 @@ function AddRole
                             <h1
                                 style={{ fontWeight: "600" }}
                             >
-                                Thêm Vai Tro
+                                Thêm Vai Trò
                             </h1>
                         </Modal.Title>
                     </Modal.Header>

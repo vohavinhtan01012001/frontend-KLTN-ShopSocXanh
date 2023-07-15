@@ -124,6 +124,7 @@ function EditProduct() {
         TheLoaiId: '',
         ten: '',
         giaTien: '',
+        gioiTinh: '',
         MauSacId: '',
         ChatLieuId: '',
         soLuongM: '',
@@ -156,6 +157,7 @@ function EditProduct() {
                 initialValues.KhuyenMaiId = res.data.product[0].KhuyenMaiId ? res.data.product[0].KhuyenMaiId : null
                 initialValues.ten = res.data.product[0].ten
                 initialValues.giaTien = res.data.product[0].giaTien
+                initialValues.gioiTinh = res.data.product[0].gioiTinh
                 initialValues.soLuongL = res.data.product[0].soLuongL
                 initialValues.soLuongM = res.data.product[0].soLuongM
                 initialValues.soLuongXL = res.data.product[0].soLuongXL
@@ -183,9 +185,9 @@ function EditProduct() {
         giaTien: Yup.number()
             .min(0, 'Giá tiền không được bé hơn 0')
             .required('Giá tiền là bắt buộc'),
-            MauSacId: Yup.string()
+        MauSacId: Yup.string()
             .required('Màu sắc là bắt buộc'),
-            ChatLieuId: Yup.string()
+        ChatLieuId: Yup.string()
             .required('Chất liệu là bắt buộc'),
         soLuongM: Yup.number()
             .min(0, 'số Lượng M không được bé hơn 0')
@@ -208,7 +210,7 @@ function EditProduct() {
                 values.image2 = image2;
                 values.image3 = image3;
                 values.image4 = image4;
-                if(!values.KhuyenMaiId){
+                if (!values.KhuyenMaiId) {
                     values.KhuyenMaiId = 0;
                 }
                 console.log(values)
@@ -245,11 +247,6 @@ function EditProduct() {
     if (loading) {
         return <Loading />
     }
-    console.log(formik.errors)
-
-
-
-
 
     return (
         <>
@@ -266,8 +263,8 @@ function EditProduct() {
                     </h1>
                 </div>
             </div>
-            <div className="container px-4 fs-4 text " style={{ fontWeight: "600" }}>
-                <div className="card mt-4 box-addProduct" style={{ background: "white" }}>
+            <div className="container px-4 fs-4 text " style={{ fontWeight: "600" }} >
+                <div className="card mt-4 box-addProduct" style={{ background: "rgb(248, 249, 250)" }}>
 
                     <div className="card-body">
 
@@ -348,6 +345,20 @@ function EditProduct() {
                                                 <p>{formik.errors.giaTien}</p>
                                             ) : null}
                                         </p>
+                                    </div>
+                                    <div className="form-group mb-3">
+                                        <label>Giới tính</label>
+                                        <select
+                                            placeholder="Nhập"
+                                            name="gioiTinh"
+                                            value={formik.values.gioiTinh}
+                                            onChange={formik.handleChange} className="form-control fs-4 text" style={{ padding: "7px 15px", fontSize: "16px",width:"20%" }}
+                                        >
+                                            <option value={0} >Nam</option>
+                                            <option value={1} >Nữ</option>
+                                            <option value={2} >Cả hai</option>
+                                        </select>
+
                                     </div>
                                     <div className="form-group mb-3">
                                         <label>Chương trình khuyến mãi</label>
@@ -537,9 +548,9 @@ function EditProduct() {
                                     </div>
                                     <div className="form-group mb-3">
                                         <label>Mô tả chi tiết</label>
-                                        <textarea name="moTa" className="form-control fs-4 text" 
-                                        onChange={formik.handleChange} 
-                                        style={{ padding: "7px 15px", fontSize: "16px" }} />
+                                        <textarea name="moTa" className="form-control fs-4 text"
+                                            onChange={formik.handleChange}
+                                            style={{ padding: "7px 15px", fontSize: "16px" }} />
                                         <p className="text-danger">
                                             <h1 name='moTa' component="div" style={{ color: "red", fontWeight: "500" }} />
                                         </p>

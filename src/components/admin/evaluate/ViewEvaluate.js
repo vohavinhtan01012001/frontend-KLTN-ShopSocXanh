@@ -64,7 +64,26 @@ function ViewEvaluate() {
             </Pagination.Item>,
         );
     }
-
+    //Xử lý search
+    const handleInput = (e) => {
+        if (e.key === 'Enter') {
+            setEvaluateLength(null);
+            API({
+                method: 'post',
+                url: `admin-evaluate/search`,
+                data: { id: e.target.value }
+            }).then(res => {
+                if (res.data.status === 400) {
+                    Swal.fire({
+                        text: res.data.message,
+                        icon: 'warning',
+                        confirmButtonText: 'Đóng'
+                    })
+                }
+                setEvaluateList(res.data.evaluates);
+            })
+        }
+    }
 
 
     var viewcategory_HTMLTABLE = "";
@@ -79,7 +98,7 @@ function ViewEvaluate() {
                     sx={{ '&:last-child tr, &:last-child th': { fontSize: '16px' } }}
                     id={item.id}
                     key={index}
-                    draggable={true}
+                    /* draggable={true} */
                     onDragStart={(e) => {
                         e.dataTransfer.setData('text/plain', index);
                     }}
@@ -121,6 +140,9 @@ function ViewEvaluate() {
     const formatMoney = (value) => {
         return value.toLocaleString('vi-VN') + ' VNĐ';
     };
+
+
+
     return (
         <div className="">
             <div className='container'>
@@ -128,9 +150,10 @@ function ViewEvaluate() {
                     <div className="card-header" style={{ padding: "30px 0" }}>
                         <h1 style={{ fontWeight: "700" }}>Danh sách đánh giá
                         </h1>
+                        <div style={{ display: "flex", justifyContent: "end", alignItems: "center" }}><input type="text" placeholder="Nhập mã sản phẩm..." className="admin__search--input" style={{ margin: "20px", marginLeft: "0", width: "200px" }} onKeyDown={handleInput} /></div><p></p>
                     </div>
                 </div>
-                <TableContainer component={Paper} className='container' style={{ padding: "10px 20px", background: "white" }}>
+                <TableContainer component={Paper} className='container' style={{ padding: "10px 20px", background: "#f8f9fa" }}>
                     <Table sx={{ minWidth: 650, fontSize: "16px" }} aria-label="caption table">
                         <TableHead >
                             <TableRow sx={{ '&:last-child tr, &:last-child th': { fontSize: '16px', fontWeight: "600" } }}>

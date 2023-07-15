@@ -11,19 +11,21 @@ import StarIcon from '@mui/icons-material/Star';
 import Loading from "../Loading";
 import StarBorderIcon from '@mui/icons-material/StarBorder';
 import StarHalfIcon from '@mui/icons-material/StarHalf';
+import FilterAltIcon from '@mui/icons-material/FilterAlt';
 import ProductItem from "./component/ProductItem";
+import { Button } from "@mui/material";
+import Filter from "./component/Filter";
 /* let PageSize = 6; */
 function CategoryList() {
     const history = useNavigate();
     const [product, setProduct] = useState([]);
     const [category, setCategory] = useState([]);
-    const [material, setMaterial] = useState([]);
-    const [color, setColor] = useState([]);
     const productCount = product.length;
     const [stars, setStars] = useState([]);
 
     const [shouldRefresh, setRefresh] = useState(false);
     const [message, setMessage] = useState('')
+    const [value, setValue] = useState([]);
 
     const callbackFunction = (childData) => {
         setMessage(childData)
@@ -153,23 +155,7 @@ function CategoryList() {
         }
     }, [message])
 
-    useEffect(() => {
-        API({
-            method: 'get',
-            url: 'marterial/show-all',
-        }).then((res) => {
-            setMaterial(res.data.materials);
-        })
-    }, [])
 
-    useEffect(() => {
-        API({
-            method: 'get',
-            url: 'color/show-all',
-        }).then((res) => {
-            setColor(res.data.colors);
-        })
-    }, [])
 
     //xuất dữ liệu 
     var showProductsList = "";
@@ -207,32 +193,9 @@ function CategoryList() {
                         <div className="col l-9">
                             <div className="tshirts__title">
                                 <h3 className="tshirts__title--heading">{category.ten}</h3>
-                                {/* <div className="tshirts__title--sort">
-                                    <div className="tshirts__title--option">
-                                        <select onChange={e => { handleOptionMaterial(e) }} id="search" className="tshirts__title--select">
-                                            <option >---Chất liệu---</option>
-                                            {
-                                                material.map((item, index) => {
-                                                    return <option value={item.id}> {item.tenChatLieu}</option>
-                                                })
-                                            }
-                                        </select>
-                                    </div>
-                                </div>
                                 <div className="tshirts__title--sort">
-                                    <div className="tshirts__title--option">
-                                        <select onChange={e => { handleOptionColor(e) }} id="search" className="tshirts__title--select">
-                                            <option >---Màu sắc---</option>
-                                            {
-                                                color.map((item, index) => {
-                                                    return <option value={item.id}> {item.tenMau}</option>
-                                                })
-                                            }
-                                        </select>
-                                    </div>
-                                </div> */}
-                                <div className="tshirts__title--sort">
-                                    <div className="tshirts__title--option">
+                                    <p style={{ fontSize: "16px", fontWeight: "bold", margin: "0 0 0 20px" }}>Bộ lọc</p><Filter iconButton={<FilterAltIcon style={{ fontSize: "35px" }} />} setValue={setValue} value={value} />
+                                    <div className="tshirts__title--option" style={{ marginLeft: "20px" }}>
                                         <select onChange={e => { handleOption(e) }} id="search" className="tshirts__title--select">
                                             <option >---Sắp xếp---</option>
                                             <option >Giá:Tăng dần</option>
@@ -242,7 +205,9 @@ function CategoryList() {
                                         </select>
                                     </div>
                                 </div>
+
                             </div>
+
                             <div className="tshirts__content">
                                 <div className="row">
                                     {showProductsList}

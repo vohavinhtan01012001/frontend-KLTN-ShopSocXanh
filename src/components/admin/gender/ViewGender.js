@@ -1,7 +1,7 @@
-import React, { useEffect, useState } from 'react';
-import axios from 'axios';
+import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import Loading from '../../Loading';
+import Swal from 'sweetalert2'
+import API from '../../../API';
 import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
 import TableCell from '@mui/material/TableCell';
@@ -10,30 +10,25 @@ import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
 import Pagination from 'react-bootstrap/Pagination';
-import API from '../../../API';
-import Swal from 'sweetalert2';
-import ContentPasteIcon from '@mui/icons-material/ContentPaste';
-import EditPermission from './EditPermission';
-import AddRole from './AddRole';
-import EditRole from './EditRole';
+import Loading from '../../Loading';
 
-function ViewPermission() {
+
+function ViewGender() {
     const [loading, setLoading] = useState(true);
+    const [genderlist, setGenderlist] = useState([]);
+    const [genderLength, setGenderLength] = useState(0);
     const [upload, setUpdate] = useState(1);
-    const [role, setRole] = useState([]);
-    const [userLength, setRolePermissionLength] = useState(0);
-    const [showAddRole, setShowAddRole] = useState(false);
+    const [showAddGender, setShowAddGender] = useState(false);
     const [refersh, setRefersh] = useState(false);
 
-
-    //show length user
+    //show length color
     useEffect(() => {
         API({
             method: 'get',
-            url: `/admin-permission/show-all`,
+            url: `/admin-gender/show-all`,
         }).then((res) => {
             if (res.status === 200) {
-                setRolePermissionLength(res.data.role.length)
+                setGenderLength(res.data.genders.length)
                 setLoading(false);
             }
             else {
@@ -46,17 +41,18 @@ function ViewPermission() {
         })
 
     }, [refersh]);
+
     //Số lượng trong 1 trang
     const limit = 5;
 
-    //show list user
+    //show list color
     useEffect(() => {
         API({
             method: 'get',
-            url: `/admin-permission/role?page=${upload}&limit=${limit}`,
+            url: `/admin-gender/gender?page=${upload}&limit=${limit}`,
         }).then((res) => {
-            if (res.data.status === 200) {
-                setRole(res.data.roles)
+            if (res.status === 200) {
+                setGenderlist(res.data.genders)
                 setLoading(false);
             }
             else {
@@ -70,35 +66,12 @@ function ViewPermission() {
 
     }, [upload, refersh]);
 
-    /* const deleteAccount = (e, id) => {
-        e.preventDefault();
-        const thisclicked = e.target.closest('tr');
-        axios.delete(`/api/delete-account/${id}`).then(res => {
-            if (res.data.status === 200) {
-                swal('Success', res.data.message, "success");
-                thisclicked.closest("tr").remove();
-            }
-            else if (res.data.status === 404) {
-                swal('Warning', res.data.message, "warning");
-            }
-        })
-    } */
-
-    const handleRowDrag = (dragIndex, hoverIndex) => {
-        const draggedRow = userLength[dragIndex];
-        const updatedList = [...userLength];
-        updatedList.splice(dragIndex, 1);
-        updatedList.splice(hoverIndex, 0, draggedRow);
-        setRolePermissionLength(updatedList);
-    };
-
-
     const handlePagination = (e) => {
         setUpdate(e.target.name)
     }
 
     let items = [];
-    for (let number = 1; number <= Math.ceil(userLength / limit); number++) {
+    for (let number = 1; number <= Math.ceil(genderLength / limit); number++) {
         items.push(
             <Pagination.Item
                 onClick={handlePagination}
@@ -111,12 +84,15 @@ function ViewPermission() {
             </Pagination.Item>,
         );
     }
-    let viewAccount_HTMLTABLE = ""
-    if (loading) {
+
+
+
+    var viewcategory_HTMLTABLE = "";
+    /* if (loading) {
         return <Loading />
     }
-    else {
-        viewAccount_HTMLTABLE = role.map((item, index) => {
+    else { */
+        viewcategory_HTMLTABLE = genderlist.map((item, index) => {
             const offset = (upload - 1) * limit;
             return (
                 <TableRow
@@ -139,56 +115,51 @@ function ViewPermission() {
                     <TableCell sx={{ fontSize: "16px" }} component="th" scope="row">
                         {offset + index + 1}
                     </TableCell>
+                    <TableCell sx={{ fontSize: "16px" }} align="right" component="th" scope="row">
+                        {item.id}
+                    </TableCell>
                     <TableCell sx={{ fontSize: "16px" }} align="right">
-                        {item.tenVaiTro}
+                        {item.ten}
                     </TableCell>
                     <TableCell sx={{ fontSize: "16px" }} align="right">
                         {item.moTa}
                     </TableCell>
-                    <TableCell
-                        align="right"
-                    >
-
-                        <EditPermission
-                            showItemPermission={item}
+                    <TableCell sx={{ fontSize: "16px" }} align="right">
+                        {/* <EditColor
+                            showItemColor={item}
                             setRefersh={setRefersh}
                             refersh={refersh}
-                        />
-                    </TableCell>
-                    <TableCell
-                        align="right"
-                    >
-                        {/*  <Link
-                            to={`${item.id}`}
-
-                        >
-                            <ContentPasteIcon style={{ fontSize: "30px", color: "#5ec9ff" }} />
-                        </Link> */}
-                        <EditRole
-                            showItemRole={item}
-                            setRefersh={setRefersh}
-                            refersh={refersh}
-                        />
+                        /> */}
                     </TableCell>
                 </TableRow>
             )
-
         });
+   /*  } */
 
-    }
 
+    const handleRowDrag = (dragIndex, hoverIndex) => {
+        const draggedRow = genderlist[dragIndex];
+        const updatedList = [...genderlist];
+        updatedList.splice(dragIndex, 1);
+        updatedList.splice(hoverIndex, 0, draggedRow);
+        setGenderlist(updatedList);
+    };
 
+    const formatMoney = (value) => {
+        return value.toLocaleString('vi-VN') + ' VNĐ';
+    };
     return (
-        <div className="" >
+        <div className="">
             <div className='container'>
                 <div  >
                     <div className="card-header" style={{ padding: "30px 0" }}>
-                        <h1 style={{ fontWeight: "700" }}>Danh sách vai trò
-                            <AddRole
-                                setShowAddRole={setShowAddRole} showAddRole={showAddRole}
+                        <h1 style={{ fontWeight: "700" }}>Danh sách màu sắc
+                            {/* <AddColor
+                                setShowAddColor={setShowAddGender}
+                                showAddColor={showAddGender}
                                 setRefersh={setRefersh}
                                 refersh={refersh}
-                            />
+                            /> */}
                         </h1>
                     </div>
                 </div>
@@ -197,14 +168,14 @@ function ViewPermission() {
                         <TableHead >
                             <TableRow sx={{ '&:last-child tr, &:last-child th': { fontSize: '16px', fontWeight: "600" } }}>
                                 <TableCell >STT</TableCell>
-                                <TableCell align="right">Tên vai trò</TableCell>
+                                <TableCell align="right">Mã</TableCell>
+                                <TableCell align="right">Tên màu</TableCell>
                                 <TableCell align="right">Mô tả</TableCell>
-                                <TableCell align="right"></TableCell>
                                 <TableCell align="right"></TableCell>
                             </TableRow>
                         </TableHead>
                         <TableBody>
-                            {viewAccount_HTMLTABLE}
+                            {viewcategory_HTMLTABLE}
                         </TableBody>
                     </Table>
                     <div style={{ margin: "20px 0 0 0", fontSize: "16px" }}>
@@ -213,8 +184,8 @@ function ViewPermission() {
                 </TableContainer>
             </div>
         </div>
+
     );
 }
 
-
-export default ViewPermission;
+export default ViewGender;

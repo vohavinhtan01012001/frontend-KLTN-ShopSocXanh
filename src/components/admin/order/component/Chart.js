@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend, Label } from 'recharts';
-import API from '../../../API';
+import API from '../../../../API';
 
 export default function BasicLineChart({orders}) {
     
@@ -10,7 +10,7 @@ export default function BasicLineChart({orders}) {
     };
 
     const formatDoanhThu = (value) => {
-        return `Doanh thu: ${value.toLocaleString()} VNĐ`;
+        return `Tổng tiền: ${value.toLocaleString()} VNĐ`;
       };
       console.log(orders)
 
@@ -18,18 +18,18 @@ export default function BasicLineChart({orders}) {
         <div style={{ margin: '0 auto', padding: '0', width: '100%',display:"flex",justifyContent:"center" }}>
             {
                 orders.length > 0 ? (
-                    <LineChart width={1000} height={300} data={orders}>
+                    <LineChart width={1000} height={300} data={orders} style={{fontSize:"13px"}}>
                         <CartesianGrid strokeDasharray="3 3" />
                         <XAxis
                             dataKey="month"
-                            formatter={formatMonth}
+                            /* tickFormatter={formatMonth} */
                         />
                         <YAxis />
                         <Tooltip
-                            formatter={formatDoanhThu}
+                            /* formatter={formatDoanhThu} */
                         />
                         <Legend />
-                        <Line type="monotone" dataKey="Doanh thu" stroke="#8884d8" />
+                        <Line type="monotone" dataKey="price" stroke="#8884d8" />
                     </LineChart>
                 ) : (
                     <h2>Năm này chưa có dữ liệu</h2>

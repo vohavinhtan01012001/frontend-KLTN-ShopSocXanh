@@ -5,6 +5,7 @@ import { Link, useNavigate, useParams } from 'react-router-dom';
 import Swal from 'sweetalert2';
 import API from '../../API';
 import RatingStars from './component/Star';
+import Button from 'react-bootstrap/esm/Button';
 
 function OrderItems() {
     const history = useNavigate();
@@ -13,6 +14,8 @@ function OrderItems() {
     const [star, setStar] = useState([]);
     const { id } = useParams();
     const [refesh, setRefesh] = useState(false)
+    const [buttonStatus, setButtonStatus] = useState(false)
+    const [value, setValue] = useState('')
 
     useEffect(() => {
         const order_id = id;
@@ -50,6 +53,39 @@ function OrderItems() {
             }
         })
     }, [id, data, refesh])
+
+    const handleCancel = () => {
+        Swal.fire({
+            title: 'Nhập lý do hủy đơn',
+            input: 'text',
+            inputPlaceholder: 'Nhập nội dung...',
+            showCancelButton: true,
+            confirmButtonText: 'Xác nhận',
+            cancelButtonText: 'Hủy bỏ',
+            showLoaderOnConfirm: true,
+            preConfirm: (inputValue) => {
+                if (inputValue) {
+                    return inputValue;
+                } else {
+                    Swal.showValidationMessage('Vui lòng nhập lý do!');
+                }
+            },
+            allowOutsideClick: () => !Swal.isLoading()
+        }).then((result) => {
+            if (result.isConfirmed) {
+                Swal.fire({
+                    text: "Vui lòng đợi phản hồi từ bên shop",
+                    icon: 'success'
+                });
+                setButtonStatus(true);
+                API({
+                    method: "put",
+                    url: `order/sendMail-cancel/${id}`,
+                    data: { input: result.value },
+                }).then(res => { console.log(res.data); })
+            }
+        });
+    }
 
     console.log(star)
     var display_products = "";
@@ -89,12 +125,18 @@ function OrderItems() {
         )
     })
     display_ship = (
-        <div className='app__container-product' style={{ marginBottom: "20px" }}>
-            <nav  /* className="cart__product--item" */ style={{ paddingTop: "20px" }}>
-                <h2 style={{ fontWeight: "bold", textAlign: "end", paddingTop: "20px", color: "#333" }}>Tổng tiền: {Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(sumPrice + 30000)}</h2>
-                <h2 style={{ fontWeight: "bold", textAlign: "end", paddingTop: "20px", color: "#333" }}>(Đã cộng thêm tiền vận chuyển) </h2>
-            </nav>
-        </div>
+        <>
+            <div className='app__container-product' style={{ marginBottom: "20px" }}>
+                <nav  /* className="cart__product--item" */ style={{ paddingTop: "20px" }}>
+                    <h2 style={{ fontWeight: "bold", textAlign: "end", paddingTop: "20px", color: "#333" }}>Tổng tiền: {Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(sumPrice + 30000)}</h2>
+                    <h2 style={{ fontWeight: "bold", textAlign: "end", paddingTop: "20px", color: "#333" }}>(Đã cộng thêm tiền vận chuyển) </h2>
+                </nav>
+                {buttonStatus ?
+                    <Button className=" cart__order--paying " style={{ border: "none", fontSize: "20px", marginTop: "20px", background: "#198754" }} disabled >Đang xử lý... </Button>
+                    :
+                    <Button className=" cart__order--paying " style={{ border: "none", fontSize: "20px", marginTop: "20px", background: "red" }} onClick={handleCancel} >Hủy đơn </Button>}
+            </div>
+        </>
     )
 
     return (

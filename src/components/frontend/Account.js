@@ -84,17 +84,17 @@ function Account() {
                         <div className='container__account-name' style={{ fontWeight: "bold", color: "#333" }}>
                             <span>Tên người nhận </span>
                             <span>:</span>
-                            <span>{name}</span>
+                            <span>{item.hoTen}</span>
                         </div>
                         <div className='container__account-name' style={{ fontWeight: "bold", color: "#333" }}>
                             <span>Địa chỉ người nhận </span>
                             <span>:</span>
-                            <span>{address}</span>
+                            <span>{item.diaChi}</span>
                         </div>
                         <div className='container__account-name' style={{ fontWeight: "bold", color: "#333" }}>
                             <span>Số điện thoại </span>
                             <span>:</span>
-                            <span>{phone}</span>
+                            <span>{item.sdt}</span>
                         </div>
                     </div>
                     <Link to={`/order/${item.id}`} className='container__account-name' style={{ fontWeight: "bold", color: "#333", textAlign: "end", textDecoration: "none" }}>

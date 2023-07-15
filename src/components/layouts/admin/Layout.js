@@ -12,13 +12,14 @@ import IconButton from '@mui/material/IconButton';
 import MenuIcon from '@mui/icons-material/Menu';
 import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
 import ChevronRightIcon from '@mui/icons-material/ChevronRight';
-import ListItem from '@mui/material/ListItem';
-import ListItemButton from '@mui/material/ListItemButton';
-import ListItemIcon from '@mui/material/ListItemIcon';
-import ListItemText from '@mui/material/ListItemText';
-import InboxIcon from '@mui/icons-material/MoveToInbox';
-import MailIcon from '@mui/icons-material/Mail';
-import { Outlet } from 'react-router-dom';
+import { Navigate, Outlet, useNavigate } from 'react-router-dom';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faBagShopping, faBox, faGauge, faLayerGroup, faPercent, faSliders, faTrademark, faUsersGear } from '@fortawesome/free-solid-svg-icons';
+import ItemSlider from './component/ItemSlider';
+import ProFile from './component/profile';
+import { AuthContext } from '../../../helpers/AuthContext';
+import Swal from 'sweetalert2';
+import API from '../../../API';
 
 const drawerWidth = 240;
 
@@ -68,9 +69,11 @@ const DrawerHeader = styled('div')(({ theme }) => ({
 }));
 
 export default function PersistentDrawerLeft() {
+    const { authState } = React.useContext(AuthContext);
+    const [permission, setPermission] = React.useState([]);
     const theme = useTheme();
     const [open, setOpen] = React.useState(false);
-
+    const history = useNavigate()
     const handleDrawerOpen = () => {
         setOpen(true);
     };
@@ -79,11 +82,31 @@ export default function PersistentDrawerLeft() {
         setOpen(false);
     };
 
+    const handleAdmin = () => {
+        Swal.fire({
+            icon: 'error',
+            text: `Bạn không phải QTV`,
+            confirmButtonText: 'Đóng'
+        })
+        history('/')
+    }
+
+    React.useEffect(() => {
+        API({
+            method: 'get',
+            url: `admin-permission/permission/${authState.VaiTroId}`,
+        }).then((res) => {
+            setPermission(res.data.RolePermissions);
+            console.log(res.data.RolePermissions);
+        })
+    }, [authState.VaiTroId])
+
+
     return (
         <Box sx={{ display: 'flex' }}>
             <CssBaseline />
-            <AppBar position="fixed" open={open} >
-                <Toolbar>
+            <AppBar position="fixed" open={open} sx={{ 'span, svg': { fontSize: '16px' }, background: "#4ea0c9" }} >
+                <Toolbar style={{ justifyContent: "space-between" }}>
                     <IconButton
                         color="inherit"
                         aria-label="open drawer"
@@ -91,11 +114,12 @@ export default function PersistentDrawerLeft() {
                         edge="start"
                         sx={{ mr: 2, ...(open && { display: 'none' }) }}
                     >
-                        <MenuIcon />
+                        <MenuIcon style={{ fontSize: "30px" }} />
                     </IconButton>
-                    <Typography variant="h6" noWrap component="div" className='fs-4 text'>
-                        Persistent drawer
+                    <Typography variant="h6" noWrap component="div" className='fs-2 text'>
+                        ShopSocXanh
                     </Typography>
+                    <ProFile />
                 </Toolbar>
             </AppBar>
             <Drawer
@@ -113,42 +137,180 @@ export default function PersistentDrawerLeft() {
             >
                 <DrawerHeader>
                     <IconButton onClick={handleDrawerClose}>
-                        {theme.direction === 'ltr' ? <ChevronLeftIcon /> : <ChevronRightIcon />}
+                        {theme.direction === 'ltr' ? <ChevronLeftIcon style={{ fontSize: "30px" }} /> : <ChevronRightIcon />}
                     </IconButton>
                 </DrawerHeader>
                 <Divider />
-                <List>
-                    {['Inbox', 'Starred', 'Send email', 'Drafts'].map((text, index) => (
-                        <ListItem key={text} disablePadding>
-                            <ListItemButton>
-                                <ListItemIcon>
-                                    {index % 2 === 0 ? <InboxIcon /> : <MailIcon />}
-                                </ListItemIcon>
-                                <ListItemText primary={text} />
-                            </ListItemButton>
-                        </ListItem>
-                    ))}
-                </List>
+                {authState.phanQuyen === 1 && <List >
+                    <ItemSlider
+                        text={'Thống kê'}
+                        icon={
+                            <FontAwesomeIcon
+                                icon={faGauge} className="account__link--icon"
+                            />}
+                        link={'/admin/dashboard'}
+                    />
+                    <ItemSlider
+                        text={'Quản lý sản phẩm'}
+                        icon={
+                            <FontAwesomeIcon
+                                icon={faBagShopping} className="account__link--icon"
+                            />}
+                        link={'/admin/view-product'}
+                    />
+                    <ItemSlider
+                        text={'Quản lý loại sản phẩm'}
+                        icon={
+                            <FontAwesomeIcon
+                                icon={faSliders} className="account__link--icon"
+                            />}
+                        link={'/admin/view-category'}
+                    />
+                    <ItemSlider
+                        text={'Quản lý khuyến mãi'}
+                        icon={
+                            <FontAwesomeIcon
+                                icon={faPercent} className="account__link--icon"
+                            />}
+                        link={'/admin/view-promotion'}
+                    />
+                    <ItemSlider
+                        text={'Quản lý thương hiệu'}
+                        icon={
+                            <FontAwesomeIcon
+                                icon={faTrademark} className="account__link--icon"
+                            />}
+                        link={'/admin/view-trademark'}
+                    />
+                    <ItemSlider
+                        text={'Quản lý đơn hàng'}
+                        icon={
+                            <FontAwesomeIcon
+                                icon={faBox} className="account__link--icon"
+                            />}
+                        link={'/admin/view-order'}
+                    />
+                    <ItemSlider
+                        text={'Quản lý khách hàng'}
+                        icon={
+                            <FontAwesomeIcon
+                                icon={faUsersGear} className="account__link--icon"
+                            />}
+                        link={'/admin/view-account'}
+                    />
+                    <ItemSlider
+                        text={'Quản lý nhân viên'}
+                        icon={
+                            <FontAwesomeIcon
+                                icon={faUsersGear} className="account__link--icon"
+                            />}
+                        link={'/admin/view-staff'}
+                    />
+                    <ItemSlider
+                        text={'Quản lý phân quyền'}
+                        icon={
+                            <FontAwesomeIcon
+                                icon={faLayerGroup} className="account__link--icon"
+                            />}
+                        link={'/admin/view-role'}
+                    />
+                </List>}
+                {authState.phanQuyen === 0 && handleAdmin()}
+                {
+                    authState.phanQuyen === 2 ?
+                        permission.map((item, index) => {
+                            if (item.PhanQuyenId === 1) {
+                                return <ItemSlider
+                                    text={'Quản lý sản phẩm'}
+                                    icon={
+                                        <FontAwesomeIcon
+                                            icon={faBagShopping} className="account__link--icon"
+                                        />}
+                                    link={'/admin/view-product'}
+                                />
+                            }
+                            else if (item.PhanQuyenId === 2) {
+                                return <ItemSlider
+                                text={'Quản lý loại sản phẩm'}
+                                icon={
+                                    <FontAwesomeIcon
+                                        icon={faSliders} className="account__link--icon"
+                                    />}
+                                link={'/admin/view-category'}
+                            />
+                            }
+                            else if (item.PhanQuyenId === 3) {
+                                return  <ItemSlider
+                                text={'Quản lý khuyến mãi'}
+                                icon={
+                                    <FontAwesomeIcon
+                                        icon={faPercent} className="account__link--icon"
+                                    />}
+                                link={'/admin/view-promotion'}
+                            />
+                            }
+                            else if (item.PhanQuyenId === 4) {
+                                return  <ItemSlider
+                                text={'Quản lý thương hiệu'}
+                                icon={
+                                    <FontAwesomeIcon
+                                        icon={faTrademark} className="account__link--icon"
+                                    />}
+                                link={'/admin/view-trademark'}
+                            />
+                            }
+                            else if (item.PhanQuyenId === 5) {
+                                return<ItemSlider
+                                text={'Quản lý đơn hàng'}
+                                icon={
+                                    <FontAwesomeIcon
+                                        icon={faBox} className="account__link--icon"
+                                    />}
+                                link={'/admin/view-order'}
+                            />
+                            }
+                            else if (item.PhanQuyenId === 6) {
+                                return<ItemSlider
+                                text={'Quản lý khách hàng'}
+                                icon={
+                                    <FontAwesomeIcon
+                                        icon={faUsersGear} className="account__link--icon"
+                                    />}
+                                link={'/admin/view-account'}
+                            />
+                            }
+                            else if (item.PhanQuyenId === 7) {
+                                return <ItemSlider
+                                text={'Quản lý nhân viên'}
+                                icon={
+                                    <FontAwesomeIcon
+                                        icon={faUsersGear} className="account__link--icon"
+                                    />}
+                                link={'/admin/view-staff'}
+                            />
+                            }
+                            else if (item.PhanQuyenId === 8) {
+                                return  <ItemSlider
+                                text={'Quản lý phân quyền'}
+                                icon={
+                                    <FontAwesomeIcon
+                                        icon={faLayerGroup} className="account__link--icon"
+                                    />}
+                                link={'/admin/view-role'}
+                            />
+                            }
+                        }) : ""
+
+                }
                 <Divider />
-                <List>
-                    {['All mail', 'Trash', 'Spam'].map((text, index) => (
-                        <ListItem key={text} disablePadding>
-                            <ListItemButton>
-                                <ListItemIcon>
-                                    {index % 2 === 0 ? <InboxIcon /> : <MailIcon />}
-                                </ListItemIcon>
-                                <ListItemText primary={text} />
-                            </ListItemButton>
-                        </ListItem>
-                    ))}
-                </List>
             </Drawer>
-            <Main open={open} sx={{height:"150%",background:"#f5f5f5",marginTop:"20px"}} >
+            <Main open={open} sx={{ height: "150%", marginTop: "20px" }} >
                 <DrawerHeader />
                 <Typography paragraph >
                     <Outlet />
                 </Typography>
             </Main>
+
         </Box>
     );
 }

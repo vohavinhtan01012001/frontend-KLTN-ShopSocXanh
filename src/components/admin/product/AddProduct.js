@@ -221,7 +221,7 @@ function AddProduct() {
                 </div>
             </div>
             <div className="container px-4 fs-4 text " style={{ fontWeight: "600" }}>
-                <div className="card mt-4 box-addProduct" style={{ background: "white" }}>
+                <div className="card mt-4 box-addProduct" style={{ background: "rgb(248, 249, 250)" }}>
 
                     <div className="card-body">
                         <Formik
@@ -282,6 +282,18 @@ function AddProduct() {
                                             </div>
                                             <p className="text-danger">
                                                 <ErrorMessage name='giaTien' component="div" style={{ color: "red", fontWeight: "500" }} />
+                                            </p>
+                                        </div>
+                                        <div className="form-group mb-3">
+                                            <label>Giới tính:</label>
+                                            <Field as="select" name="gioiTinh" className="form-control fs-4 text" style={{ padding: "7px 15px", fontSize: "16px",width:"20%" }}>
+                                                <option value='0' >Nam</option>
+                                                <option value='1' >Nữ</option>
+                                                <option value='2' >Cả hai</option>
+                                            </Field>
+                                            <p className="text-danger">
+                                                <ErrorMessage name='KhuyenMaiId' component="div" style={{ color: "red", fontWeight: "500" }}
+                                                />
                                             </p>
                                         </div>
                                         <div className="form-group mb-3">
