@@ -15,6 +15,7 @@ function EditProduct() {
     const [materialList, setMaterialList] = useState([]);
     const [loading, setLoading] = useState(true);
     const [product, setProduct] = useState({});
+    const [styleList, setStyleList] = useState([]);
     const history = useNavigate()
     const slug = useParams();
     const [image1, setImage1] = useState(null);
@@ -120,6 +121,26 @@ function EditProduct() {
             }
         })
     }, []);
+
+    useEffect(() => {
+        API({
+            method: 'get',
+            url: `/admin-style/show-all`,
+        }).then((res) => {
+            if (res.status === 200) {
+                setStyleList(res.data.styles)
+            }
+            else {
+                Swal.fire({
+                    title: 'Error!',
+                    text: 'Do you want to continue',
+                    icon: 'error',
+                    confirmButtonText: 'Cool'
+                })
+            }
+        })
+    }, []);
+
     var initialValues = {
         TheLoaiId: '',
         ten: '',
@@ -158,6 +179,7 @@ function EditProduct() {
                 initialValues.ten = res.data.product[0].ten
                 initialValues.giaTien = res.data.product[0].giaTien
                 initialValues.gioiTinh = res.data.product[0].gioiTinh
+                initialValues.KieuDangId = res.data.product[0].KieuDangId
                 initialValues.soLuongL = res.data.product[0].soLuongL
                 initialValues.soLuongM = res.data.product[0].soLuongM
                 initialValues.soLuongXL = res.data.product[0].soLuongXL
@@ -352,11 +374,26 @@ function EditProduct() {
                                             placeholder="Nhập"
                                             name="gioiTinh"
                                             value={formik.values.gioiTinh}
-                                            onChange={formik.handleChange} className="form-control fs-4 text" style={{ padding: "7px 15px", fontSize: "16px",width:"20%" }}
+                                            onChange={formik.handleChange} className="form-control fs-4 text" style={{ padding: "7px 15px", fontSize: "16px", width: "20%" }}
                                         >
                                             <option value={0} >Nam</option>
                                             <option value={1} >Nữ</option>
                                             <option value={2} >Cả hai</option>
+                                        </select>
+                                    </div>
+                                    <div className="form-group mb-3">
+                                        <label>Kiểu dáng</label>
+                                        <select
+                                            placeholder="Nhập"
+                                            name="KieuDangId"
+                                            value={formik.values.KieuDangId}
+                                            onChange={formik.handleChange} className="form-control fs-4 text" style={{ padding: "7px 15px", fontSize: "16px", width: "20%" }}
+                                        >
+                                            {
+                                                styleList.map((item) => {
+                                                    return <option value={item.id} >{item.ten}</option>
+                                                })
+                                            }
                                         </select>
 
                                     </div>

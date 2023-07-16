@@ -12,6 +12,7 @@ function AddProduct() {
     const [promotionlist, setPromotionlist] = useState([]);
     const [colorlist, setColorlist] = useState([]);
     const [materialList, setMaterialList] = useState([]);
+    const [styleList, setStyleList] = useState([]);
     const history = useNavigate()
     const [image1, setImage1] = useState();
     const [image2, setImage2] = useState();
@@ -102,6 +103,25 @@ function AddProduct() {
         }).then((res) => {
             if (res.status === 200) {
                 setMaterialList(res.data.materials)
+            }
+            else {
+                Swal.fire({
+                    title: 'Error!',
+                    text: 'Do you want to continue',
+                    icon: 'error',
+                    confirmButtonText: 'Cool'
+                })
+            }
+        })
+    }, []);
+
+    useEffect(() => {
+        API({
+            method: 'get',
+            url: `/admin-style/show-all`,
+        }).then((res) => {
+            if (res.status === 200) {
+                setStyleList(res.data.styles)
             }
             else {
                 Swal.fire({
@@ -286,10 +306,20 @@ function AddProduct() {
                                         </div>
                                         <div className="form-group mb-3">
                                             <label>Giới tính:</label>
-                                            <Field as="select" name="gioiTinh" className="form-control fs-4 text" style={{ padding: "7px 15px", fontSize: "16px",width:"20%" }}>
+                                            <Field as="select" name="gioiTinh" className="form-control fs-4 text" style={{ padding: "7px 15px", fontSize: "16px", width: "20%" }}>
                                                 <option value='0' >Nam</option>
                                                 <option value='1' >Nữ</option>
                                                 <option value='2' >Cả hai</option>
+                                            </Field>
+                                        </div>
+                                        <div className="form-group mb-3">
+                                            <label>Kiểu dáng:</label>
+                                            <Field as="select" name="KieuDangId" className="form-control fs-4 text" style={{ padding: "7px 15px", fontSize: "16px", width: "20%" }}>
+                                                {
+                                                    styleList.map((item) => {
+                                                        return <option value={item.id} >{item.ten}</option>
+                                                    })
+                                                }
                                             </Field>
                                         </div>
                                         <div className="form-group mb-3">

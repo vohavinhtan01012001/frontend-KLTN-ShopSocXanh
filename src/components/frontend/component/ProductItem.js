@@ -45,11 +45,7 @@ function ProductItem({ item, index }) {
         }
     }
     const handleClick = () => {
-        if (item.soLuongM == 0 && item.soLuongL == 0 && item.soLuongXL == 0) {
-
-        } else {
-            history(`/${item.TheLoai.ten}/${item.id}`)
-        }
+        history(`/${item.TheLoai.ten}/${item.id}`)
     }
 
 

@@ -433,6 +433,14 @@ function ViewProduct() {
                         component="th"
                         scope="row"
                     >
+                        {item.KieuDang?.ten}
+                    </TableCell>
+                    <TableCell
+                        sx={{ fontSize: "16px" }}
+                        align="right"
+                        component="th"
+                        scope="row"
+                    >
                         {item.soLuongM}
                     </TableCell>
                     <TableCell
@@ -646,6 +654,7 @@ function ViewProduct() {
                                     <TableCell align="right" width={150}>Giá đã giảm</TableCell>
                                     <TableCell align="right">Màu sắc</TableCell>
                                     <TableCell align="right">Chất liệu</TableCell>
+                                    <TableCell align="right">Kiểu dáng</TableCell>
                                     <TableCell align="right">M</TableCell>
                                     <TableCell align="right">L</TableCell>
                                     <TableCell align="right">XL</TableCell>
